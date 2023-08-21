@@ -1,0 +1,79 @@
+package net.javaguides.springboot.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import net.javaguides.springboot.exception.ResourceNotFoundException;
+import net.javaguides.springboot.model.Assignment;
+import net.javaguides.springboot.repository.AssignmentRepository;
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/api/v1/")
+public class AssignmentController {
+
+    @Autowired
+    private AssignmentRepository assignmentRepository;
+
+    // Get all assignments
+    @GetMapping("/assignments")
+    public List<Assignment> getAllAssignments() {
+        return assignmentRepository.findAll();
+    }
+
+    // Create assignment rest api
+    @PostMapping("/assignments")
+    public Assignment createAssignment(@RequestBody Assignment assignment) {
+        return assignmentRepository.save(assignment);
+    }
+
+    // Get assignment by id rest api
+    @GetMapping("/assignments/{id}")
+    public ResponseEntity<Assignment> getAssignmentById(@PathVariable Long id) {
+        Assignment assignment = assignmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Assignment not exist with id :" + id));
+        return ResponseEntity.ok(assignment);
+    }
+
+    // Update assignment rest api
+    @PutMapping("/assignments/{id}")
+    public ResponseEntity<Assignment> updateAssignment(@PathVariable Long id, @RequestBody Assignment assignmentDetails) {
+        Assignment assignment = assignmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Assignment not exist with id :" + id));
+
+         assignment.setAssignmentType(assignmentDetails.getAssignmentType());
+    assignment.setStartDate(assignmentDetails.getStartDate());
+    assignment.setEndDate(assignmentDetails.getEndDate());
+     assignment.setBillRate(assignmentDetails.getBillRate());
+    assignment.setStatus(assignmentDetails.getStatus());
+    assignment.setNote(assignmentDetails.getNote());
+
+        Assignment updatedAssignment = assignmentRepository.save(assignment);
+        return ResponseEntity.ok(updatedAssignment);
+    }
+
+    // Delete assignment rest api
+    @DeleteMapping("/assignments/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteAssignment(@PathVariable Long id) {
+        Assignment assignment = assignmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Assignment not exist with id :" + id));
+
+        assignmentRepository.delete(assignment);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
+}
