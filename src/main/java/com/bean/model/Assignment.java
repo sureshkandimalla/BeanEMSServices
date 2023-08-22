@@ -2,6 +2,8 @@ package com.bean.model;
 
 import java.time.LocalDate;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,9 +24,14 @@ public class Assignment {
   private String status;
   private String note;
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "employee_id")
+  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE, optional = false)
+  @JoinColumn(name = "employee_id", nullable = false)
+  //@JsonIgnore
   private Employee employee;
+  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE, optional = false)
+  @JoinColumn(name = "project_id", nullable = false)
+  //@JsonIgnore
+  private Project project;
 
   @Override
   public String toString() {

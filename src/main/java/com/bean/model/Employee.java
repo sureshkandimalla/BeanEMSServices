@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "employees")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee {
 
   @Id
@@ -32,13 +34,13 @@ public class Employee {
 
   
 
- @OneToMany(cascade = CascadeType.ALL)
+/* @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employeeAssignment_employeeId", referencedColumnName = "employeeId")
   private List<Assignment> assignments = new ArrayList<>();
 
      @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")
-		private Project project;
+		private Project project;*/
 	
 
 	@Override
@@ -57,8 +59,8 @@ public class Employee {
 			", city='" + getCity() + "'" +
 			", state='" + getState() + "'" +
 			", referredBy='" + getReferredBy() + "'" +
-			", assignments='" + getAssignments() + "'" +
-			", project='" + getProject() + "'" +
+		//	", assignments='" + getAssignments() + "'" +
+		//	", project='" + getProject() + "'" +
 			"}";
 	}
 

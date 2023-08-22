@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "Project")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Project {
 
   @Id
@@ -27,9 +29,9 @@ public class Project {
   private String invoiceTerm;
   private String paymentTerm;
   private String notes;
-  @ManyToOne(cascade = CascadeType.ALL)
+  /*@ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "id")
-  private Employee Employee;
+  private Employee Employee;*/
 
   @Override
   public String toString() {
