@@ -1,8 +1,10 @@
 package com.bean.controller;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.bean.repository.AssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,20 @@ public class AssignmentController {
     @GetMapping("/assignments")
     public List<Assignment> getAllAssignments() {
         return assignmentRepository.findAll();
+    }
+
+
+    @GetMapping("/activeAssignments")
+    public List<Assignment> getAllActiveAssignments(String startDate,String endDate) {
+       // LocalDate today = LocalDate.now();
+        if(endDate==null || endDate.length()<6)
+            endDate=startDate;
+        return assignmentRepository.findAllActiveAssignment(startDate,endDate);/*findAll().stream().filter(a->{
+            if(a.getStartDate().isBefore(today) && a.getEndDate().isAfter(today))
+                return true;
+            else
+                return false;
+        }).collect(Collectors.toList());*/
     }
 
     // Create assignment rest api
