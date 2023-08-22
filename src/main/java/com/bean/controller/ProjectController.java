@@ -1,11 +1,12 @@
-package net.javaguides.springboot.controller;
+package com.bean.controller;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.javaguides.springboot.exception.ResourceNotFoundException;
-import net.javaguides.springboot.model.Project;
-import net.javaguides.springboot.repository.ProjectRepository;
+
+import com.bean.exception.ResourceNotFoundException;
+import com.bean.repository.ProjectRepository;
+import com.bean.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

@@ -1,8 +1,7 @@
-package net.javaguides.springboot;
+package com.bean;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
 public class SpringbootBackendApplication {

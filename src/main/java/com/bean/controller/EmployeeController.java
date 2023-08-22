@@ -1,11 +1,12 @@
-package net.javaguides.springboot.controller;
+package com.bean.controller;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.javaguides.springboot.exception.ResourceNotFoundException;
-import net.javaguides.springboot.model.Employee;
-import net.javaguides.springboot.repository.EmployeeRepository;
+
+import com.bean.repository.EmployeeRepository;
+import com.bean.exception.ResourceNotFoundException;
+import com.bean.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,6 +36,7 @@ public class EmployeeController {
   // create employee rest api
   @PostMapping("/employees")
   public Employee createEmployee(@RequestBody Employee employee) {
+
     return employeeRepository.save(employee);
   }
 

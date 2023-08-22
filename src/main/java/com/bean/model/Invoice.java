@@ -1,4 +1,4 @@
-package net.javaguides.springboot.model;
+package com.bean.model;
 
 import java.time.LocalDate;
 
@@ -6,8 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -21,7 +19,7 @@ public class Invoice {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long invoiceId;
   private String vendorName;
   private double billRate;
   private LocalDate startDate;
@@ -37,7 +35,7 @@ public class Invoice {
   @Override
   public String toString() {
     return "{" +
-      " id='" + getId() + "'" +
+      " id='" + getInvoiceId() + "'" +
       ", vendorName='" + getVendorName() + "'" +
       ", billRate='" + getBillRate() + "'" +
       ", startDate='" + getStartDate() + "'" +

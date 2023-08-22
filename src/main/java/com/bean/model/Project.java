@@ -1,15 +1,8 @@
-package net.javaguides.springboot.model;
+package com.bean.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,9 +15,7 @@ public class Project {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-
+  private Long projectId;
 
   private String projectName;
   private String vendor;
@@ -36,12 +27,14 @@ public class Project {
   private String invoiceTerm;
   private String paymentTerm;
   private String notes;
-
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "id")
+  private Employee Employee;
 
   @Override
   public String toString() {
     return "{" +
-      " id='" + getId() + "'" +
+      " id='" + getProjectId() + "'" +
       ", projectName='" + getProjectName() + "'" +
       ", vendor='" + getVendor() + "'" +
       ", client='" + getClient() + "'" +

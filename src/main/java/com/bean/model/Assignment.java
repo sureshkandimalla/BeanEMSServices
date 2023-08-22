@@ -1,4 +1,4 @@
-package net.javaguides.springboot.model;
+package com.bean.model;
 
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -13,7 +13,7 @@ public class Assignment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long assignmentId;
 
   private String assignmentType;
   private LocalDate startDate;
@@ -22,12 +22,14 @@ public class Assignment {
   private String status;
   private String note;
 
-
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employee_id")
+  private Employee employee;
 
   @Override
   public String toString() {
     return "{" +
-      " id='" + getId() + "'" +
+      " id='" + getAssignmentId() + "'" +
       ", assignmentType='" + getAssignmentType() + "'" +
       ", startDate='" + getStartDate() + "'" +
       ", endDate='" + getEndDate() + "'" +

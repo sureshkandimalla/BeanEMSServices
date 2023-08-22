@@ -1,4 +1,4 @@
-package net.javaguides.springboot.model;
+package com.bean.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class Employee {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private long employeeId;
   private String firstName;
   private String lastName;
   private String emailId;
@@ -33,7 +33,7 @@ public class Employee {
   
 
  @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "employeeAssignment_fid", referencedColumnName = "id")
+    @JoinColumn(name = "employeeAssignment_employeeId", referencedColumnName = "employeeId")
   private List<Assignment> assignments = new ArrayList<>();
 
      @OneToOne(cascade = CascadeType.ALL)
@@ -44,7 +44,7 @@ public class Employee {
 	@Override
 	public String toString() {
 		return "{" +
-			" id='" + getId() + "'" +
+			" id='" + getEmployeeId() + "'" +
 			", firstName='" + getFirstName() + "'" +
 			", lastName='" + getLastName() + "'" +
 			", emailId='" + getEmailId() + "'" +

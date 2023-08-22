@@ -1,4 +1,4 @@
-package net.javaguides.springboot.model;
+package com.bean.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class Vendor {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long vendorId;
 
   private String vendorName;
 
@@ -30,7 +30,7 @@ public class Vendor {
   @Override
   public String toString() {
     return "{" +
-      " id='" + getId() + "'" +
+      " id='" + getVendorId() + "'" +
       ", vendorName='" + getVendorName() + "'" +
       ", projects='" + getProjects() + "'" +
       "}";
