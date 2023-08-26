@@ -1,5 +1,6 @@
 package com.bean.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Setter
 @Getter
@@ -22,47 +24,54 @@ public class Employee {
   private String firstName;
   private String lastName;
   private String emailId;
-  private String employeeType;
-  private String visa;
-  private String dob;
-  private String vendor;
   private String phone;
-  private String address;
-  private String city;
-  private String state;
+  private String dob;
+  private enum gender {MALE,FEMALE};
+  private String ssn;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employeeId")
+  private List<Address> employeeAddress;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employeeId")
+  private List<ImmigrationDetails> employeeImmigrationDetails;
+
   private String referredBy;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "employeeId")
+	private List<Employment> employmentDetails;
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employeeId")
+  private List<BankAccount> employeeBankAccount;
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employeeId")
+  private List<Notes> employeeNotes;
 
-  
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employeeId")
+  private List<Project> projects;
 
-/* @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "employeeAssignment_employeeId", referencedColumnName = "employeeId")
-  private List<Assignment> assignments = new ArrayList<>();
+  @UpdateTimestamp
+  private LocalDate LastUpdated;
 
-     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_id")
-		private Project project;*/
-	
-
-	@Override
-	public String toString() {
-		return "{" +
-			" id='" + getEmployeeId() + "'" +
-			", firstName='" + getFirstName() + "'" +
-			", lastName='" + getLastName() + "'" +
-			", emailId='" + getEmailId() + "'" +
-			", employeeType='" + getEmployeeType() + "'" +
-			", visa='" + getVisa() + "'" +
-			", dob='" + getDob() + "'" +
-			", vendor='" + getVendor() + "'" +
-			", phone='" + getPhone() + "'" +
-			", address='" + getAddress() + "'" +
-			", city='" + getCity() + "'" +
-			", state='" + getState() + "'" +
-			", referredBy='" + getReferredBy() + "'" +
-		//	", assignments='" + getAssignments() + "'" +
-		//	", project='" + getProject() + "'" +
-			"}";
-	}
-
-
+  @Override
+  public String toString() {
+    return "Employee{" +
+            "employeeId=" + employeeId +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", emailId='" + emailId + '\'' +
+            ", phone='" + phone + '\'' +
+            ", dob='" + dob + '\'' +
+            ", ssn='" + ssn + '\'' +
+            ", employeeAddress=" + employeeAddress +
+            ", employeeImmigrationDetails=" + employeeImmigrationDetails +
+            ", referredBy='" + referredBy + '\'' +
+            ", employmentDetails=" + employmentDetails +
+            ", employeeBankAccount=" + employeeBankAccount +
+            ", employeeNotes=" + employeeNotes +
+            ", LastUpdated=" + LastUpdated +
+            '}';
+  }
 }

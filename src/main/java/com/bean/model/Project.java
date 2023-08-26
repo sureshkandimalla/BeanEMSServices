@@ -1,12 +1,14 @@
 package com.bean.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Setter
 @Getter
@@ -20,35 +22,46 @@ public class Project {
   private Long projectId;
 
   private String projectName;
-  private String vendor;
+
+  @OneToOne(cascade = CascadeType.MERGE)
+  @JoinColumn(name = "projectId")
+  private Vendor vendor;
   private String client;
-  private double billRate;
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "projectId")
+  private List<Wage> billRate;
   private LocalDate startDate;
   private LocalDate endDate;
   private String status;
   private String invoiceTerm;
   private String paymentTerm;
-  private String notes;
-  /*@ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "id")
-  private Employee Employee;*/
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "projectId")
+  private List<Notes> projectNotes;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "projectId")
+  private List<Assignment> assignments;
+
+  @UpdateTimestamp
+  private LocalDate LastUpdated;
 
   @Override
   public String toString() {
-    return "{" +
-      " id='" + getProjectId() + "'" +
-      ", projectName='" + getProjectName() + "'" +
-      ", vendor='" + getVendor() + "'" +
-      ", client='" + getClient() + "'" +
-      ", billRate='" + getBillRate() + "'" +
-      ", startDate='" + getStartDate() + "'" +
-      ", endDate='" + getEndDate() + "'" +
-      ", status='" + getStatus() + "'" +
-      ", invoiceTerm='" + getInvoiceTerm() + "'" +
-      ", paymentTerm='" + getPaymentTerm() + "'" +
-      ", notes='" + getNotes() + "'" +
-      "}";
+    return "Project{" +
+            "projectId=" + projectId +
+            ", projectName='" + projectName + '\'' +
+            ", vendor=" + vendor +
+            ", client='" + client + '\'' +
+            ", billRate=" + billRate +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", status='" + status + '\'' +
+            ", invoiceTerm='" + invoiceTerm + '\'' +
+            ", paymentTerm='" + paymentTerm + '\'' +
+            ", projectNotes=" + projectNotes +
+            ", LastUpdated=" + LastUpdated +
+            '}';
   }
-
-   
 }

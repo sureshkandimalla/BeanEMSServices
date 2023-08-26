@@ -73,9 +73,7 @@ public class AssignmentController {
          assignment.setAssignmentType(assignmentDetails.getAssignmentType());
     assignment.setStartDate(assignmentDetails.getStartDate());
     assignment.setEndDate(assignmentDetails.getEndDate());
-     assignment.setBillRate(assignmentDetails.getBillRate());
-    assignment.setStatus(assignmentDetails.getStatus());
-    assignment.setNote(assignmentDetails.getNote());
+
 
         Assignment updatedAssignment = assignmentRepository.save(assignment);
         return ResponseEntity.ok(updatedAssignment);

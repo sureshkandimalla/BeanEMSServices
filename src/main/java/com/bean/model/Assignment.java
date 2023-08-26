@@ -1,11 +1,13 @@
 package com.bean.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Setter
 @Getter
@@ -20,33 +22,32 @@ public class Assignment {
   private String assignmentType;
   private LocalDate startDate;
   private LocalDate endDate;
-  private double billRate;
-  private String status;
-  private String note;
 
-  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE, optional = false)
-  @JoinColumn(name = "employee_id", nullable = false)
-  //@JsonIgnore
-  private Employee employee;
-  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE, optional = false)
-  @JoinColumn(name = "project_id", nullable = false)
-  //@JsonIgnore
+   @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "assignmentId")
+  private List<Wage> assignmentWage;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "projectId")
   private Project project;
+  private String status;
+
+  @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+  @JoinColumn(name = "assignmentId")
+  private List<Notes> assignmentNotes;
 
   @Override
   public String toString() {
-    return "{" +
-      " id='" + getAssignmentId() + "'" +
-      ", assignmentType='" + getAssignmentType() + "'" +
-      ", startDate='" + getStartDate() + "'" +
-      ", endDate='" + getEndDate() + "'" +
-      ", billRate='" + getBillRate() + "'" +
-      ", status='" + getStatus() + "'" +
-      ", note='" + getNote() + "'" +
-      "}";
+    return "Assignment{" +
+            "assignmentId=" + assignmentId +
+            ", assignmentType='" + assignmentType + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", assignmentWage=" + assignmentWage +
+            ", status='" + status + '\'' +
+            ", assignmentNotes=" + assignmentNotes +
+            '}';
   }
-
-
-  
-  
+  @UpdateTimestamp
+  private LocalDate LastUpdated;
 }
