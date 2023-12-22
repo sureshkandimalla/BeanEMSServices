@@ -1,5 +1,8 @@
 package com.bean.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +11,7 @@ import com.bean.exception.ResourceNotFoundException;
 import com.bean.repository.ProjectRepository;
 import com.bean.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +34,18 @@ public class ProjectController {
   @GetMapping("/projects")
   public List<Project> getAllProjects() {
     return projectRepository.findAll();
+  }
+
+  @GetMapping("/activeProjects/{date}")
+  public List<Project> getAllActiveProjects(@PathVariable String date) {
+    DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate datetime = LocalDate.parse(date, pattern);
+
+
+    System.out.println(datetime);
+
+    return projectRepository.findAll();
+   // return projectRepository.findAll().stream().filter(project  -> project.getStartDate().isAfter()after(start) && dates.before(end)
   }
 
   @PostMapping("/projects")
