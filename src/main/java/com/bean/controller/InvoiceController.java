@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//import static org.graalvm.compiler.nodes.calc.BinaryArithmeticNode.ReassociateMatch.x;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/")
@@ -50,6 +52,7 @@ public class InvoiceController {
     public ResponseEntity<List<Invoice>> getInvoiceForMonth(String month) {
         /* Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Invoice not exist with id: " + id));*/
+        month = "202303";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
         YearMonth yearMonth=YearMonth.parse(month,formatter);
 
@@ -90,4 +93,12 @@ public class InvoiceController {
                 .orElseThrow(() -> new ResourceNotFoundException("Invoice not exist with id: " + id));
         return ResponseEntity.ok(invoice);
     }
+
+    @GetMapping("/activeInvoices/{monthYear}")
+    public ResponseEntity<List<Invoice>> getActiveInvoicesForMonth(@PathVariable String monthYear) {
+        List<Invoice> invoiceList=invoiceRepository.findAllActiveInvoicesForTheMonth(monthYear,monthYear);
+
+        return ResponseEntity.ok(invoiceList);
+    }
+
 }
