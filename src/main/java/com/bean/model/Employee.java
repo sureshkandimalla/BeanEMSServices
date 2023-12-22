@@ -30,6 +30,11 @@ public class Employee {
   private enum gender {MALE,FEMALE};
   private String ssn;
   private String referredBy;
+  private String gender;
+  private LocalDate startDate;
+  private LocalDate endDate;
+  private String designation;
+  private String employmentType;
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "employeeId")
   private List<Assignment> employeeAssignments;

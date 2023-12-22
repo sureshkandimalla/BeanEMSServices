@@ -18,8 +18,6 @@ public class EmployeeWage {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long employeeWageId;
-
-
   @UpdateTimestamp
   private LocalDate LastUpdated;
 }
