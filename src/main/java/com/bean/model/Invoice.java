@@ -35,6 +35,10 @@ public class Invoice {
     this.endDate = endDate;
   }
 
+  public Invoice() {
+
+  }
+
   @Override
   public String toString() {
     return "{" +
