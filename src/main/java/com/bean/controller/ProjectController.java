@@ -59,7 +59,7 @@ public class ProjectController {
       );
 
     project.setProjectName(projectDetails.getProjectName());
-    project.setVendor(projectDetails.getVendor());
+   // project.setVendor(projectDetails.getVendor());
   
 
     Project updatedProject = projectRepository.save(project);

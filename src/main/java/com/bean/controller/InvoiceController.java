@@ -48,7 +48,7 @@ public class InvoiceController {
 
     @GetMapping("/invoicesForMonth")
     public ResponseEntity<List<Invoice>> getInvoiceForMonth(String month) {
-        /*Invoice invoice = invoiceRepository.findById(id)
+        /* Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Invoice not exist with id: " + id));*/
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
         YearMonth yearMonth=YearMonth.parse(month,formatter);

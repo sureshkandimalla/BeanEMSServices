@@ -23,22 +23,22 @@ public class Project {
 
   private String projectName;
 
-  @OneToOne(cascade = CascadeType.MERGE)
-  @JoinColumn(name = "projectId")
-  private Vendor vendor;
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "vendorId")
+  private Customer vendor;
   private String client;
-  @OneToMany(cascade = CascadeType.ALL)
+  /*@OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "projectId")
-  private List<Wage> billRate;
+  private List<ProjectBilling> billRates;*/
   private LocalDate startDate;
   private LocalDate endDate;
-  private String status;
   private String invoiceTerm;
   private String paymentTerm;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  private String status;
+  /*@OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "projectId")
-  private List<Notes> projectNotes;
+    private List<Notes> projectNotes;*/
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "projectId")
@@ -47,21 +47,4 @@ public class Project {
   @UpdateTimestamp
   private LocalDate LastUpdated;
 
-  @Override
-  public String toString() {
-    return "Project{" +
-            "projectId=" + projectId +
-            ", projectName='" + projectName + '\'' +
-            ", vendor=" + vendor +
-            ", client='" + client + '\'' +
-            ", billRate=" + billRate +
-            ", startDate=" + startDate +
-            ", endDate=" + endDate +
-            ", status='" + status + '\'' +
-            ", invoiceTerm='" + invoiceTerm + '\'' +
-            ", paymentTerm='" + paymentTerm + '\'' +
-            ", projectNotes=" + projectNotes +
-            ", LastUpdated=" + LastUpdated +
-            '}';
-  }
 }

@@ -28,7 +28,7 @@ public class Employment {
   private String employmentEndDate;
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "employmentId")
-  private List<Wage> employmentWage;
+  private List<EmployeeWage> employmentWage;
 
   @UpdateTimestamp
   private LocalDate LastUpdated;

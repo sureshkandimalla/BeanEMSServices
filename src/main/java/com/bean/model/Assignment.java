@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Entity
 @Table(name = "Assignment")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Assignment {
 
   @Id
@@ -23,31 +25,14 @@ public class Assignment {
   private LocalDate startDate;
   private LocalDate endDate;
 
-   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "assignmentId")
-  private List<Wage> assignmentWage;
+  private long wage;
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "projectId")
-  private Project project;
   private String status;
 
   @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "assignmentId")
   private List<Notes> assignmentNotes;
 
-  @Override
-  public String toString() {
-    return "Assignment{" +
-            "assignmentId=" + assignmentId +
-            ", assignmentType='" + assignmentType + '\'' +
-            ", startDate=" + startDate +
-            ", endDate=" + endDate +
-            ", assignmentWage=" + assignmentWage +
-            ", status='" + status + '\'' +
-            ", assignmentNotes=" + assignmentNotes +
-            '}';
-  }
   @UpdateTimestamp
   private LocalDate LastUpdated;
 }

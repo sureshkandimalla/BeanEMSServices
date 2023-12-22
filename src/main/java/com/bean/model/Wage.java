@@ -20,14 +20,13 @@ public class Wage {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long wageId;
   private long wage;
-  private enum wageType{HOURLY,YEARLY,MONTHLY}
+  private String wageType;
   private LocalDate startDate;
   private LocalDate EndDate;
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "wageId")
   private List<Notes> wageNotes;
   private LocalDate createdDate;
-
 
   @UpdateTimestamp
   private LocalDate LastUpdated;

@@ -27,6 +27,9 @@ public class Address {
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "addressId")
+  private List<EmployeeAddress> employeeAddress;
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "addressId")
   private List<Notes> addressNotes;
 
   @Override

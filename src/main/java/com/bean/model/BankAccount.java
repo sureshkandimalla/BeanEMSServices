@@ -1,5 +1,6 @@
 package com.bean.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "BankAccount")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BankAccount {
 
   @Id
@@ -34,6 +36,4 @@ public class BankAccount {
   private LocalDate activeUntil;
   @UpdateTimestamp
   private LocalDate LastUpdated;
-  
-
 }

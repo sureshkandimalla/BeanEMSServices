@@ -3,6 +3,7 @@ package com.bean.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -28,17 +29,21 @@ public class Employee {
   private String dob;
   private enum gender {MALE,FEMALE};
   private String ssn;
-
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "employeeId")
-  private List<Address> employeeAddress;
-
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "employeeId")
-  private List<ImmigrationDetails> employeeImmigrationDetails;
-
   private String referredBy;
-	@OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employeeId")
+  private List<Assignment> employeeAssignments;
+  @OneToMany(mappedBy = "employee" , cascade = CascadeType.ALL)
+ // @JoinColumn(name = "employeeId")
+  private List<EmployeeAddress> employeeAddress;
+
+
+ /* @OneToMany(mappedBy = "employee" , cascade = CascadeType.ALL)
+ // @JoinColumn(name = "employeeId")
+  private List<ImmigrationDetails> employeeImmigrationDetails;
+*/
+
+	/*@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "employeeId")
 	private List<Employment> employmentDetails;
   @OneToMany(cascade = CascadeType.ALL)
@@ -50,7 +55,7 @@ public class Employee {
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "employeeId")
-  private List<Project> projects;
+  private List<EmployeeAssignments> employeeAssignments;*/
 
   @UpdateTimestamp
   private LocalDate LastUpdated;
@@ -66,11 +71,11 @@ public class Employee {
             ", dob='" + dob + '\'' +
             ", ssn='" + ssn + '\'' +
             ", employeeAddress=" + employeeAddress +
-            ", employeeImmigrationDetails=" + employeeImmigrationDetails +
+           // ", employeeImmigrationDetails=" + employeeImmigrationDetails +
             ", referredBy='" + referredBy + '\'' +
-            ", employmentDetails=" + employmentDetails +
+           /* ", employmentDetails=" + employmentDetails +
             ", employeeBankAccount=" + employeeBankAccount +
-            ", employeeNotes=" + employeeNotes +
+            ", employeeNotes=" + employeeNotes +*/
             ", LastUpdated=" + LastUpdated +
             '}';
   }

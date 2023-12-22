@@ -3,8 +3,8 @@ package com.bean.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bean.model.Vendor;
+import com.bean.model.Customer;
 @Repository
-public interface VendorRepository extends JpaRepository<Vendor, Long>{
+public interface CustomerRepository extends JpaRepository<Customer, Long>{
     
 }
