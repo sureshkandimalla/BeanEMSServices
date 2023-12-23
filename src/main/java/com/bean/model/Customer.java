@@ -33,14 +33,14 @@ public class Customer {
   private LocalDate customerStartDate;
   private LocalDate customerEndDate;
 
-  @OneToMany(cascade = CascadeType.ALL)
+ /* @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "customerId")
   private List<BankAccount> customerBankAccount;
 
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "customerId")
-  private List<Project> projects;
+  private List<Project> projects;*/
 
   @UpdateTimestamp
   private LocalDate LastUpdated;

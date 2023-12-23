@@ -25,11 +25,14 @@ public class Project {
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "vendorId")
-  private Customer vendor;
+  private Customer customer;
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employeeId")
+  private Employee employee;
   private String client;
-  /*@OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "projectId")
-  private List<ProjectBilling> billRates;*/
+  private List<Wage> billRates;
   private LocalDate startDate;
   private LocalDate endDate;
   private String invoiceTerm;

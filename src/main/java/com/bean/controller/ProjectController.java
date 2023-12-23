@@ -2,14 +2,15 @@ package com.bean.controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.bean.exception.ResourceNotFoundException;
+import com.bean.model.Assignment;
+import com.bean.model.Wage;
 import com.bean.repository.ProjectRepository;
 import com.bean.model.Project;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,63 @@ public class ProjectController {
 
     return projectRepository.findAll();
    // return projectRepository.findAll().stream().filter(project  -> project.getStartDate().isAfter()after(start) && dates.before(end)
+  }
+  @GetMapping("/getAllProjects/{date}")
+  public List<com.bean.domain.Project> getAllProjects(@PathVariable String date) {
+    DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate datetime = LocalDate.parse(date, pattern);
+    System.out.println(datetime);
+    var repoProjects= projectRepository.findAll();
+
+    List<com.bean.domain.Project> flattenProjects=new ArrayList<>();
+
+    repoProjects.stream().forEach(project->{
+      project.getBillRates().forEach(billrate->{
+
+        project.getEmployee().getEmployeeAssignments().forEach(employeeAssignment->{
+          // if employee assignment falls in the bill rate period create a project
+          // if billrate started earlier or same time as assignment
+          boolean isInRange = billrate.getStartDate().isEqual(employeeAssignment.getStartDate()) || billrate.getStartDate().isBefore(employeeAssignment.getStartDate()) &&
+                  (billrate.getEndDate().isEqual(employeeAssignment.getEndDate()) || billrate.getEndDate().isAfter(employeeAssignment.getEndDate()));
+          if(isInRange)
+          flattenProjects.add(createProject(project,billrate,employeeAssignment));});
+      });
+    });
+
+
+    flattenProjects.forEach(project -> {
+      System.out.println(project);
+    });
+
+    return flattenProjects;
+    // return projectRepository.findAll().stream().filter(project  -> project.getStartDate().isAfter()after(start) && dates.before(end)
+  }
+  public com.bean.domain.Project  updateBillRate(com.bean.domain.Project project, Assignment assignment){
+
+    return project;
+  }
+  public com.bean.domain.Project  createProject(Project project, Wage wage,Assignment assignment){
+    com.bean.domain.Project projectDomain=new com.bean.domain.Project();
+    projectDomain.setProjectId(project.getProjectId());
+    projectDomain.setProjectName(project.getProjectName());
+    projectDomain.setClientName(project.getClient());
+    projectDomain.setInvoiceTerm(project.getInvoiceTerm());
+    projectDomain.setPaymentTerm(project.getPaymentTerm());
+    projectDomain.setStartDate(wage.getStartDate());
+    projectDomain.setEndDate(wage.getEndDate());
+    projectDomain.setBillRate(wage.getWage());
+    projectDomain.setEmployeeId(project.getEmployee().getEmployeeId());
+    projectDomain.setEmployeeName(project.getEmployee().getFirstName()+" "+project.getEmployee().getLastName());
+    projectDomain.setVendorId(project.getCustomer().getCustomerId());
+    projectDomain.setVendorName(project.getCustomer().getCustomerName());
+    projectDomain.setEmployeePay(assignment.getWage());
+    projectDomain.setStartDate(assignment.getStartDate());
+    projectDomain.setEndDate(assignment.getEndDate());
+
+      //projectDomain.gete
+
+    return projectDomain;
+
   }
 
   @PostMapping("/projects")
