@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.bean.domain.Status;
 import com.bean.exception.ResourceNotFoundException;
 import com.bean.model.Assignment;
 import com.bean.model.Wage;
@@ -48,26 +49,23 @@ public class ProjectController {
     return projectRepository.findAll();
    // return projectRepository.findAll().stream().filter(project  -> project.getStartDate().isAfter()after(start) && dates.before(end)
   }
-  @GetMapping("/getAllProjects/{date}")
-  public List<com.bean.domain.Project> getAllProjects(@PathVariable String date) {
-    DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    LocalDate datetime = LocalDate.parse(date, pattern);
-    System.out.println(datetime);
+  @GetMapping("/getProjects")
+  public List<com.bean.domain.Project> getProjects() {
     var repoProjects= projectRepository.findAll();
-
     List<com.bean.domain.Project> flattenProjects=new ArrayList<>();
-
     repoProjects.stream().forEach(project->{
       project.getBillRates().forEach(billrate->{
+        flattenProjects.add(createProject(project,billrate));});
 
-        project.getEmployee().getEmployeeAssignments().forEach(employeeAssignment->{
+        /*project.getEmployee().getEmployeeAssignments().forEach(employeeAssignment->{
           // if employee assignment falls in the bill rate period create a project
           // if billrate started earlier or same time as assignment
           boolean isInRange = billrate.getStartDate().isEqual(employeeAssignment.getStartDate()) || billrate.getStartDate().isBefore(employeeAssignment.getStartDate()) &&
                   (billrate.getEndDate().isEqual(employeeAssignment.getEndDate()) || billrate.getEndDate().isAfter(employeeAssignment.getEndDate()));
           if(isInRange)
-          flattenProjects.add(createProject(project,billrate,employeeAssignment));});
-      });
+          flattenProjects.add(createProject(project,billrate,employeeAssignment));});*/
+        System.out.println("Suresh");
+     // });
     });
 
 
@@ -82,7 +80,7 @@ public class ProjectController {
 
     return project;
   }
-  public com.bean.domain.Project  createProject(Project project, Wage wage,Assignment assignment){
+  public com.bean.domain.Project  createProject(Project project, Wage wage){
     com.bean.domain.Project projectDomain=new com.bean.domain.Project();
     projectDomain.setProjectId(project.getProjectId());
     projectDomain.setProjectName(project.getProjectName());
@@ -96,10 +94,13 @@ public class ProjectController {
     projectDomain.setEmployeeName(project.getEmployee().getFirstName()+" "+project.getEmployee().getLastName());
     projectDomain.setVendorId(project.getCustomer().getCustomerId());
     projectDomain.setVendorName(project.getCustomer().getCustomerName());
-    projectDomain.setEmployeePay(assignment.getWage());
-    projectDomain.setStartDate(assignment.getStartDate());
-    projectDomain.setEndDate(assignment.getEndDate());
-
+    projectDomain.setEmployeePay(wage.getWage());
+    projectDomain.setStartDate(wage.getStartDate());
+    projectDomain.setEndDate(wage.getEndDate());
+    if(wage.getEndDate().isBefore(LocalDate.now()) ||  project.getEndDate().isBefore(LocalDate.now()))
+      projectDomain.setStatus(Status.INACTIVE.toString());
+    else
+      projectDomain.setStatus(Status.ACTIVE.toString());
       //projectDomain.gete
 
     return projectDomain;
