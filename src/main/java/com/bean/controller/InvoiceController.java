@@ -61,7 +61,7 @@ public class InvoiceController {
         List<Assignment> assignmentList=assignmentRepository.findAllActiveAssignment(month,month);
         List x=assignmentList.stream().map(assignment -> {
             Invoice newInvoice= new Invoice(startMonth,endMonth);
-            newInvoice.setAssignment(assignment);
+           // newInvoice.setAssignment(assignment);
             invoiceRepository.save(newInvoice);
             return newInvoice;
         }).collect(Collectors.toList());

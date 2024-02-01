@@ -93,7 +93,7 @@ public class ProjectController {
     projectDomain.setEmployeeId(project.getEmployee().getEmployeeId());
     projectDomain.setEmployeeName(project.getEmployee().getFirstName()+" "+project.getEmployee().getLastName());
     projectDomain.setVendorId(project.getCustomer().getCustomerId());
-    projectDomain.setVendorName(project.getCustomer().getCustomerName());
+    projectDomain.setVendorName(project.getCustomer().getCustomerCompanyName());
     projectDomain.setEmployeePay(wage.getWage());
     projectDomain.setStartDate(wage.getStartDate());
     projectDomain.setEndDate(wage.getEndDate());

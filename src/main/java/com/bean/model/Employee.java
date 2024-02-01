@@ -29,6 +29,8 @@ public class Employee {
   private String dob;
   private enum gender {MALE,FEMALE};
   private String ssn;
+  private String visa;
+  private String taxTerm;
   private String referredBy;
   private String gender;
   private LocalDate startDate;

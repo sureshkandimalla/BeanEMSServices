@@ -25,10 +25,10 @@ public class Invoice {
   private String status;
   private LocalDate paymentDate;
 
-  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, optional = false)
+  /*@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, optional = false)
   @JoinColumn(name = "assignment_id", nullable = false)
   //@JsonIgnore
-  private Assignment assignment;
+  private Assignment assignment;*/
 
   public Invoice(LocalDate startDate, LocalDate endDate) {
     this.startDate = startDate;
