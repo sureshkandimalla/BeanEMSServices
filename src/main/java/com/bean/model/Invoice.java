@@ -1,6 +1,7 @@
 package com.bean.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -14,17 +15,20 @@ import lombok.Setter;
 public class Invoice {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long invoiceId;
 
+  private Long projectId;
+  private LocalDate invoiceMonth;
+  private Long billing;
+  private Long hours;
+  private Long total;
+  private Long invoicePaidAmount;
+  private LocalDate invoiceDate;
   private LocalDate startDate;
   private LocalDate endDate;
-  private double hours;
-  private double total;
-  private LocalDate invoiceDate;
-  private String status;
   private LocalDate paymentDate;
-
+  private String status;
+  
   /*@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, optional = false)
   @JoinColumn(name = "assignment_id", nullable = false)
   //@JsonIgnore
@@ -41,16 +45,20 @@ public class Invoice {
 
   @Override
   public String toString() {
-    return "{" +
-      " id='" + getInvoiceId() + "'" +
-      ", startDate='" + getStartDate() + "'" +
-      ", endDate='" + getEndDate() + "'" +
-      ", hours='" + getHours() + "'" +
-      ", total='" + getTotal() + "'" +
-      ", invoiceDate='" + getInvoiceDate() + "'" +
-      ", status='" + getStatus() + "'" +
-      ", paymentDate='" + getPaymentDate() + "'" +
-      "}";
+      return "Invoice{" +
+              "invoiceId=" + invoiceId +
+              ", projectId=" + projectId +
+              ", invoiceMonth=" + invoiceMonth +
+              ", billing=" + billing +
+              ", hours=" + hours +
+              ", total=" + total +
+              ", invoicePaidAmount=" + invoicePaidAmount +
+              ", invoiceDate=" + invoiceDate +
+              ", startDate=" + startDate +
+              ", endDate=" + endDate +
+              ", paymentDate=" + paymentDate +
+              ", status='" + status + '\'' +
+              '}';
   }
 
 }

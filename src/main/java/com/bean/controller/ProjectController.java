@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/")
 public class ProjectController {
-
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ProjectController.class);
   @Autowired
   private ProjectRepository projectRepository;
 
@@ -38,25 +38,36 @@ public class ProjectController {
     return projectRepository.findAll();
   }
 
-  @GetMapping("/activeProjects/{date}")
-  public List<Project> getAllActiveProjects(@PathVariable String date) {
-    DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    LocalDate datetime = LocalDate.parse(date, pattern);
+  @GetMapping("/activeProjects/{endDate}")
+  public List<com.bean.domain.Project> getAllActiveProjects(@PathVariable String endDate) {
 
+	  String startDate ="2020-01-01"; //to read from property file
 
-    System.out.println(datetime);
+    logger.info("endDate: "+endDate);
 
-    return projectRepository.findAll();
+    var activeProjects= projectRepository.findAllActiveProjectsByDate(startDate, endDate);
+    logger.info(activeProjects.toString());
+    List<com.bean.domain.Project> flattenProjects=new ArrayList<>();
+	activeProjects.stream().forEach(project -> {
+		project.getBillRates().forEach(billrate -> {
+			flattenProjects.add(createProject(project, billrate));
+		});
+	});
+		
+		return flattenProjects;
    // return projectRepository.findAll().stream().filter(project  -> project.getStartDate().isAfter()after(start) && dates.before(end)
   }
+    
   @GetMapping("/getProjects")
   public List<com.bean.domain.Project> getProjects() {
     var repoProjects= projectRepository.findAll();
     List<com.bean.domain.Project> flattenProjects=new ArrayList<>();
-    repoProjects.stream().forEach(project->{
-      project.getBillRates().forEach(billrate->{
-        flattenProjects.add(createProject(project,billrate));});
-
+	repoProjects.stream().forEach(project -> {
+		project.getBillRates().forEach(billrate -> {
+			flattenProjects.add(createProject(project, billrate));
+		});
+		
+		
         /*project.getEmployee().getEmployeeAssignments().forEach(employeeAssignment->{
           // if employee assignment falls in the bill rate period create a project
           // if billrate started earlier or same time as assignment
@@ -64,7 +75,7 @@ public class ProjectController {
                   (billrate.getEndDate().isEqual(employeeAssignment.getEndDate()) || billrate.getEndDate().isAfter(employeeAssignment.getEndDate()));
           if(isInRange)
           flattenProjects.add(createProject(project,billrate,employeeAssignment));});*/
-        System.out.println("Suresh");
+        //System.out.println("Suresh");
      // });
     });
 
@@ -97,7 +108,7 @@ public class ProjectController {
     projectDomain.setEmployeePay(wage.getWage());
     projectDomain.setStartDate(wage.getStartDate());
     projectDomain.setEndDate(wage.getEndDate());
-    if(wage.getEndDate().isBefore(LocalDate.now()) ||  project.getEndDate().isBefore(LocalDate.now()))
+    if(wage.getEndDate().isBefore(LocalDate.now()) ||  project.getEndDate().isBefore(LocalDate.now())) //to recheck condn
       projectDomain.setStatus(Status.INACTIVE.toString());
     else
       projectDomain.setStatus(Status.ACTIVE.toString());
