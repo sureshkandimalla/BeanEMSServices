@@ -52,7 +52,7 @@ public class InvoiceController {
     public ResponseEntity<String> createInvoice(@RequestBody List<com.bean.domain.Invoice> invoices) throws InvoiceException, BillsException {
     	
 		List<com.bean.domain.Invoice> filteredInvoices = invoices.stream().filter(
-				invoice -> invoice.getHours() != null && Objects.nonNull(invoice.getInvoiceId()) && invoice.getTotal() != null)
+				invoice -> isValid(invoice.getInvoiceId())) //only invoiceid as hours and total can be 0/null
 				.collect(Collectors.toList());
 		
 		//filteredInvoices.forEach(System.out::println);
@@ -67,7 +67,9 @@ public class InvoiceController {
     	return new ResponseEntity<>("Invoices created successfully", HttpStatus.CREATED);
     }
 
-
+    public boolean isValid(Long value) {
+        return value != null && value != 0L && value != Long.MIN_VALUE;
+    }
 
 	@GetMapping("/invoices/{id}")
     public ResponseEntity<Invoice> getInvoiceById(@PathVariable Long id) {
@@ -101,7 +103,7 @@ public class InvoiceController {
 	public ResponseEntity<List<Invoice>> getInvoiceForMonthAndYear(@RequestParam(required = true) String selectedDate) {
     	
     	LocalDate localDate = LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-logger.info("selectedDate:::::"+selectedDate);
+    	logger.info("selectedDate:::::"+selectedDate);
         // Format the LocalDate to a string in "yyyymm" format
         String formattedDate = localDate.format(DateTimeFormatter.ofPattern("yyyyMM"));
 		/*

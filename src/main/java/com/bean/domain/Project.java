@@ -24,28 +24,25 @@ public class Project {
     private String status;
     private String  invoiceTerm;
     private String  paymentTerm;
+    private long hours;
+    private long invoiceId;
+    private long Billing;
+    private long total;
+    
+    
+	@Override
+	public String toString() {
+		return "Project [projectId=" + projectId + ", projectName=" + projectName + ", employeeId=" + employeeId
+				+ ", employeeName=" + employeeName + ", vendorName=" + vendorName + ", vendorId=" + vendorId
+				+ ", clientName=" + clientName + ", clientId=" + clientId + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", billRate=" + billRate + ", employeePay=" + employeePay + ", expenseInternal="
+				+ expenseInternal + ", expenseExternal=" + expenseExternal + ", net=" + net + ", status=" + status
+				+ ", invoiceTerm=" + invoiceTerm + ", paymentTerm=" + paymentTerm + ", hours=" + hours + ", invoiceID="
+				+ invoiceId + ", Billing=" + Billing + ", total=" + total + "]";
+	}
+    
+    
+  
 
-    @Override
-    public String toString() {
-        return "Project{" +
-                "projectId=" + projectId +
-                ", projectName='" + projectName + '\'' +
-                ", employeeId=" + employeeId +
-                ", employeeName='" + employeeName + '\'' +
-                ", vendorName='" + vendorName + '\'' +
-                ", vendorId=" + vendorId +
-                ", clientName='" + clientName + '\'' +
-                ", clientId=" + clientId +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", billRate=" + billRate +
-                ", employeePay=" + employeePay +
-                ", expenseInternal=" + expenseInternal +
-                ", expenseExternal=" + expenseExternal +
-                ", net=" + net +
-                ", status='" + status + '\'' +
-                ", invoiceTerm='" + invoiceTerm + '\'' +
-                ", paymentTerm='" + paymentTerm + '\'' +
-                '}';
-    }
+    
 }
