@@ -52,7 +52,7 @@ public class ProjectController {
 
 		logger.info("endDate: " + endDate);
 
-		var activeProjects = projectRepository.findAllActiveProjectsByDate(startDate, endDate);
+		var activeProjects = projectRepository.findAllActiveProjectsByDate(endDate);
 		logger.info(activeProjects.toString());
 		List<com.bean.domain.Project> flattenProjects = new ArrayList<>();
 		activeProjects.stream().forEach(project -> {

@@ -28,6 +28,9 @@ public class Assignment {
   private long wage;
 
   private String status;
+  /*@ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "employeeId")*/
+  private long employeeId;
 
   @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "assignmentId")

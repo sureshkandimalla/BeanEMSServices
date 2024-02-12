@@ -14,6 +14,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 	@Query(
             value = "SELECT * FROM project a where DATE_FORMAT(a.end_date,'%Y-%m-%d')>=?",
             nativeQuery = true)
-    List<Project> findAllActiveProjectsByDate(String startDate, String endDate);
+    List<Project> findAllActiveProjectsByDate(String endDate);
    
 }
