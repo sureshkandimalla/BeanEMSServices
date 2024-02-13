@@ -70,6 +70,37 @@ public class ProjectController {
 		// project.getStartDate().isAfter()after(start) && dates.before(end)
 	}
 
+
+	@GetMapping("/projectDashboard")
+	public List<com.bean.domain.Project> projectDashboard(@RequestParam(required = true) String endDate,
+															  @RequestParam(required = true) String selectedDate) {
+
+		getAllActiveProjects(endDate,selectedDate);
+
+
+		String startDate = "2020-01-01"; // to read from property file
+
+		logger.info("endDate: " + endDate);
+
+		var activeProjects = projectRepository.findAllActiveProjectsByDate(endDate);
+		logger.info(activeProjects.toString());
+		List<com.bean.domain.Project> flattenProjects = new ArrayList<>();
+		activeProjects.stream().forEach(project -> {
+			project.getBillRates().forEach(billrate -> {
+				flattenProjects.add(projectService.createProject(project, billrate, selectedDate));
+			});
+		});
+
+		flattenProjects.forEach(project -> {
+			System.out.println(project);
+		});
+
+		return flattenProjects;
+		// return projectRepository.findAll().stream().filter(project ->
+		// project.getStartDate().isAfter()after(start) && dates.before(end)
+	}
+
+
 	@GetMapping("/getProjects")
 	public List<com.bean.domain.Project> getProjects() {
 		var repoProjects = projectRepository.findAll();
