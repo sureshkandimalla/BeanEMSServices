@@ -42,7 +42,7 @@ public class ProjectService {
 		      //projectDomain.gete
 
 		    
-		    //to add cond'n if any requred for below
+		    //to add cond'n if any requred for below other than just selectedDate
 			if (selectedDate != null) {
 				List<Invoice> monthlyInvoices = invoiceService.getInvoiceByMonthAndProjectId(selectedDate,
 						project.getProjectId());

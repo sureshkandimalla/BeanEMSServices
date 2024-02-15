@@ -20,7 +20,7 @@ public class Assignment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long assignmentId;
-
+  private Long projectId;
   private String assignmentType;
   private LocalDate startDate;
   private LocalDate endDate;

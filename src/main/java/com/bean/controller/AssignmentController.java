@@ -1,12 +1,16 @@
 package com.bean.controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bean.repository.AssignmentRepository;
+import com.bean.service.AssignmentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,18 +21,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bean.exception.ResourceNotFoundException;
 import com.bean.model.Assignment;
+import com.bean.model.Bills;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/")
 public class AssignmentController {
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AssignmentController.class);
 
     @Autowired
     private AssignmentRepository assignmentRepository;
+    @Autowired
+    private AssignmentService assignmentService;
 
     // Get all assignments
     @GetMapping("/assignments")
@@ -37,17 +46,20 @@ public class AssignmentController {
     }
 
 
-    @GetMapping("/activeAssignments")
-    public List<Assignment> getAllActiveAssignments(String startDate,String endDate) {
-       // LocalDate today = LocalDate.now();
-        if(endDate==null || endDate.length()<6)
-            endDate=startDate;
-        return assignmentRepository.findAllActiveAssignment(startDate,endDate);/*findAll().stream().filter(a->{
-            if(a.getStartDate().isBefore(today) && a.getEndDate().isAfter(today))
-                return true;
-            else
-                return false;
-        }).collect(Collectors.toList());*/
+    @GetMapping("/getActiveAssignments")
+    public ResponseEntity<List<Assignment>> getAllActiveAssignments() {
+    	
+		/*
+		 * logger.info("selectedDate:::::"+selectedDate); LocalDate date =
+		 * LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		 * String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyyMM"));
+		 */
+        
+        //get active assignments by enddate, asof now cannot have selecteddate 
+        Optional<List<Assignment>> assignList= assignmentService.findActiveAssignmentsByEndDate(LocalDate.now().toString());
+        logger.info("billsList:: "+assignList.toString());
+    	return assignList.map(assigns -> ResponseEntity.ok(assigns))
+                .orElse(null);
     }
 
     // Create assignment rest api

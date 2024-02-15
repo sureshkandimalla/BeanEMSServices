@@ -1,21 +1,20 @@
 package com.bean.controller;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.bean.domain.Status;
+import com.bean.domain.Dashboard;
 import com.bean.exception.ResourceNotFoundException;
 import com.bean.model.Assignment;
 import com.bean.model.Wage;
+import com.bean.repository.AssignmentRepository;
 import com.bean.repository.ProjectRepository;
 import com.bean.service.InvoiceService;
 import com.bean.service.ProjectService;
 import com.bean.model.Project;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,11 +37,13 @@ public class ProjectController {
 	private ProjectRepository projectRepository;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private AssignmentRepository assignmentRepository;
 
-	@GetMapping("/projects")
-	public List<Project> getAllProjects() {
-		return projectRepository.findAll();
-	}
+	/*
+	 * @GetMapping("/projects") public List<Project> getAllProjects() { return
+	 * projectRepository.findAll(); }
+	 */
 
 	@GetMapping("/activeProjects")
 	public List<com.bean.domain.Project> getAllActiveProjects(@RequestParam(required = true) String endDate,
@@ -66,38 +67,43 @@ public class ProjectController {
 		});
 		
 		return flattenProjects;
-		// return projectRepository.findAll().stream().filter(project ->
-		// project.getStartDate().isAfter()after(start) && dates.before(end)
 	}
 
 
 	@GetMapping("/projectDashboard")
-	public List<com.bean.domain.Project> projectDashboard(@RequestParam(required = true) String endDate,
-															  @RequestParam(required = true) String selectedDate) {
-
-		getAllActiveProjects(endDate,selectedDate);
+	public com.bean.domain.Dashboard projectDashboard() {
 
 
-		String startDate = "2020-01-01"; // to read from property file
+		var activeProjects = projectRepository.findAllActiveProjectsByDate(LocalDate.now().toString());
+		logger.info(null, activeProjects.size());
+		com.bean.domain.Dashboard dashboardData = new Dashboard();
+		
+		double totalWageBillRate = activeProjects.stream()
+			    .flatMap(project -> project.getBillRates().stream())
+			    .mapToDouble(billRate -> billRate.getWage())
+			    .sum();
 
-		logger.info("endDate: " + endDate);
+		// below form assignments table based on active projectId
+		
+		//var activeAssignments = assignmentRepository.findActiveAssignmentsByEndDate(LocalDate.now().toString());
+		//double totalAssignWage = activeAssignments.stream().mapToDouble(billRate -> billRate.getWage()).sum();
+		
+		List<Long> projectIds = activeProjects.stream().map(project -> project.getProjectId())
+				.collect(Collectors.toList());
 
-		var activeProjects = projectRepository.findAllActiveProjectsByDate(endDate);
-		logger.info(activeProjects.toString());
-		List<com.bean.domain.Project> flattenProjects = new ArrayList<>();
-		activeProjects.stream().forEach(project -> {
-			project.getBillRates().forEach(billrate -> {
-				flattenProjects.add(projectService.createProject(project, billrate, selectedDate));
-			});
-		});
-
-		flattenProjects.forEach(project -> {
-			System.out.println(project);
-		});
-
-		return flattenProjects;
-		// return projectRepository.findAll().stream().filter(project ->
-		// project.getStartDate().isAfter()after(start) && dates.before(end)
+		// Fetch sum of wages from assignments table
+		double totalWageFromAssignments = assignmentRepository.getTotalWageByProjectIds(projectIds);
+		
+		Optional.ofNullable(activeProjects.size())
+        .ifPresentOrElse(
+                size -> dashboardData.setActiveProjects(size),
+                () -> dashboardData.setActiveProjects(0)
+        );
+		Optional.ofNullable(totalWageBillRate).ifPresentOrElse(wage -> dashboardData.setTotalRevenue(wage),() -> dashboardData.setTotalRevenue(0));
+		Optional.ofNullable(totalWageFromAssignments).ifPresentOrElse(wage -> dashboardData.setTotalCost(wage),() -> dashboardData.setTotalCost(0));
+		logger.info("dashboardData:: "+dashboardData.toString());
+		
+		return dashboardData;
 	}
 
 
@@ -109,20 +115,6 @@ public class ProjectController {
 			project.getBillRates().forEach(billrate -> {
 				flattenProjects.add(projectService.createProject(project, billrate, null));
 			});
-
-			/*
-			 * project.getEmployee().getEmployeeAssignments().forEach(employeeAssignment->{
-			 * // if employee assignment falls in the bill rate period create a project //
-			 * if billrate started earlier or same time as assignment boolean isInRange =
-			 * billrate.getStartDate().isEqual(employeeAssignment.getStartDate()) ||
-			 * billrate.getStartDate().isBefore(employeeAssignment.getStartDate()) &&
-			 * (billrate.getEndDate().isEqual(employeeAssignment.getEndDate()) ||
-			 * billrate.getEndDate().isAfter(employeeAssignment.getEndDate()));
-			 * if(isInRange)
-			 * flattenProjects.add(createProject(project,billrate,employeeAssignment));});
-			 */
-			// System.out.println("Suresh");
-			// });
 		});
 
 		flattenProjects.forEach(project -> {
@@ -130,8 +122,6 @@ public class ProjectController {
 		});
 
 		return flattenProjects;
-		// return projectRepository.findAll().stream().filter(project ->
-		// project.getStartDate().isAfter()after(start) && dates.before(end)
 	}
 
 	public com.bean.domain.Project updateBillRate(com.bean.domain.Project project, Assignment assignment) {
