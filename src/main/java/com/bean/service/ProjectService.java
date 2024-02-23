@@ -3,6 +3,7 @@ package com.bean.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.bean.model.Assignment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,8 @@ public class ProjectService {
 		    else
 		      projectDomain.setStatus(Status.ACTIVE.toString());
 		      //projectDomain.gete
-
+		  projectDomain.setExpenseExternal((float) project.getAssignments().stream().mapToDouble(Assignment::getWage).sum());
+		//  getExpense(wage,project.getAssignments());
 		    
 		    //to add cond'n if any requred for below other than just selectedDate
 			if (selectedDate != null) {

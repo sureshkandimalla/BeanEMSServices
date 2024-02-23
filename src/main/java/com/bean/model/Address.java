@@ -25,9 +25,9 @@ public class Address {
   private String zipCode;
   private String country;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  /*@OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "addressId")
-  private List<EmployeeAddress> employeeAddress;
+  private List<EmployeeAddress> employeeAddress;*/
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "addressId")
   private List<Notes> addressNotes;
@@ -41,7 +41,7 @@ public class Address {
             ", state='" + state + '\'' +
             ", zipCode='" + zipCode + '\'' +
             ", country='" + country + '\'' +
-            ", addressNotes=" + addressNotes +
+           // ", addressNotes=" + addressNotes +
             '}';
   }
   @UpdateTimestamp

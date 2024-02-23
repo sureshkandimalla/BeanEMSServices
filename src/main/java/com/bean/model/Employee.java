@@ -40,9 +40,9 @@ public class Employee {
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "employeeId")
   private List<Assignment> employeeAssignments;
-  @OneToMany(mappedBy = "employee" , cascade = CascadeType.ALL)
- // @JoinColumn(name = "employeeId")
-  private List<EmployeeAddress> employeeAddress;
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "employeeId")
+  private List<Address> employeeAddress;
 
 
  /* @OneToMany(mappedBy = "employee" , cascade = CascadeType.ALL)
