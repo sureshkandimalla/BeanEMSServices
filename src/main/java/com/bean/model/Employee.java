@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class Employee {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "employee_id")
   private long employeeId;
   private String firstName;
   private String lastName;
@@ -37,13 +39,20 @@ public class Employee {
   private LocalDate endDate;
   private String designation;
   private String employmentType;
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "employeeId")
-  private List<Assignment> employeeAssignments;
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "employeeId")
-  private List<Address> employeeAddress;
-
+	/*
+	 * @OneToMany(cascade = CascadeType.ALL)
+	 * 
+	 * @JoinColumn(name = "employeeId") private List<Assignment>
+	 * employeeAssignments;
+	 */
+  
+  @JsonIgnoreProperties("employee")
+  @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private Address address;
+  
+  @JsonIgnoreProperties("employee")
+  @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+  private List<Project> project = new ArrayList<>();
 
  /* @OneToMany(mappedBy = "employee" , cascade = CascadeType.ALL)
  // @JoinColumn(name = "employeeId")
@@ -67,23 +76,13 @@ public class Employee {
   @UpdateTimestamp
   private LocalDate LastUpdated;
 
-  @Override
-  public String toString() {
-    return "Employee{" +
-            "employeeId=" + employeeId +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", emailId='" + emailId + '\'' +
-            ", phone='" + phone + '\'' +
-            ", dob='" + dob + '\'' +
-            ", ssn='" + ssn + '\'' +
-            ", employeeAddress=" + employeeAddress +
-           // ", employeeImmigrationDetails=" + employeeImmigrationDetails +
-            ", referredBy='" + referredBy + '\'' +
-           /* ", employmentDetails=" + employmentDetails +
-            ", employeeBankAccount=" + employeeBankAccount +
-            ", employeeNotes=" + employeeNotes +*/
-            ", LastUpdated=" + LastUpdated +
-            '}';
-  }
+@Override
+public String toString() {
+	return "Employee [employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + ", emailId="
+			+ emailId + ", phone=" + phone + ", dob=" + dob + ", ssn=" + ssn + ", visa=" + visa + ", taxTerm=" + taxTerm
+			+ ", referredBy=" + referredBy + ", gender=" + gender + ", startDate=" + startDate + ", endDate=" + endDate
+			+ ", designation=" + designation + ", employmentType=" + employmentType + ", LastUpdated=" + LastUpdated + "]";
+}
+  
+  
 }

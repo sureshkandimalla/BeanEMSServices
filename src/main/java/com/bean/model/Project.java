@@ -19,15 +19,18 @@ public class Project {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "project_id")
   private Long projectId;
 
   private String projectName;
-
+  
+  @JsonIgnoreProperties("project")
   @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "vendorId")
+  @JoinColumn(name = "vendor_id", referencedColumnName = "customer_id")
   private Customer customer;
+  @JsonIgnoreProperties("project")
   @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "employeeId")
+  @JoinColumn(name = "employee_id")
   private Employee employee;
   private String client;
   @OneToMany(cascade = CascadeType.ALL)
@@ -49,5 +52,18 @@ public class Project {
 
   @UpdateTimestamp
   private LocalDate LastUpdated;
+  
+  //using below to access the UI request only
+  @Transient
+  private Long employeeId;
+  @Transient
+  private Long vendorId;
+  
+  @Override
+public String toString() {
+	return "Project [projectId=" + projectId + ", projectName=" + projectName + ", client=" + client + ", startDate="
+			+ startDate + ", endDate=" + endDate + ", invoiceTerm=" + invoiceTerm + ", paymentTerm=" + paymentTerm
+			+ ", status=" + status + ", LastUpdated=" + LastUpdated + "]";
+}
 
 }

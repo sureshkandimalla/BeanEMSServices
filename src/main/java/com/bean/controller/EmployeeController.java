@@ -3,9 +3,13 @@ package com.bean.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.bean.repository.EmployeeRepository;
+import com.bean.service.CustomerService;
+import com.bean.service.EmployeeService;
 import com.bean.exception.ResourceNotFoundException;
+import com.bean.model.Customer;
 import com.bean.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +25,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/employees")
 public class EmployeeController {
-
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(EmployeeController.class);
+ 
   @Autowired
   private EmployeeRepository employeeRepository;
+  
+  @Autowired
+  private EmployeeService employeeService;
 
   // get all employees
-  @GetMapping("/employees")
+  @GetMapping("/getAllEmployees")
   public List<Employee> getAllEmployees() {
     return employeeRepository.findAll();
   }
 
   // create employee rest api
-  @PostMapping("/employees")
-  public Employee createEmployee(@RequestBody Employee employee) {
+  @PostMapping("/saveOnBoardDetails")
+  public ResponseEntity<Optional<Employee>> createEmployee(@RequestBody com.bean.domain.Employee employee) {
 
-    return employeeRepository.save(employee);
+	  logger.info("employee:: "+employee.toString());
+	  Optional<Employee> respEmployee = employeeService.saveEmployeeDetails(employee);
+	  
+	  logger.info("respEmployee:: "+respEmployee.toString());
+	  
+	    return ResponseEntity.ok(respEmployee);
+	    
   }
 
   // get employee by id rest api
-  @GetMapping("/employees/{id}")
+  @GetMapping("/employee/{id}")
   public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
     Employee employee = employeeRepository
       .findById(id)

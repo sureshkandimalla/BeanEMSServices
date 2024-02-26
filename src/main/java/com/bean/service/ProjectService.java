@@ -2,15 +2,24 @@ package com.bean.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import com.bean.model.Assignment;
+import com.bean.model.Employee;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.bean.model.Customer;
 import com.bean.domain.Status;
 import com.bean.model.Invoice;
 import com.bean.model.Project;
 import com.bean.model.Wage;
+import com.bean.repository.CustomerRepository;
+import com.bean.repository.EmployeeRepository;
+import com.bean.repository.ProjectRepository;
 
 @Service
 public class ProjectService {
@@ -18,6 +27,13 @@ public class ProjectService {
 	
     @Autowired
     private InvoiceService invoiceService;
+    
+	@Autowired
+    private EmployeeRepository employeeRepository;
+	@Autowired
+    private ProjectRepository projectRepository;
+	@Autowired
+    private CustomerRepository customerRepository;
     
 	  public com.bean.domain.Project  createProject(Project project, Wage wage, String selectedDate){
 		    com.bean.domain.Project projectDomain=new com.bean.domain.Project();
@@ -67,4 +83,40 @@ public class ProjectService {
 		    return projectDomain;
 
 		  }
+
+	public ResponseEntity<String> saveProject(com.bean.domain.Project project) {
+
+			logger.info("employeeid : "+project.getEmployeeId());
+		
+			Project dbProject = new Project();
+			dbProject.setClient(project.getClient());
+			dbProject.setEmployeeId(project.getEmployeeId());
+			dbProject.setVendorId(project.getVendorId());
+			dbProject.setEndDate(project.getEndDate());
+			dbProject.setStartDate(project.getStartDate());
+			dbProject.setStatus(project.getStatus());
+			dbProject.setLastUpdated(LocalDate.now());
+			dbProject.setProjectName(project.getProjectName());
+			dbProject.setInvoiceTerm(project.getInvoiceTerm());
+			dbProject.setPaymentTerm(project.getPaymentTerm());
+		
+		Optional<Employee> optionalEmployee = employeeRepository.findById(project.getEmployeeId());
+		Optional<Customer> optionalCustomer = customerRepository.findById(project.getVendorId());
+
+		if (optionalEmployee.isPresent() && optionalCustomer.isPresent()) {
+		    Employee employee = optionalEmployee.get();
+		    Customer customer = optionalCustomer.get();
+
+		    dbProject.setEmployee(employee);
+		    dbProject.setCustomer(customer);
+
+		    logger.info("employeeid & vendorid in project table: " + project.getEmployeeId() + " " + project.getVendorId());
+		    projectRepository.save(dbProject);
+		} else {
+		    // Handle the case where either the employee or the customer is not found
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee or Customer not found");
+		}
+		return ResponseEntity.status(HttpStatus.OK).body("Project data saved Succesfully");
+		
+	}
 }

@@ -13,7 +13,6 @@ import com.bean.repository.ProjectRepository;
 import com.bean.service.InvoiceService;
 import com.bean.service.ProjectService;
 import com.bean.model.Project;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -129,9 +128,11 @@ public class ProjectController {
 		return project;
 	}
 
-	@PostMapping("/projects")
-	public Project createProject(@RequestBody Project project) {
-		return projectRepository.save(project);
+	@PostMapping("/projects/saveOnBoardProject")
+	public ResponseEntity<String> createProject(@RequestBody com.bean.domain.Project project) {
+		
+		ResponseEntity<String> savedProject = projectService.saveProject(project);
+		return savedProject;
 	}
 
 	@GetMapping("/projects/{id}")

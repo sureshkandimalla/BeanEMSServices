@@ -13,6 +13,7 @@ public class Project {
     private String vendorName;
     private long vendorId;
     private String clientName;
+    private String client; //for project table
     private long clientId;
     private LocalDate startDate;
     private LocalDate endDate;

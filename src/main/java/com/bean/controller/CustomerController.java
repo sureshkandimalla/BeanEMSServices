@@ -3,9 +3,11 @@ package com.bean.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.bean.exception.ResourceNotFoundException;
 import com.bean.repository.CustomerRepository;
+import com.bean.service.CustomerService;
 import com.bean.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,20 +23,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/customers")
 public class CustomerController {
-
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CustomerController.class);
+	
   @Autowired
   private CustomerRepository customerRepository;
+  
+  @Autowired
+  private CustomerService customerService;
 
-  @GetMapping("/customers")
+  @GetMapping("/getAllCustomers")
   public List<Customer> getAllCustomers() {
     return customerRepository.findAll();
   }
 
-  @PostMapping("/customers")
-  public Customer createCustomer(@RequestBody Customer customer) {
-    return customerRepository.save(customer);
+  @PostMapping("/saveOnBoardDetails")
+  public ResponseEntity<Optional<Customer>> createCustomer(@RequestBody com.bean.domain.Customer customer) {
+	  
+	  logger.info("customer:: "+customer.toString());
+    Optional<Customer> respCustomer = customerService.saveCustomer(customer);
+    
+    return ResponseEntity.ok(respCustomer);
   }
 
   @GetMapping("/customers/{id}")
