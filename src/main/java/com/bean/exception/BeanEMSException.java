@@ -13,5 +13,11 @@ public class BeanEMSException {
 	        // Log the exception or perform additional handling if needed
 	        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
+	 
+	 @ExceptionHandler(EmployeeServiceException.class)
+	    public ResponseEntity<String> handleEmployeeServiceException(EmployeeServiceException ex) {
+	        // Log the exception or perform additional handling if needed
+	        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 
 }

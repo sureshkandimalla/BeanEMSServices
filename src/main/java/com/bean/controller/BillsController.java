@@ -18,7 +18,7 @@ import com.bean.repository.BillsRepository;
 import com.bean.service.BillsService;
 
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4000"})
 @RestController
 @RequestMapping("/api/v1/bills")
 public class BillsController {

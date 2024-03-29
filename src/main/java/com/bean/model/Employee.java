@@ -39,6 +39,10 @@ public class Employee {
   private LocalDate endDate;
   private String designation;
   private String employmentType;
+  private String status;
+  private String location;
+  private String primarySkills;
+  private String secondarySkills;
 	/*
 	 * @OneToMany(cascade = CascadeType.ALL)
 	 * 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -20,15 +21,19 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
    
     @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? ",
             nativeQuery = true)
-	List<Invoice> findAllInvoicesForTheMonth(String yearMonthReq);
+    List<Invoice> findAllInvoicesForTheMonth(String yearMonthReq);
 
-    @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? and a.project_id =?",
-            nativeQuery = true)
+    @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? and a.project_id =?", nativeQuery = true)
 	List<Invoice> findByInvoiceByMonthAndProjectId(String selectedDate, Long projectId);
     
-    @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? and a.invoice_Id =?",
-            nativeQuery = true)
+    @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? and a.invoice_Id =?", nativeQuery = true)
 	Optional<Invoice> findByInvoiceByMonthAndInvoiceId(String invoiceMonth, Long invoiceId);
+
+    @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? and a.status =?", nativeQuery = true)
+    List<Invoice> findAllInvoicesForTheMonthAndStatus(String formattedDate, String status);
+    
+    @Query(value = "SELECT status, COUNT(*) as count FROM invoice WHERE status IN ('paid', 'pending', 'upcoming', 'overdew') GROUP BY status", nativeQuery = true)
+	List<Map<String, String>> getInvoiceCountByStatus();
 
 	//void saveAll(List<com.bean.domain.Invoice> filteredInvoices);
 

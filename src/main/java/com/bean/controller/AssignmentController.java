@@ -28,7 +28,7 @@ import com.bean.exception.ResourceNotFoundException;
 import com.bean.model.Assignment;
 import com.bean.model.Bills;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4000"})
 @RestController
 @RequestMapping("/api/v1/")
 public class AssignmentController {

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4000"})
 @RestController
 @RequestMapping("/api/v1/")
 public class ProjectController {
@@ -39,16 +39,10 @@ public class ProjectController {
 	@Autowired
 	private AssignmentRepository assignmentRepository;
 
-	/*
-	 * @GetMapping("/projects") public List<Project> getAllProjects() { return
-	 * projectRepository.findAll(); }
-	 */
 
 	@GetMapping("/activeProjects")
 	public List<com.bean.domain.Project> getAllActiveProjects(@RequestParam(required = true) String endDate,
 			@RequestParam(required = true) String selectedDate) {
-
-		String startDate = "2020-01-01"; // to read from property file
 
 		logger.info("endDate: " + endDate);
 
@@ -61,9 +55,9 @@ public class ProjectController {
 			});
 		});
 
-		flattenProjects.forEach(project -> {
-			System.out.println(project);
-		});
+		/*
+		 * flattenProjects.forEach(project -> { System.out.println(project); });
+		 */
 		
 		return flattenProjects;
 	}
@@ -116,10 +110,12 @@ public class ProjectController {
 			});
 		});
 
-		flattenProjects.forEach(project -> {
-			System.out.println(project);
-		});
-
+		/*
+		 * flattenProjects.forEach(project -> { System.out.println(project); });
+		 */
+		if(!flattenProjects.isEmpty()) {
+			logger.info("flattenProjects.size():: "+flattenProjects.size());
+		}
 		return flattenProjects;
 	}
 
