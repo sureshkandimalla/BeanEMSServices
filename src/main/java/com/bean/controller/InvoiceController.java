@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 //import static org.graalvm.compiler.nodes.calc.BinaryArithmeticNode.ReassociateMatch.x;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4000" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001","http://localhost:4000" })
 @RestController
 @RequestMapping("/api/v1/invoice")
 public class InvoiceController {
@@ -104,6 +104,12 @@ public class InvoiceController {
 		return ResponseEntity.ok(x);
 	}
 
+
+	@GetMapping("/getAllInvoices")
+	public ResponseEntity<List<Invoice>> getAllInvoices() {
+		return ResponseEntity.ok(invoiceRepository.getAllInvoices());
+	}
+
 	
 	@GetMapping("/invoicesForMonthAndYear")
 	public ResponseEntity<List<Invoice>> getInvoiceForMonthAndYear(@RequestParam(required = true) String selectedDate, @RequestParam(required = false) String status) {
@@ -139,7 +145,8 @@ public class InvoiceController {
 		List<Map<String, String>> invoiceStatus = invoiceRepository.getInvoiceCountByStatus();
 		logger.info("invoiceStatus:: " + invoiceStatus.toString());
 		return invoiceStatus;
-	}	
+	}
+
 	
 
 	@PutMapping("/invoices/{id}")
@@ -167,6 +174,7 @@ public class InvoiceController {
 				.orElseThrow(() -> new ResourceNotFoundException("Invoice not exist with id: " + id));
 		return ResponseEntity.ok(invoice);
 	}
+
 
 	@GetMapping("/activeInvoices/{monthYear}")
 	public ResponseEntity<List<Invoice>> getActiveInvoicesForMonth(@PathVariable String monthYear) {

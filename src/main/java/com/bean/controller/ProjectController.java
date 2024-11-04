@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4000"})
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001", "http://localhost:4000"})
 @RestController
 @RequestMapping("/api/v1/")
 public class ProjectController {
@@ -85,7 +85,9 @@ public class ProjectController {
 				.collect(Collectors.toList());
 
 		// Fetch sum of wages from assignments table
-		double totalWageFromAssignments = assignmentRepository.getTotalWageByProjectIds(projectIds);
+		System.out.println(projectIds);
+		var totalWageFromAssignments=0;
+		//var totalWageFromAssignments = assignmentRepository.getTotalWageByProjectIds(projectIds);
 		
 		Optional.ofNullable(activeProjects.size())
         .ifPresentOrElse(

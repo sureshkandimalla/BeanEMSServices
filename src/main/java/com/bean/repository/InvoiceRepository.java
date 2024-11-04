@@ -23,6 +23,10 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
             nativeQuery = true)
     List<Invoice> findAllInvoicesForTheMonth(String yearMonthReq);
 
+    @Query(value = "SELECT * FROM invoice ",
+            nativeQuery = true)
+    List<Invoice> getAllInvoices();
+
     @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? and a.project_id =?", nativeQuery = true)
 	List<Invoice> findByInvoiceByMonthAndProjectId(String selectedDate, Long projectId);
     
