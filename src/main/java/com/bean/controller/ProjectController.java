@@ -139,6 +139,12 @@ public class ProjectController {
 				.orElseThrow(() -> new ResourceNotFoundException("Project not exist with id :" + id));
 		return ResponseEntity.ok(project);
 	}
+	@GetMapping("/projects")
+	public ResponseEntity<List<Project>> getProjectByEmpId(@RequestParam Long employeeId) {
+		List<Project> project = projectRepository.findAllProjectsByEmployee(employeeId);
+				//.orElseThrow(() -> new ResourceNotFoundException("Project not exist with id :" + employeeId));
+		return ResponseEntity.ok(project);
+	}
 
 	@PutMapping("/projects/{id}")
 	public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails) {
