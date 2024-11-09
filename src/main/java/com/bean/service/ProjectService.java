@@ -1,6 +1,7 @@
 package com.bean.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +53,10 @@ public class ProjectService {
 		    projectDomain.setEmployeePay(wage.getWage());
 		    projectDomain.setStartDate(wage.getStartDate());
 		    projectDomain.setEndDate(wage.getEndDate());
-		    if(wage.getEndDate().isBefore(LocalDate.now()) ||  project.getEndDate().isBefore(LocalDate.now())) //to recheck condn
-		      projectDomain.setStatus(Status.INACTIVE.toString());
+		  LocalDate today = LocalDate.now();
+		  if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||
+				  (project.getEndDate() != null && project.getEndDate().isBefore(today)))
+			  projectDomain.setStatus(Status.INACTIVE.toString());
 		    else
 		      projectDomain.setStatus(Status.ACTIVE.toString());
 		      //projectDomain.gete
@@ -103,6 +106,21 @@ public class ProjectService {
 		Optional<Employee> optionalEmployee = employeeRepository.findById(project.getEmployeeId());
 		Optional<Customer> optionalCustomer = customerRepository.findById(project.getVendorId());
 
+		Wage wage =new Wage();
+		wage.setEndDate(project.getEndDate());
+		wage.setLastUpdated(LocalDate.now());
+		wage.setStartDate(project.getStartDate());
+		wage.setWageType("Billing");
+		wage.setWage(project.getBillRate());
+		wage.setCreatedDate(LocalDate.now());
+		// Using Optional to handle null list gracefully
+		Optional.ofNullable(dbProject.getBillRates())
+				.orElseGet(() -> {
+					List<Wage> newList = new ArrayList<>();
+					dbProject.setBillRates(newList);
+					return newList;
+				})
+				.add(wage);
 		if (optionalEmployee.isPresent() && optionalCustomer.isPresent()) {
 		    Employee employee = optionalEmployee.get();
 		    Customer customer = optionalCustomer.get();

@@ -1,6 +1,7 @@
 package com.bean.controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,28 @@ public class ProjectController {
 		 * flattenProjects.forEach(project -> { System.out.println(project); });
 		 */
 		
+		return flattenProjects;
+	}
+	@GetMapping("/allActiveProjects")
+	public List<com.bean.domain.Project> getAllActiveProjects() {
+
+		//logger.info("endDate: " + endDate);
+		String endDate=LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		String selectedDate=LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+		var activeProjects = projectRepository.findAllActiveProjectsByDate(endDate);
+		logger.info(activeProjects.toString());
+		List<com.bean.domain.Project> flattenProjects = new ArrayList<>();
+		activeProjects.stream().forEach(project -> {
+			project.getBillRates().forEach(billrate -> {
+				flattenProjects.add(projectService.createProject(project, billrate, selectedDate));
+			});
+		});
+
+		/*
+		 * flattenProjects.forEach(project -> { System.out.println(project); });
+		 */
+
 		return flattenProjects;
 	}
 

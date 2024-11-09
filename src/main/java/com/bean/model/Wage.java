@@ -19,7 +19,7 @@ public class Wage {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long wageId;
-  private long wage;
+  private float wage;
   private String wageType;
   private LocalDate startDate;
   private LocalDate EndDate;
