@@ -1,5 +1,7 @@
 package com.bean.controller;
 
+import java.math.BigInteger;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -74,6 +76,20 @@ public class AssignmentController {
         Assignment assignment = assignmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Assignment not exist with id :" + id));
         return ResponseEntity.ok(assignment);
+    }
+
+    @GetMapping("/assignmentsForProject")
+    public ResponseEntity<List<com.bean.domain.Assignment>> getAssignmentByProjectId(@RequestParam Long projectId) {
+
+        List<com.bean.domain.Assignment> x=assignmentRepository.findAssignmentsForProject(projectId).stream().map(result->new com.bean.domain.Assignment(
+                (String) result[0],(String) result[1],(BigInteger) result[2],(BigInteger) result[3]
+                ,(String)result[4],(String)result[5],(Date)result[6],(Date)result[7],(Date)result[8])
+        ).collect(Collectors.toList());;
+        System.out.println(x);
+
+      //  var assignment = assignmentRepository.findAssignmentsForProject(projectId)
+               // .orElseThrow(() -> new ResourceNotFoundException("Assignment not exist with id :" + projectId));
+        return ResponseEntity.ok(x);
     }
 
     // Update assignment rest api

@@ -51,8 +51,8 @@ public class Employee {
 	 */
   
   @JsonIgnoreProperties("employee")
-  @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private Address address;
+  @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Address> address= new ArrayList<>();
   
   @JsonIgnoreProperties("employee")
   @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)

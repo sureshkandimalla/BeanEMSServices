@@ -22,6 +22,7 @@ public class Assignment {
   private Long assignmentId;
   private Long projectId;
   private String assignmentType;
+  private String assignmentTaxType;
   private LocalDate startDate;
   private LocalDate endDate;
 

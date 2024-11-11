@@ -1,6 +1,7 @@
 package com.bean.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,8 +57,10 @@ public class EmployeeService {
 		address.setState(employee.state());
 		address.setCountry(employee.country());
 		address.setZipCode(employee.zipCode());
-		
-		emp.setAddress(address);
+		Optional.ofNullable(emp.getAddress()).orElseGet(() -> { emp.setAddress(new ArrayList<>()); return emp.getAddress(); }).add(address);
+
+
+		//emp.setAddress(address);
         address.setEmployee(emp);
 		
         try {

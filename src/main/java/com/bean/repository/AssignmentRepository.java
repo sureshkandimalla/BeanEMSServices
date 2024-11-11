@@ -30,7 +30,12 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     
     @Query(value = "SELECT SUM(wage) FROM assignment WHERE project_id IN :projectIds", nativeQuery = true)
     double getTotalWageByProjectIds(@Param("projectIds") List<Long> projectIds);
-    
-    
+
+    @Query(value =" select e.first_name as firstName,e.last_name as lastName,assignment_id as assignmentId,wage as wage, "+
+            "assignment_type as assignmentType, a.status as status, a.start_date as startDate,a.end_date as endDate,"+
+            "a.last_updated as lastUpdatedDate from assignment a,employees e "+
+            "where a.employee_id=e.employee_id and a.project_id=?",
+            nativeQuery = true)
+    List<Object[]> findAssignmentsForProject(Long projectId);
     
 }

@@ -63,7 +63,7 @@ public class Project {
 public String toString() {
 	return "Project [projectId=" + projectId + ", projectName=" + projectName + ", client=" + client + ", startDate="
 			+ startDate + ", endDate=" + endDate + ", invoiceTerm=" + invoiceTerm + ", paymentTerm=" + paymentTerm
-			+ ", status=" + status + ", LastUpdated=" + LastUpdated + "]";
+			+ ", status=" + status + ", LastUpdated=" + LastUpdated +", assignments= "+assignments+ "]";
 }
 
 }

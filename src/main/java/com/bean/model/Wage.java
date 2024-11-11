@@ -26,6 +26,8 @@ public class Wage {
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "wageId")
   private List<Notes> wageNotes;
+
+
   private LocalDate createdDate;
 
   @UpdateTimestamp
