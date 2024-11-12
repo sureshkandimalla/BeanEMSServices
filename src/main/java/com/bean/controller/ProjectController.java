@@ -124,13 +124,25 @@ public class ProjectController {
 		return dashboardData;
 	}
 
-
+ Map<String,Long> getWages(Project project,Wage billrate){
+	var assignments=project.getAssignments();
+	Map<String,Long> assignmentMap=new HashMap<>();
+	assignments.forEach(assignment ->{
+		if((assignment.getStartDate().isEqual(billrate.getStartDate()) || assignment.getStartDate().isAfter(billrate.getStartDate()))
+		&& (assignment.getEndDate().isEqual(billrate.getEndDate())  || assignment.getEndDate().isEqual(billrate.getEndDate()))){
+			assignmentMap.put(assignment.getAssignmentType(), assignment.getWage());
+		}
+	} );
+	return assignmentMap;
+}
 	@GetMapping("/getProjects")
 	public List<com.bean.domain.Project> getProjects() {
 		var repoProjects = projectRepository.findAll();
 		List<com.bean.domain.Project> flattenProjects = new ArrayList<>();
 		repoProjects.stream().forEach(project -> {
+			System.out.println(project.getAssignments());
 			project.getBillRates().forEach(billrate -> {
+
 				flattenProjects.add(projectService.createProject(project, billrate, null));
 			});
 		});

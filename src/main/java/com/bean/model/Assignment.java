@@ -39,4 +39,21 @@ public class Assignment {
 
   @UpdateTimestamp
   private LocalDate LastUpdated;
+
+  @Override
+  public String toString() {
+    return "Assignment{" +
+            "assignmentId=" + assignmentId +
+            ", projectId=" + projectId +
+            ", assignmentType='" + assignmentType + '\'' +
+            ", assignmentTaxType='" + assignmentTaxType + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", wage=" + wage +
+            ", status='" + status + '\'' +
+            ", employeeId=" + employeeId +
+            ", assignmentNotes=" + assignmentNotes +
+            ", LastUpdated=" + LastUpdated +
+            '}';
+  }
 }

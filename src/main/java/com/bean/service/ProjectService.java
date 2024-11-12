@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.bean.domain.WageType;
 import com.bean.model.Assignment;
 import com.bean.model.Employee;
 
@@ -50,17 +52,37 @@ public class ProjectService {
 		    projectDomain.setEmployeeName(project.getEmployee().getFirstName()+" "+project.getEmployee().getLastName());
 		    projectDomain.setVendorId(project.getCustomer().getCustomerId());
 		    projectDomain.setVendorName(project.getCustomer().getCustomerCompanyName());
-		    projectDomain.setEmployeePay(wage.getWage());
 		    projectDomain.setStartDate(wage.getStartDate());
 		    projectDomain.setEndDate(wage.getEndDate());
 		  LocalDate today = LocalDate.now();
+		  // to get multiple assignments if employee pay if we need to create 2 diffrent projects if employee pay is diff
+		  /*List<Assignment> empPayAssignments = project.getAssignments().stream()
+				  .filter(assignment -> WageType.EMP_PAY.equals(assignment.getAssignmentType()))
+				  .collect(Collectors.toList());*/
+		  Optional<Long> empPayWage = project.getAssignments().stream()
+				  .filter(assignment -> (WageType.EMP_PAY.toString().equals(assignment.getAssignmentType())))
+				  .filter(assignment -> {
+					  return (assignment.getStartDate().isBefore(today) || assignment.getStartDate().isEqual(today)) &&
+							  (assignment.getEndDate().isAfter(today) || assignment.getEndDate().isEqual(today));
+				  })
+				  .map(Assignment::getWage)
+				  .findFirst();
+		  projectDomain.setEmployeePay(empPayWage.orElse(0L));
+		  projectDomain.setExpenseInternal((float)(( projectDomain.getEmployeePay() == 0) ? 0L : projectDomain.getEmployeePay() * .10));
+
+		  //project.getAssignments().stream().forEach(assignment ->{if(WageType.EMP_PAY.equals(assignment.getAssignmentType())?assignment.getWage()});
 		  if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||
 				  (project.getEndDate() != null && project.getEndDate().isBefore(today)))
 			  projectDomain.setStatus(Status.INACTIVE.toString());
 		    else
 		      projectDomain.setStatus(Status.ACTIVE.toString());
 		      //projectDomain.gete
-		  projectDomain.setExpenseExternal((float) project.getAssignments().stream().mapToDouble(Assignment::getWage).sum());
+		  projectDomain.setExpenseExternal((float) project.getAssignments().stream()
+				  .filter(assignment -> !WageType.EMP_PAY.toString().equals(assignment.getAssignmentType()))  // Exclude EMP_PAY
+				  .mapToDouble(Assignment::getWage)  // Sum wages
+				  .sum());
+		  projectDomain.setNet(projectDomain.getBillRate()- projectDomain.getEmployeePay()- projectDomain.getExpenseExternal()- projectDomain.getExpenseInternal());
+		//  projectDomain.setExpenseExternal((float) project.getAssignments().stream().mapToDouble(Assignment::getWage).sum());
 		//  getExpense(wage,project.getAssignments());
 		    
 		    //to add cond'n if any requred for below other than just selectedDate
