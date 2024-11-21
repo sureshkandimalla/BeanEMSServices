@@ -130,7 +130,7 @@ public class ProjectController {
 	assignments.forEach(assignment ->{
 		if((assignment.getStartDate().isEqual(billrate.getStartDate()) || assignment.getStartDate().isAfter(billrate.getStartDate()))
 		&& (assignment.getEndDate().isEqual(billrate.getEndDate())  || assignment.getEndDate().isEqual(billrate.getEndDate()))){
-			assignmentMap.put(assignment.getAssignmentType(), assignment.getWage());
+			assignmentMap.put(assignment.getAssignmentType(), (long)assignment.getWage());
 		}
 	} );
 	return assignmentMap;

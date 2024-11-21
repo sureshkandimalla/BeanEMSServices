@@ -33,6 +33,10 @@ public class Customer {
   private String customerStatus;
   private LocalDate customerStartDate;
   private LocalDate customerEndDate;
+  private String customerContactEmail;
+  private String customerType;
+  private String customerAddress;
+
 
  /* @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "customerId")

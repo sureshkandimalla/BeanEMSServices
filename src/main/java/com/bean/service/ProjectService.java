@@ -59,16 +59,24 @@ public class ProjectService {
 		  /*List<Assignment> empPayAssignments = project.getAssignments().stream()
 				  .filter(assignment -> WageType.EMP_PAY.equals(assignment.getAssignmentType()))
 				  .collect(Collectors.toList());*/
-		  Optional<Long> empPayWage = project.getAssignments().stream()
+		  //TODO check for employee wages if there are multiple
+		  Optional<Assignment> empAssignment = project.getAssignments().stream()
 				  .filter(assignment -> (WageType.EMP_PAY.toString().equals(assignment.getAssignmentType())))
-				  .filter(assignment -> {
-					  return (assignment.getStartDate().isBefore(today) || assignment.getStartDate().isEqual(today)) &&
-							  (assignment.getEndDate().isAfter(today) || assignment.getEndDate().isEqual(today));
-				  })
-				  .map(Assignment::getWage)
 				  .findFirst();
-		  projectDomain.setEmployeePay(empPayWage.orElse(0L));
-		  projectDomain.setExpenseInternal((float)(( projectDomain.getEmployeePay() == 0) ? 0L : projectDomain.getEmployeePay() * .10));
+
+		  /*Optional<Double> empPayWage = project.getAssignments().stream()
+				  .filter(assignment -> (WageType.EMP_PAY.toString().equals(assignment.getAssignmentType())))
+				  *//*.filter(assignment -> {
+					  return (assignment.getStartDate().isAfter(project.getStartDate()) || assignment.getStartDate().isEqual(project.getStartDate())) &&
+							  (assignment.getEndDate().isBefore(today) || assignment.getEndDate().isEqual(today));
+				  })*//*
+				  .map(Assignment::getWage)
+				  .findFirst();*/
+		  if(empAssignment.isPresent()) {
+			  projectDomain.setEmployeePay(((float) empAssignment.get().getWage()));
+			 if( empAssignment.get().getAssignmentTaxType().equals("W2"))
+				 projectDomain.setExpenseInternal((float)(( projectDomain.getEmployeePay() == 0) ? 0L : projectDomain.getEmployeePay() * .10));
+		  }
 
 		  //project.getAssignments().stream().forEach(assignment ->{if(WageType.EMP_PAY.equals(assignment.getAssignmentType())?assignment.getWage()});
 		  if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||

@@ -3,11 +3,9 @@ package com.bean.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +41,14 @@ public class Employee {
   private String location;
   private String primarySkills;
   private String secondarySkills;
-	/*
+    private String workCity;
+    private String workCountry;
+    private String resourceType;
+    private String employeeDept;
+  private long annualPay;
+  private LocalDate payrollStart;
+
+    /*
 	 * @OneToMany(cascade = CascadeType.ALL)
 	 * 
 	 * @JoinColumn(name = "employeeId") private List<Assignment>

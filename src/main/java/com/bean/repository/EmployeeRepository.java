@@ -12,8 +12,9 @@ import com.bean.model.Employee;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
-	@Query(value = "SELECT status, COUNT(*) as count FROM employees WHERE status IN ('onBoarding', 'active', 'NewHires', 'bench') GROUP BY status",
-            nativeQuery = true)
+	//@Query(value = "SELECT status, COUNT(*) as count FROM employees WHERE status IN ('onBoarding', 'Terminated','Inactive','Approved','active', 'NewHires', 'bench') GROUP BY status",
+			@Query(value = "SELECT status, COUNT(*) as count FROM employees  GROUP BY status",
+					nativeQuery = true)
 	List<Map<String, String>> getEmpCountByStatus();
 	
 	

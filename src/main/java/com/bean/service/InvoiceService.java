@@ -125,7 +125,7 @@ public class InvoiceService {
 	        bill.setAssignmentId(assignment.getAssignmentId());
 	        bill.setEmployeeId(assignment.getAssignmentId());
 	        bill.setBillDate(invoice.getPaymentDate()); //tochange as per business
-	        bill.setBilling(assignment.getWage()); //invoice.getBilling()
+	        bill.setBilling((long)assignment.getWage()); //invoice.getBilling()
 	        bill.setHours(invoice.getHours());
 	        bill.setBillPaidAmount(invoice.getTotal());  //tochange as per business
 	        bill.setPaymentDate(invoice.getPaymentDate());

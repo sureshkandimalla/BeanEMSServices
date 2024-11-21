@@ -20,7 +20,7 @@ public class Assignment {
   private String firstName;
   private String lastName;
   private BigInteger assignmentId;
-  private BigInteger wage;
+  private Double wage;
   private Date startDate;
   private Date endDate;
 
@@ -32,7 +32,7 @@ public class Assignment {
   private Date lastUpdatedDate;
 
   public Assignment(String firstName, String lastName,
-                    BigInteger assignmentId, BigInteger wage,
+                    BigInteger assignmentId, double wage,
                     String assignmentType, String status,Date startDate, Date endDate,  Date lastUpdatedDate) {
     this.firstName = firstName;
     this.lastName = lastName;
