@@ -151,10 +151,8 @@ public class InvoiceController {
 
 	@PutMapping("/invoices/{id}")
 	public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody Invoice invoiceDetails) {
-		Invoice invoice = invoiceRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Invoice not exist with id: " + id));
-
-		Invoice updatedInvoice = invoiceRepository.save(invoice);
+		Invoice invoice = invoiceRepository.findByInvoiceId(id).orElseThrow(() -> new ResourceNotFoundException("Invoice not exist with id: " + id));
+		Invoice updatedInvoice = invoiceRepository.saveAndFlush(invoiceDetails);
 		return ResponseEntity.ok(updatedInvoice);
 	}
 

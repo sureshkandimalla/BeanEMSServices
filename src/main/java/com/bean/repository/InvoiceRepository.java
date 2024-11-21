@@ -2,6 +2,7 @@ package com.bean.repository;
 
 import com.bean.model.Assignment;
 import com.bean.model.Invoice;
+import com.bean.model.Payroll;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -38,6 +39,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     
     @Query(value = "SELECT status, COUNT(*) as count FROM invoice WHERE status IN ('paid', 'pending', 'upcoming', 'overdew') GROUP BY status", nativeQuery = true)
 	List<Map<String, String>> getInvoiceCountByStatus();
+   Optional<Invoice> findByInvoiceId(Long employeeId);
 
 	//void saveAll(List<com.bean.domain.Invoice> filteredInvoices);
 
