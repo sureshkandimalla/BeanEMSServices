@@ -1,14 +1,21 @@
 package com.bean.controller;
 
+import com.bean.exception.BillsException;
+import com.bean.exception.EmployeeServiceException;
+import com.bean.exception.InvoiceException;
 import com.bean.model.Adjustment;
+import com.bean.model.Employee;
 import com.bean.model.Payroll;
 import com.bean.repository.AdjustmentRepository;
 import com.bean.repository.PayrollRepository;
 import com.bean.service.BillsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -39,5 +46,15 @@ public class AdjustmentController {
 		return adjustments;
 
 	}
+	@PostMapping("/addAdjustment")
+	public ResponseEntity<Adjustment>  createInvoice(@RequestBody Adjustment adjustment) throws Exception {
 
+		try {
+			 Adjustment newAdjustment=adjustmentRepository.save(adjustment);
+
+			return  ResponseEntity.ok(newAdjustment);
+		} catch (Exception e) {
+			throw new Exception("Adjustment data not saved", e);
+		}
+	}
 }
