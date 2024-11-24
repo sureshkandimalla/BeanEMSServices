@@ -14,10 +14,10 @@ public class Invoice {
 	 	private long invoiceId;
 	    private Long projectId;
 	    private LocalDate  invoiceMonth;
-	    private Long billRate;
-	    private Long hours;
-	    private Long total;
-	    private Long invoicePaidAmount;
+	    private float billRate;
+	    private float hours;
+	    private float total;
+	    private float invoicePaidAmount;
 	    private LocalDate invoiceDate;
 	    private LocalDate startDate;
 	    private LocalDate endDate;

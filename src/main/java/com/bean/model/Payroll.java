@@ -19,9 +19,13 @@ public class Payroll {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "payroll_id")
   private long payrollId;
+  private long payCheckId;
   private long employeeId;
+  @Transient
   private LocalDate checkDate;
+  @Transient
   private LocalDate payCycleStartDate;
+  @Transient
   private LocalDate payCycleEndDate;
   private float hours;
   private float totalPaid;
@@ -32,6 +36,23 @@ public class Payroll {
   private String notes;
   @UpdateTimestamp
   private LocalDate LastUpdated;
+public Payroll() {}
+  public Payroll(long payrollId, long payCheckId, long employeeId, LocalDate payCycleStartDate,LocalDate checkDate,  LocalDate payCycleEndDate, float hours, float totalPaid, float taxWithheld, float deductions, float netPay, float employerLiability, String notes, LocalDate lastUpdated) {
+    this.payrollId = payrollId;
+    this.payCheckId = payCheckId;
+    this.employeeId = employeeId;
+    this.checkDate = checkDate;
+    this.payCycleStartDate = payCycleStartDate;
+    this.payCycleEndDate = payCycleEndDate;
+    this.hours = hours;
+    this.totalPaid = totalPaid;
+    this.taxWithheld = taxWithheld;
+    this.deductions = deductions;
+    this.netPay = netPay;
+    this.employerLiability = employerLiability;
+    this.notes = notes;
+    LastUpdated = lastUpdated;
+  }
 
   @Override
   public String toString() {

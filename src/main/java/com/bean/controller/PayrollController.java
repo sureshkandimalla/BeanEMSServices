@@ -38,7 +38,7 @@ public class PayrollController {
 	@GetMapping("/getPayrollsForEmp")
 	public List<Payroll> getPayrolls(@RequestParam(required = true) long employeeId) {
 
-		List<Payroll> filteredPayrolls = payrollRepository.findByEmployeeId(employeeId);
+		List<Payroll> filteredPayrolls = payrollRepository.findPayrollsWithPayPeriodDatesByEmployeeId(employeeId);
 
 		return filteredPayrolls;
 

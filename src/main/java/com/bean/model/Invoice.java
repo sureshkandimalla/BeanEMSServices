@@ -1,7 +1,6 @@
 package com.bean.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.*;
 
@@ -19,10 +18,10 @@ public class Invoice {
 
   private Long projectId;
   private LocalDate invoiceMonth;
-  private Long billing;
-  private Long hours;
-  private Long total;
-  private Long invoicePaidAmount;
+  private float billing;
+  private float hours;
+  private float total;
+  private float invoicePaidAmount;
   private LocalDate invoiceDate;
   private LocalDate startDate;
   private LocalDate endDate;

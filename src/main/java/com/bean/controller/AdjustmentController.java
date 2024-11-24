@@ -1,21 +1,12 @@
 package com.bean.controller;
 
-import com.bean.exception.BillsException;
-import com.bean.exception.EmployeeServiceException;
-import com.bean.exception.InvoiceException;
 import com.bean.model.Adjustment;
-import com.bean.model.Employee;
-import com.bean.model.Payroll;
 import com.bean.repository.AdjustmentRepository;
-import com.bean.repository.PayrollRepository;
-import com.bean.service.BillsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -39,11 +30,15 @@ public class AdjustmentController {
 	@GetMapping("/findAdjustmentsByEmployeeId")
 	public List<com.bean.domain.Adjustment> findAdjustmentsByEmployeeId(@RequestParam(required = true) long id) {
 
-		List<Object[]> filteredAdjustments = adjustmentRepository.findAdjustmentsByEmployeeId(id);
-		List<com.bean.domain.Adjustment> adjustments = filteredAdjustments.stream()
-				.map(a -> new com.bean.domain.Adjustment(a)) // Replace with appropriate constructor
+		return adjustmentRepository.findAdjustmentsByEmployeeId(id).stream()
+				.map(row -> {
+					com.bean.domain.Adjustment adjustment = new com.bean.domain.Adjustment(row);
+					if (adjustment.getToId() == id) {
+						adjustment.setAmount(-Math.abs(adjustment.getAmount()));
+					}
+					return adjustment;
+				})
 				.collect(Collectors.toList());
-		return adjustments;
 
 	}
 	@PostMapping("/addAdjustment")

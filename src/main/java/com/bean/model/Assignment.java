@@ -32,6 +32,7 @@ public class Assignment {
   /*@ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "employeeId")*/
   private long employeeId;
+  private String description;
 
   @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "assignmentId")

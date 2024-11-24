@@ -56,7 +56,7 @@ public class InvoiceService {
 		if (existingInvoice.isPresent()) {
 
 			Invoice existing = existingInvoice.get();
-			if (!existing.getHours().equals(dbInvoice.getHours()) || !existing.getTotal().equals(dbInvoice.getTotal())) {
+			if (!(existing.getHours()==dbInvoice.getHours()) || !(existing.getTotal()==dbInvoice.getTotal())) {
 				existing.setHours(dbInvoice.getHours());
 				existing.setTotal(dbInvoice.getTotal());
 				// toadd params if required invoice_date,invoice paid amount, need to be

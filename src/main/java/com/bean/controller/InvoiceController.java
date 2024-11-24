@@ -152,6 +152,21 @@ public class InvoiceController {
 	@PutMapping("/invoices/{id}")
 	public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody Invoice invoiceDetails) {
 		Invoice invoice = invoiceRepository.findByInvoiceId(id).orElseThrow(() -> new ResourceNotFoundException("Invoice not exist with id: " + id));
+		switch (invoiceDetails.getStatus().toLowerCase()) {
+			case "paid":
+				if (invoiceDetails.getInvoicePaidAmount() == 0) {
+					invoiceDetails.setInvoicePaidAmount(invoiceDetails.getTotal());
+				}
+				break;
+			case "unpaid":
+				if (invoiceDetails.getInvoicePaidAmount() != 0) {
+					invoiceDetails.setInvoicePaidAmount(0L);
+				}
+				break;
+			default:
+				// Handle other statuses if needed
+				break;
+		}
 		Invoice updatedInvoice = invoiceRepository.saveAndFlush(invoiceDetails);
 		return ResponseEntity.ok(updatedInvoice);
 	}

@@ -25,10 +25,10 @@ public class Project {
     private String status;
     private String  invoiceTerm;
     private String  paymentTerm;
-    private long hours;
+    private float hours;
     private long invoiceId;
-    private long Billing;
-    private long total;
+    private float Billing;
+    private float total;
     
     
 	@Override

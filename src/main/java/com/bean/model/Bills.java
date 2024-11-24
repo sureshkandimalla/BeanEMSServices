@@ -21,11 +21,11 @@ public class Bills {
   private Long invoiceId;
   private Long assignmentId;
   private LocalDate invoiceMonth;
-  private Long billing; //assignment wage
+  private float billing; //assignment wage
   private Long employeeId; //assignment 
-  private Long hours;
-  private Long total;
-  private Long billPaidAmount;
+  private float hours;
+  private float total;
+  private float billPaidAmount;
   private LocalDate billDate;
   private LocalDate startDate;
   private LocalDate endDate;

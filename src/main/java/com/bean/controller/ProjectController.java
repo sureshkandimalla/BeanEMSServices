@@ -1,31 +1,21 @@
 package com.bean.controller;
 
+import com.bean.domain.Dashboard;
+import com.bean.exception.ResourceNotFoundException;
+import com.bean.model.Assignment;
+import com.bean.model.Project;
+import com.bean.model.Wage;
+import com.bean.repository.AssignmentRepository;
+import com.bean.repository.ProjectRepository;
+import com.bean.service.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import com.bean.domain.Dashboard;
-import com.bean.exception.ResourceNotFoundException;
-import com.bean.model.Assignment;
-import com.bean.model.Wage;
-import com.bean.repository.AssignmentRepository;
-import com.bean.repository.ProjectRepository;
-import com.bean.service.InvoiceService;
-import com.bean.service.ProjectService;
-import com.bean.model.Project;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001", "http://localhost:4000"})
 @RestController
@@ -46,15 +36,15 @@ public class ProjectController {
 			@RequestParam(required = true) String selectedDate) {
 
 		logger.info("endDate: " + endDate);
+		String selectedMonth=selectedDate.substring(0,7);
 
-		var activeProjects = projectRepository.findAllActiveProjectsByDate(endDate);
+		var activeProjects = projectRepository.findAllActiveProjectsForMonth(selectedMonth);
 		logger.info(activeProjects.toString());
 		List<com.bean.domain.Project> flattenProjects = new ArrayList<>();
-		activeProjects.stream().forEach(project -> {
+		for (Project project : activeProjects)
 			project.getBillRates().forEach(billrate -> {
 				flattenProjects.add(projectService.createProject(project, billrate, selectedDate));
 			});
-		});
 
 		/*
 		 * flattenProjects.forEach(project -> { System.out.println(project); });
@@ -204,4 +194,7 @@ public class ProjectController {
 		response.put("deleted", Boolean.TRUE);
 		return ResponseEntity.ok(response);
 	}
+
+
+
 }

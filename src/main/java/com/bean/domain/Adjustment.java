@@ -27,6 +27,8 @@ public class Adjustment {
   private LocalDate adjustmentDate;
   private LocalDate lastUpdated;
 
+  public Adjustment(){
+  }
   public Adjustment(Object row[]){
     this.adjustmentId = row[0] != null ? ((BigInteger) row[0]).longValue() : null;
     this.lastUpdated = row[1] != null ? (((Date) row[1])).toLocalDate() : null;

@@ -19,6 +19,10 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
             value = "SELECT * FROM invoice a where DATE_FORMAT(a.start_date,'%Y%m')<=? and DATE_FORMAT(a.end_date,'%Y%m')>=?",
             nativeQuery = true)
     List<Invoice> findAllActiveInvoicesForTheMonth(String startDate, String endDate);
+    @Query(
+            value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m')<=:endDate and DATE_FORMAT(a.invoice_month,'%Y%m')>=:startDate and a.project_id =:projectId ",
+            nativeQuery = true)
+    List<Invoice> findAllInvoicesForTheMonthProject(String startDate, String endDate,long projectId);
    
     @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? ",
             nativeQuery = true)
@@ -40,6 +44,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query(value = "SELECT status, COUNT(*) as count FROM invoice WHERE status IN ('paid', 'pending', 'upcoming', 'overdew') GROUP BY status", nativeQuery = true)
 	List<Map<String, String>> getInvoiceCountByStatus();
    Optional<Invoice> findByInvoiceId(Long employeeId);
+    Optional<Invoice> findByProjectId(Long projectId);
 
 	//void saveAll(List<com.bean.domain.Invoice> filteredInvoices);
 

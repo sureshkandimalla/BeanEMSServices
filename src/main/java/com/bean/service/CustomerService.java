@@ -36,7 +36,9 @@ public class CustomerService {
 		cust.setEin(customer.ein());
 		cust.setWebsite(customer.webSite());
 		cust.setLastUpdated(LocalDate.now());
-		
+		cust.setCustomerContactEmail(customer.emailId());
+		cust.setCustomerType("Vendor");
+		cust.setCustomerAddress("ADDRESS");
 		return Optional.of(customerRepository.save(cust));
 
 		//return cust;
