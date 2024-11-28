@@ -84,7 +84,7 @@ public class EmployeeService {
 		return Optional.of(empDetailsList);
 	}
 	public List<BasicEmployee> getEmployees() {
-		return employeeRepository.getEmployee().stream().map(emp -> new BasicEmployee((Integer) emp[0], (String) emp[1], (String) emp[2])).collect(Collectors.toList());
+		return employeeRepository.getEmployee().stream().map(emp -> new BasicEmployee((BigInteger) emp[0], (String) emp[1], (String) emp[2])).collect(Collectors.toList());
 	}
 
 }
