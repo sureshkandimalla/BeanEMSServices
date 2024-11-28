@@ -1,5 +1,6 @@
 package com.bean.controller;
 
+import com.bean.domain.DashboardEmployeeDetails;
 import com.bean.model.Assignment;
 import com.bean.repository.AssignmentRepository;
 import com.bean.repository.InvoiceRepository;
@@ -27,10 +28,7 @@ import com.bean.model.Invoice;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 //import static org.graalvm.compiler.nodes.calc.BinaryArithmeticNode.ReassociateMatch.x;
@@ -195,5 +193,13 @@ public class InvoiceController {
 
 		return ResponseEntity.ok(invoiceList);
 	}
+	@GetMapping("/getInvoicesForEmployee")
+	public ResponseEntity<List<Invoice>> getEmployeesListByStatus(@RequestParam(required = true) Long employeeId) {
+		logger.info("employeeId:: "+employeeId);
+
+		List<Invoice> invoiceList = invoiceRepository.findByEmployee(employeeId);
+		return ResponseEntity.ok(invoiceList);
+	}
+
 
 }
