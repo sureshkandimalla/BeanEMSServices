@@ -67,7 +67,13 @@ public class AssignmentController {
     // Create assignment rest api
     @PostMapping("/assignments")
     public Assignment createAssignment(@RequestBody Assignment assignment) {
-        return assignmentRepository.save(assignment);
+        LocalDate today = LocalDate.now();
+        if (assignment.getStartDate().isBefore(today) && assignment.getEndDate().isAfter(today))
+            assignment.setStatus("Active");
+        else
+            assignment.setStatus("Inactive");
+            // The assignment is active
+            return assignmentRepository.save(assignment);
     }
 
     // Get assignment by id rest api
@@ -81,8 +87,9 @@ public class AssignmentController {
     @GetMapping("/assignmentsForProject")
     public ResponseEntity<List<com.bean.domain.Assignment>> getAssignmentByProjectId(@RequestParam Long projectId) {
 
-        List<com.bean.domain.Assignment> x=assignmentRepository.findAssignmentsForProject(projectId).stream().map(result->new com.bean.domain.Assignment(
-                (String) result[0],(String) result[1],(BigInteger) result[2],(Double) result[3]
+        List<com.bean.domain.Assignment> x=assignmentRepository.findAssignmentsForProject(projectId).stream().map(
+                result->new com.bean.domain.Assignment(
+                (String) result[0],(String) result[1],(BigInteger) result[2],(Float) result[3]
                 ,(String)result[4],(String)result[5],(Date)result[6],(Date)result[7],(Date)result[8])
         ).collect(Collectors.toList());;
         System.out.println(x);

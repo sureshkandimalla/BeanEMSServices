@@ -45,7 +45,7 @@ public class Employee {
     private String workCountry;
     private String resourceType;
     private String employeeDept;
-  private long annualPay;
+  private float annualPay;
   private LocalDate payrollStart;
 
     /*

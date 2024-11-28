@@ -26,7 +26,7 @@ public class Assignment {
   private LocalDate startDate;
   private LocalDate endDate;
 
-  private long wage;
+  private float wage;
 
   private String status;
   /*@ManyToOne(cascade = CascadeType.ALL)
