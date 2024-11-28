@@ -4,7 +4,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.bean.domain.BasicEmployee;
+import com.bean.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,6 +32,8 @@ public class BillsController {
     private BillsRepository billsRepository;
 	@Autowired
     private BillsService billsService;
+    @Autowired
+    private EmployeeService employeeService;
 	
 	
     @GetMapping("/getBillsForMonthAndYear")
@@ -41,6 +46,26 @@ public class BillsController {
         Optional<List<Bills>> billsList= billsService.findBillsByInvoiceMonth(formattedDate);
         logger.info("billsList:: "+billsList.toString());
     	return billsList.map(bills -> ResponseEntity.ok(bills))
+                .orElse(null);
+    }
+    @GetMapping("/getBillsForProject")
+    public ResponseEntity<List<com.bean.domain.Bills>> getBillsForProject(@RequestParam(required = true) long projectId) {
+
+        Optional<List<Bills>> billsList= billsService.findBillsForProject(projectId);
+        List<com.bean.domain.Bills> domainBillsList = billsList.orElseThrow().stream()
+                .map(bills -> new com.bean.domain.Bills(bills))
+                .collect(Collectors.toList());
+        List<BasicEmployee> employees=employeeService.getEmployees();
+        domainBillsList.stream().forEach(bills -> {
+                    bills.setEmployeeName(employees.stream()
+                            .filter(emp -> emp.getEmployeeId()==bills.getEmployeeId())
+                            .findFirst()
+                            .map(BasicEmployee::getName)
+                            .orElse("Unknown"));
+                    logger.info("bills:: "+ bills);
+        }   );
+        logger.info("billsList:: "+ domainBillsList);
+        return billsList.map(bills -> ResponseEntity.ok(domainBillsList))
                 .orElse(null);
     }
 

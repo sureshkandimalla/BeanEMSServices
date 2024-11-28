@@ -1,5 +1,6 @@
 package com.bean.service;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.bean.domain.BasicEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,6 +82,9 @@ public class EmployeeService {
 		        .collect(Collectors.toList());
 		
 		return Optional.of(empDetailsList);
+	}
+	public List<BasicEmployee> getEmployees() {
+		return employeeRepository.getEmployee().stream().map(emp -> new BasicEmployee((Integer) emp[0], (String) emp[1], (String) emp[2])).collect(Collectors.toList());
 	}
 
 }

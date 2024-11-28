@@ -47,7 +47,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query(value = "SELECT status, COUNT(*) as count FROM invoice WHERE status IN ('paid', 'pending', 'upcoming', 'overdew') GROUP BY status", nativeQuery = true)
 	List<Map<String, String>> getInvoiceCountByStatus();
    Optional<Invoice> findByInvoiceId(Long employeeId);
-    Optional<Invoice> findByProjectId(Long projectId);
+    Optional<List<Invoice>> findByProjectId(Long projectId);
 
 	//void saveAll(List<com.bean.domain.Invoice> filteredInvoices);
 

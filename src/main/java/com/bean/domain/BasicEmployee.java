@@ -22,6 +22,11 @@ public class BasicEmployee {
         this.name = name;
         this.status = status;
     }
+    public BasicEmployee(Integer employeeId, String name, String status) {
+        this.employeeId = employeeId.longValue();
+        this.name = name;
+        this.status = status;
+    }
 
 
 

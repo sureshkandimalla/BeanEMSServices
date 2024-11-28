@@ -194,10 +194,17 @@ public class InvoiceController {
 		return ResponseEntity.ok(invoiceList);
 	}
 	@GetMapping("/getInvoicesForEmployee")
-	public ResponseEntity<List<Invoice>> getEmployeesListByStatus(@RequestParam(required = true) Long employeeId) {
+	public ResponseEntity<List<Invoice>> getInvoicesForEmployee(@RequestParam(required = true) Long employeeId) {
 		logger.info("employeeId:: "+employeeId);
 
 		List<Invoice> invoiceList = invoiceRepository.findByEmployee(employeeId);
+		return ResponseEntity.ok(invoiceList);
+	}
+	@GetMapping("/getInvoicesForProject")
+	public ResponseEntity<Optional<List<Invoice>>> getInvoicesForProject(@RequestParam(required = true) Long projectId) {
+		logger.info("employeeId:: "+projectId);
+
+		Optional<List<Invoice>> invoiceList = invoiceRepository.findByProjectId(projectId);
 		return ResponseEntity.ok(invoiceList);
 	}
 
