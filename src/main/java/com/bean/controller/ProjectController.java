@@ -46,10 +46,33 @@ public class ProjectController {
 				flattenProjects.add(projectService.createProject(project, billrate, selectedDate));
 			});
 
+
+		  flattenProjects.forEach(project -> { System.out.println(project); });
+
+		
+		return flattenProjects;
+	}
+
+	@GetMapping("/activeProjectsForInvoiceByEmployee")
+	public List<com.bean.domain.Project> activeProjectsForInvoiceByEmployee(@RequestParam(required = true) Long employeeId) {
+
+
+
+		var activeProjects = projectRepository.findAllProjectsByEmployee(employeeId);
+		logger.info(activeProjects.toString());
+		List<com.bean.domain.Project> flattenProjects = new ArrayList<>();
+		for (Project project : activeProjects)
+			project.getBillRates().forEach(billrate -> {
+				flattenProjects.addAll(projectService.createProjectForInvoice(project, billrate));
+			});
+
 		/*
 		 * flattenProjects.forEach(project -> { System.out.println(project); });
 		 */
-		
+		flattenProjects.forEach(project -> {
+
+		});
+
 		return flattenProjects;
 	}
 	@GetMapping("/allActiveProjects")

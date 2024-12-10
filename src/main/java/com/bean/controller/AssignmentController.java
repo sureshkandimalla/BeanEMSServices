@@ -82,7 +82,7 @@ public class AssignmentController {
     public ResponseEntity<List<com.bean.domain.Assignment>> getAssignmentByProjectId(@RequestParam Long projectId) {
 
         List<com.bean.domain.Assignment> x=assignmentRepository.findAssignmentsForProject(projectId).stream().map(result->new com.bean.domain.Assignment(
-                (String) result[0],(String) result[1],(BigInteger) result[2],(Double) result[3]
+                (String) result[0],(String) result[1],(BigInteger) result[2],(Float) result[3]
                 ,(String)result[4],(String)result[5],(Date)result[6],(Date)result[7],(Date)result[8])
         ).collect(Collectors.toList());;
         System.out.println(x);

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 @Getter@Setter
-public class Project {
+public class Project implements Cloneable {
     private long projectId;
     private String projectName;
     private long employeeId;
@@ -29,7 +29,16 @@ public class Project {
     private long invoiceId;
     private float Billing;
     private float total;
-    
+
+    @Override
+    public Project clone() {
+        try {
+            return (Project) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     
 	@Override
 	public String toString() {

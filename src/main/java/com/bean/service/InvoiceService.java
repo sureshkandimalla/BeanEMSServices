@@ -147,6 +147,12 @@ public class InvoiceService {
 			 return invoiceRepository.findByInvoiceByMonthAndProjectId(formattedDate, projectId);
 			 
 		}
+	public List<Invoice> getInvoiceByProjectId( Long projectId) {
+		logger.info( "Project ID :: "+projectId);
+
+		return invoiceRepository.findByProjectId( projectId);
+
+	}
 	  
 	  public boolean isValid(Long value) {
 	        return value != null && value != 0L && value != Long.MIN_VALUE;

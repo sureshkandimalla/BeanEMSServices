@@ -1,6 +1,7 @@
 package com.bean.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -116,6 +117,69 @@ public class ProjectService {
 		    return projectDomain;
 
 		  }
+
+
+	public List<com.bean.domain.Project>  createProjectForInvoice(Project project, Wage wage){
+		com.bean.domain.Project projectDomain=new com.bean.domain.Project();
+		projectDomain.setProjectId(project.getProjectId());
+		projectDomain.setProjectName(project.getProjectName());
+		projectDomain.setClientName(project.getClient());
+		projectDomain.setInvoiceTerm(project.getInvoiceTerm());
+		projectDomain.setPaymentTerm(project.getPaymentTerm());
+		projectDomain.setStartDate(wage.getStartDate());
+		projectDomain.setEndDate(wage.getEndDate());
+		projectDomain.setBillRate(wage.getWage());
+		projectDomain.setEmployeeId(project.getEmployee().getEmployeeId());
+		projectDomain.setEmployeeName(project.getEmployee().getFirstName()+" "+project.getEmployee().getLastName());
+		projectDomain.setVendorId(project.getCustomer().getCustomerId());
+		projectDomain.setVendorName(project.getCustomer().getCustomerCompanyName());
+		projectDomain.setStartDate(wage.getStartDate());
+		projectDomain.setEndDate(wage.getEndDate());
+		LocalDate today = LocalDate.now();
+
+
+		//Here
+		LocalDate startDate = wage.getStartDate();
+		LocalDate endDate = wage.getEndDate();
+		if(endDate.isAfter(today)){
+			endDate = today;
+		}
+		System.out.println("startDate: "+startDate+" endDate: "+endDate);
+		LocalDate current = startDate;
+		List<com.bean.domain.Project> dominList = new ArrayList<>();
+
+		List<Invoice> monthlyInvoices = invoiceService.getInvoiceByProjectId(
+				project.getProjectId());
+		while (!current.isAfter(endDate)) {
+			com.bean.domain.Project newprojectDomain= projectDomain.clone();
+			newprojectDomain.setStartDate(current.withDayOfMonth(1)); // Set to the first day of the current month
+			newprojectDomain.setEndDate(current.withDayOfMonth(current.lengthOfMonth())); // Set to the last day of the current month
+
+
+			if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||
+					(project.getEndDate() != null && project.getEndDate().isBefore(today)))
+				newprojectDomain.setStatus(Status.INACTIVE.toString());
+			else
+				newprojectDomain.setStatus(Status.ACTIVE.toString());
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+			String selectedMonthYear = current.format(formatter);
+					monthlyInvoices.stream()
+					.filter(invoice -> invoice.getInvoiceMonth().format(formatter).equals(selectedMonthYear))
+					.findAny().ifPresentOrElse(invoice -> {
+						logger.info("id: "+invoice.getInvoiceId()+"hours: "+invoice.getHours());
+								newprojectDomain.setHours(invoice.getHours());
+								newprojectDomain.setInvoiceId(invoice.getInvoiceId());
+								newprojectDomain.setTotal(invoice.getTotal());
+					}, () -> {System.out.println("No matching invoice found");});
+			dominList.add(newprojectDomain);
+			// Move to the next month
+			current = current.plusMonths(1);
+		}
+
+		return dominList;
+
+	}
 
 	public ResponseEntity<String> saveProject(com.bean.domain.Project project) {
 

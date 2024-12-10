@@ -192,8 +192,8 @@ public class InvoiceController {
 	@GetMapping("/activeInvoices/{monthYear}")
 	public ResponseEntity<List<Invoice>> getActiveInvoicesForMonth(@PathVariable String monthYear) {
 		List<Invoice> invoiceList = invoiceRepository.findAllActiveInvoicesForTheMonth(monthYear, monthYear);
-
 		return ResponseEntity.ok(invoiceList);
 	}
+
 
 }
