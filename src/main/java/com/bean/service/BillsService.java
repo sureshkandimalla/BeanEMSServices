@@ -23,5 +23,12 @@ public class BillsService {
 		// TODO mapping based on UI display
 		return existingInvoice;
 	}
+	public Optional<List<Bills>> findBillsForProject(Long projectId) {
+
+		Optional<List<Bills>> bills = billsRepository.findBillsForProject(projectId);
+
+		// TODO mapping based on UI display
+		return bills;
+	}
 
 }

@@ -1,10 +1,13 @@
 package com.bean.controller;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.bean.domain.BasicEmployee;
 import com.bean.repository.EmployeeRepository;
 import com.bean.service.CustomerService;
 import com.bean.service.EmployeeService;
@@ -46,6 +49,10 @@ public class EmployeeController {
 	@GetMapping("/getAllEmployees")
 	public List<Employee> getAllEmployees() {
 		return employeeRepository.findAll();
+	}
+	@GetMapping("/getEmployees")
+	public List<BasicEmployee> getEmployees() {
+		return employeeRepository.getEmployee().stream().map(emp -> new BasicEmployee((BigInteger) emp[0], (String) emp[1], (String) emp[2])).collect(Collectors.toList());
 	}
 
 	// create employee rest api

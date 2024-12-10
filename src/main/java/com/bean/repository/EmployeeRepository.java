@@ -21,5 +21,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 	@Query(value = "SELECT * FROM employees WHERE status = ?",
             nativeQuery = true)
 	List<Employee> getEmpListByStatus(String status);
+	@Query(value = "SELECT employee_id,CONCAT(first_name,' ', last_name) AS employee_name ,status FROM employees",
+			nativeQuery = true)
+	List<Object[]> getEmployee();
 
 }
