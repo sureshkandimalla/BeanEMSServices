@@ -42,8 +42,8 @@ public class InvoiceService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String formattedDate = today.format(formatter);
 		LocalDate parsedDate = LocalDate.parse(formattedDate, formatter);
-		LocalDate invoiceMonth = LocalDate.parse(Date, formatter);
-		String invoiceMonthForDB = invoiceMonth.format(DateTimeFormatter.ofPattern("yyyyMM"));
+		//LocalDate invoiceMonth = LocalDate.parse(, formatter);
+		String invoiceMonthForDB = dbInvoice.getStartDate().format(DateTimeFormatter.ofPattern("yyyyMM"));
 
 		Invoice dbInvoiceObject =null;
 		Invoice invoice = new Invoice();
@@ -83,7 +83,7 @@ public class InvoiceService {
 			invoice.setProjectId(dbInvoice.getProjectId());
 			invoice.setBilling(dbInvoice.getBillRate());
 			invoice.setInvoicePaidAmount(dbInvoice.getInvoicePaidAmount());
-			invoice.setInvoiceMonth(invoiceMonth); // tochange as per business
+			invoice.setInvoiceMonth(dbInvoice.getStartDate()); // tochange as per business
 
 			try {
 				dbInvoiceObject = invoiceRepository.save(invoice);
