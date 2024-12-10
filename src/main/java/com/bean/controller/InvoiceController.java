@@ -200,10 +200,10 @@ public class InvoiceController {
 		return ResponseEntity.ok(invoiceList);
 	}
 	@GetMapping("/getInvoicesForProject")
-	public ResponseEntity<Optional<List<Invoice>>> getInvoicesForProject(@RequestParam(required = true) Long projectId) {
+	public ResponseEntity<List<Invoice>> getInvoicesForProject(@RequestParam(required = true) Long projectId) {
 		logger.info("employeeId:: "+projectId);
 
-		Optional<List<Invoice>> invoiceList = invoiceRepository.findByProjectId(projectId);
+		List<Invoice> invoiceList = invoiceRepository.findByProjectId(projectId).stream().toList();
 		return ResponseEntity.ok(invoiceList);
 	}
 
