@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,7 +79,7 @@ public class InvoiceService {
 			invoice.setInvoiceDate(parsedDate);
 			invoice.setStartDate(dbInvoice.getStartDate());
 			invoice.setEndDate(dbInvoice.getEndDate());
-			invoice.setStatus("paid"); // tochange as per business
+			invoice.setStatus("Created"); // tochange as per business
 			invoice.setPaymentDate(parsedDate);
 			invoice.setProjectId(dbInvoice.getProjectId());
 			invoice.setBilling(dbInvoice.getBillRate());
@@ -98,9 +99,16 @@ public class InvoiceService {
 		logger.info("invoice dbobj:: " + dbInvoiceObject);
 		if (dbInvoiceObject != null && isValid(dbInvoiceObject.getInvoiceId())) {
 			try {
-				List<Assignment> assignmentsList = assignmentRepository.findByProjectId(dbInvoice.getProjectId());
-				logger.info("assignmentsList size" + assignmentsList.size());
+				//List<Assignment> assignmentsList = assignmentRepository.findByProjectId(dbInvoice.getProjectId());
+				//logger.info("assignmentsList size" + assignmentsList.size());
 				// Map Assignments data to Bills object and save to Bills table
+				LocalDate invoiceMonth = dbInvoiceObject.getInvoiceMonth();
+				List<Assignment> assignmentsList = assignmentRepository.findByProjectId(dbInvoice.getProjectId()).stream()
+						.filter(assignment -> assignment.getStartDate() != null && assignment.getEndDate() != null)
+						.filter(assignment -> !assignment.getStartDate().isAfter(invoiceMonth)
+								&& !assignment.getEndDate().isBefore(invoiceMonth))
+						.collect(Collectors.toList());
+
 				for (Assignment assignment : assignmentsList) {
 					Bills bill = mapAssignmentsToBills(assignment, dbInvoiceObject); // can use invoice obj as well
 					billsRepository.save(bill);
@@ -123,17 +131,18 @@ public class InvoiceService {
 	        Bills bill = new Bills();
 	        bill.setInvoiceId(invoice.getInvoiceId());
 	        bill.setAssignmentId(assignment.getAssignmentId());
-	        bill.setEmployeeId(assignment.getAssignmentId());
-	        bill.setBillDate(invoice.getPaymentDate()); //tochange as per business
-	        bill.setBilling((long)assignment.getWage()); //invoice.getBilling()
+	        bill.setEmployeeId(assignment.getEmployeeId());
+	        bill.setBillDate(invoice.getInvoiceDate());
+	        bill.setBilling((long)assignment.getWage());
 	        bill.setHours(invoice.getHours());
-	        bill.setBillPaidAmount(invoice.getTotal());  //tochange as per business
+	        bill.setBillPaidAmount(0);
 	        bill.setPaymentDate(invoice.getPaymentDate());
-	        bill.setStartDate(assignment.getStartDate());
-	        bill.setEndDate(assignment.getEndDate());
+	        bill.setStartDate(invoice.getStartDate());
+	        bill.setEndDate(invoice.getStartDate());
 	        bill.setInvoiceMonth(invoice.getInvoiceMonth());
 	        bill.setStatus(assignment.getStatus());
-	        bill.setTotal(invoice.getTotal());
+	        bill.setTotal(bill.getHours()*bill.getBilling());
+		  bill.setBillType(assignment.getAssignmentType() + " - " + assignment.getDescription()+" - for Project "+assignment.getProjectId());
 
 	        logger.info("billobj to be saved:: "+bill.toString());
 	        return bill;

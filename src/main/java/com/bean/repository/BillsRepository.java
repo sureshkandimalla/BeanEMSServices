@@ -18,5 +18,7 @@ public interface BillsRepository extends JpaRepository<Bills, Long> {
             value = "SELECT * FROM bills where invoice_id in (select invoice_id FROM invoice  where project_id=:projectId)",
             nativeQuery = true)
     Optional<List<Bills>> findBillsForProject(long projectId);
+   // Optional<List<Bills>> findBillsForProject(long projectId);
+   Optional<List<Bills>>  findByEmployeeId(long employeeId);
    
 }

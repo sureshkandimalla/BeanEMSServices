@@ -30,5 +30,12 @@ public class BillsService {
 		// TODO mapping based on UI display
 		return bills;
 	}
+	public Optional<List<Bills>> findBillsForEmployee(Long employeeId) {
+
+		Optional<List<Bills>> bills = billsRepository.findByEmployeeId(employeeId);
+
+		// TODO mapping based on UI display
+		return bills;
+	}
 
 }

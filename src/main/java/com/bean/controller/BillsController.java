@@ -68,5 +68,25 @@ public class BillsController {
         return billsList.map(bills -> ResponseEntity.ok(domainBillsList))
                 .orElse(null);
     }
+    @GetMapping("/getBillsForEmployee")
+    public ResponseEntity<List<com.bean.domain.Bills>> getBillsForEmployee(@RequestParam(required = true) long employeeId) {
+
+        Optional<List<Bills>> billsList= billsService.findBillsForEmployee(employeeId);
+        List<com.bean.domain.Bills> domainBillsList = billsList.orElseThrow().stream()
+                .map(bills -> new com.bean.domain.Bills(bills))
+                .collect(Collectors.toList());
+        List<BasicEmployee> employees=employeeService.getEmployees();
+        domainBillsList.stream().forEach(bills -> {
+            bills.setEmployeeName(employees.stream()
+                    .filter(emp -> emp.getEmployeeId()==bills.getEmployeeId())
+                    .findFirst()
+                    .map(BasicEmployee::getName)
+                    .orElse("Unknown"));
+            logger.info("bills:: "+ bills);
+        }   );
+        logger.info("billsList:: "+ domainBillsList);
+        return billsList.map(bills -> ResponseEntity.ok(domainBillsList))
+                .orElse(null);
+    }
 
 }

@@ -31,6 +31,7 @@ public class Bills {
   private LocalDate endDate;
   private LocalDate paymentDate;
   private String status;
+  private String billType;
   
   
 @Override

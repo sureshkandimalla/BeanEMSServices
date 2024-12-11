@@ -28,6 +28,7 @@ public class Bills {
   private LocalDate endDate;
   private LocalDate paymentDate;
   private String status;
+  private String billType;
 
   public Bills(com.bean.model.Bills modelBill) {
       this.BillId = modelBill.getBillId();
@@ -44,6 +45,7 @@ public class Bills {
       this.endDate = modelBill.getEndDate();
       this.paymentDate = modelBill.getPaymentDate();
       this.status = modelBill.getStatus();
+      this.billType = modelBill.getBillType();
   }
 
 @Override
