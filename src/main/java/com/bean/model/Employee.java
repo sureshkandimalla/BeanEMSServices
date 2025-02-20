@@ -62,6 +62,10 @@ public class Employee {
   @JsonIgnoreProperties("employee")
   @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
   private List<Project> project = new ArrayList<>();
+ // @JsonIgnoreProperties("visa")
+ @JsonIgnoreProperties("employee")
+ @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+  private List<Visa> visas = new ArrayList<>();
 
  /* @OneToMany(mappedBy = "employee" , cascade = CascadeType.ALL)
  // @JoinColumn(name = "employeeId")

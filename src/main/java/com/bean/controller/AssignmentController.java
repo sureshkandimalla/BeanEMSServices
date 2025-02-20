@@ -30,7 +30,7 @@ import com.bean.exception.ResourceNotFoundException;
 import com.bean.model.Assignment;
 import com.bean.model.Bills;
 
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4000"})
+@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com","http://localhost:3000", "http://localhost:4000"})
 @RestController
 @RequestMapping("/api/v1/")
 public class AssignmentController {
@@ -67,6 +67,10 @@ public class AssignmentController {
     // Create assignment rest api
     @PostMapping("/assignments")
     public Assignment createAssignment(@RequestBody Assignment assignment) {
+        if(assignment.getEndDate().isAfter(LocalDate.now()))
+            assignment.setStatus("Active");
+        else
+            assignment.setStatus("Inactive");
         return assignmentRepository.save(assignment);
     }
 

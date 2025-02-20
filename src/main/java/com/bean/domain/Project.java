@@ -21,6 +21,8 @@ public class Project implements Cloneable {
     private float employeePay;
     private float expenseInternal;
     private float expenseExternal;
+
+    private float employerTax;
     private float net;
     private String status;
     private String  invoiceTerm;

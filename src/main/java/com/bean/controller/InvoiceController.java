@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 //import static org.graalvm.compiler.nodes.calc.BinaryArithmeticNode.ReassociateMatch.x;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001","http://localhost:4000" })
+@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com","http://localhost:3000", "http://localhost:3001","http://localhost:4000" })
 @RestController
 @RequestMapping("/api/v1/invoice")
 public class InvoiceController {

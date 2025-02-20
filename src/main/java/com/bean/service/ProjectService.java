@@ -3,6 +3,7 @@ package com.bean.service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,9 +63,14 @@ public class ProjectService {
 				  .collect(Collectors.toList());*/
 		  //TODO check for employee wages if there are multiple
 		  Optional<Assignment> empAssignment = project.getAssignments().stream()
-				  .filter(assignment -> (WageType.EMP_PAY.toString().equals(assignment.getAssignmentType())))
-				  .findFirst();
+				  .filter(assignment -> (WageType.EMP_PAY.toString().equals(assignment.getAssignmentType()) && assignment.getStatus().equalsIgnoreCase("Active")))
+				  .findFirst()
+				  .or(() -> project.getAssignments().stream()
+						  .filter(assignment -> WageType.EMP_PAY.toString().equals(assignment.getAssignmentType()))
+						  .max(Comparator.comparing(Assignment::getStartDate))
+				  );
 
+		  //projectDomain.setEmployerTax((float) (projectDomain.getEmployeePay()*0.8));
 		  /*Optional<Double> empPayWage = project.getAssignments().stream()
 				  .filter(assignment -> (WageType.EMP_PAY.toString().equals(assignment.getAssignmentType())))
 				  *//*.filter(assignment -> {
@@ -75,8 +81,14 @@ public class ProjectService {
 				  .findFirst();*/
 		  if(empAssignment.isPresent()) {
 			  projectDomain.setEmployeePay(((float) empAssignment.get().getWage()));
-			 if( empAssignment.get().getAssignmentTaxType().equals("W2"))
-				 projectDomain.setExpenseInternal((float)(( projectDomain.getEmployeePay() == 0) ? 0L : projectDomain.getEmployeePay() * .10));
+			 if( empAssignment.get().getAssignmentTaxType().equals("W2")) {
+				 Optional<Employee> employee = employeeRepository.findById(empAssignment.get().getEmployeeId());
+				 if(employee.isPresent() && employee.get().getVisa().contains("OPT"))
+					 projectDomain.setEmployerTax(0);
+				 else
+					 projectDomain.setEmployerTax((float) ((projectDomain.getEmployeePay() == 0) ? 0L : projectDomain.getEmployeePay() * .08));
+				 projectDomain.setExpenseInternal(projectDomain.getEmployerTax());
+			 }
 		  }
 
 		  //project.getAssignments().stream().forEach(assignment ->{if(WageType.EMP_PAY.equals(assignment.getAssignmentType())?assignment.getWage()});

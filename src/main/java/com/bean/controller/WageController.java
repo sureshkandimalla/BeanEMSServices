@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4000"})
+@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com","http://localhost:3000", "http://localhost:4000"})
 @RestController
 @RequestMapping("/api/v1/wages")
 public class WageController {
