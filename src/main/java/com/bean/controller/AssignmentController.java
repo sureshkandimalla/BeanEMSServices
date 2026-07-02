@@ -67,7 +67,10 @@ public class AssignmentController {
     // Create assignment rest api
     @PostMapping("/assignments")
     public Assignment createAssignment(@RequestBody Assignment assignment) {
-        if(assignment.getEndDate().isAfter(LocalDate.now()))
+        if (assignment.getEndDate() == null) {
+            assignment.setEndDate(LocalDate.of(9999, 12, 31));
+        }
+        if (assignment.getEndDate().isAfter(LocalDate.now()))
             assignment.setStatus("Active");
         else
             assignment.setStatus("Inactive");
@@ -102,9 +105,17 @@ public class AssignmentController {
         Assignment assignment = assignmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Assignment not exist with id :" + id));
 
-         assignment.setAssignmentType(assignmentDetails.getAssignmentType());
-    assignment.setStartDate(assignmentDetails.getStartDate());
-    assignment.setEndDate(assignmentDetails.getEndDate());
+        assignment.setProjectId(assignmentDetails.getProjectId());
+        assignment.setAssignmentType(assignmentDetails.getAssignmentType());
+        assignment.setAssignmentTaxType(assignmentDetails.getAssignmentTaxType());
+        assignment.setStartDate(assignmentDetails.getStartDate());
+        assignment.setEndDate(assignmentDetails.getEndDate());
+        assignment.setWage(assignmentDetails.getWage());
+        assignment.setEmployeeId(assignmentDetails.getEmployeeId());
+        assignment.setDescription(assignmentDetails.getDescription());
+        if (assignmentDetails.getEndDate() != null) {
+            assignment.setStatus(assignmentDetails.getEndDate().isAfter(java.time.LocalDate.now()) ? "Active" : "Inactive");
+        }
 
 
         Assignment updatedAssignment = assignmentRepository.save(assignment);

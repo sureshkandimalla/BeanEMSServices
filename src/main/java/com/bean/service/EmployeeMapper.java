@@ -17,8 +17,10 @@ public class EmployeeMapper {
         modelEmployee.setEndDate(domainEmployee.endDate());
         modelEmployee.setDesignation(domainEmployee.designation());
         modelEmployee.setEmploymentType(domainEmployee.employmentType());
+        modelEmployee.setEmployeeType(domainEmployee.employeeType());
         modelEmployee.setStatus(domainEmployee.status());
         modelEmployee.setLocation(domainEmployee.location());
+        modelEmployee.setCompanyName(domainEmployee.companyName());
         // Map additional fields if necessary
 
         return modelEmployee;
@@ -38,6 +40,7 @@ public class EmployeeMapper {
                 modelEmployee.getPhone(),
                 modelEmployee.getEmailId(),
                 modelEmployee.getEmploymentType(),
+                modelEmployee.getEmployeeType(),
                 modelEmployee.getFirstName(),
                 modelEmployee.getLastName(),
                 modelEmployee.getGender(),
@@ -46,11 +49,14 @@ public class EmployeeMapper {
                 modelEmployee.getReferredBy(),
                 modelEmployee.getTaxTerm(),
                 modelEmployee.getVisa(),
+
+
                 //set Address here
                 null,null,null,null,null,null,
                 modelEmployee.getStatus(),
                 modelEmployee.getLocation(),
                 income,expense
+                ,modelEmployee.getEverifyStatus(),modelEmployee.getI9(),modelEmployee.getPAF(),modelEmployee.getInsurance(),modelEmployee.getAnnualPay(),modelEmployee.getCompanyName()
         );
     }
 

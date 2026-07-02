@@ -53,12 +53,10 @@ public class ProjectController {
 		return flattenProjects;
 	}
 
-	@GetMapping("/activeProjectsForInvoiceByEmployee")
-	public List<com.bean.domain.Project> activeProjectsForInvoiceByEmployee(@RequestParam(required = true) Long employeeId) {
+	@GetMapping({"/activeProjectsForInvoiceByEmployee", "/projects/activeProjectsForInvoiceByEmployee", "/projects/activeProjectsForInvoice", "/activeProjectsForInvoice"})
+	public List<com.bean.domain.Project> activeProjectsForInvoiceByEmployee(@RequestParam(required = true) String employeeId) {
 
-
-
-		var activeProjects = projectRepository.findAllProjectsByEmployee(employeeId);
+		var activeProjects = projectRepository.findAllProjectsByEmployee(Long.parseLong(employeeId));
 		logger.info(activeProjects.toString());
 		List<com.bean.domain.Project> flattenProjects = new ArrayList<>();
 		for (Project project : activeProjects)

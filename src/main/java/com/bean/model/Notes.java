@@ -21,6 +21,12 @@ public class Notes {
 
   private String notesType;
   private String details;
+  private String status;
+
+  @JsonIgnoreProperties({"visas", "address", "project", "passports", "onboarding"})
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "employee_id")
+  private Employee employee;
 
   @UpdateTimestamp
   private LocalDate LastUpdated;

@@ -1,8 +1,14 @@
 package com.bean.model;
 
+import com.bean.deserializer.EmployeeDeserializer;
+import com.bean.deserializer.LcaDeserializer;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -16,6 +22,7 @@ import java.time.LocalDate;
 public class Visa {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long visaId;
   private String visaCategory;
   private String receiptNumber ;
@@ -28,12 +35,26 @@ public class Visa {
   private String vendor;
   private String jobLocation;
   private String jobLocation2;
-  private Long lcaWage;
+  private Double lcaWage;
   private String status;
+  @Enumerated(EnumType.STRING)
+  private FilingType filingType;
+  @Enumerated(EnumType.STRING)
+  private VisaSubCategory visaSubCategory;
+  private Integer filingYear;
+  @JsonAlias("employeeId")
+  @JsonDeserialize(using = EmployeeDeserializer.class)
   @JsonIgnoreProperties("visa")
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
   private Employee employee;
+
+  @JsonIgnoreProperties({"visa", "employee"})
+  @JsonDeserialize(using = LcaDeserializer.class)
+  @NotFound(action = NotFoundAction.IGNORE)
+  @OneToOne(fetch = FetchType.EAGER, optional = true)
+  @JoinColumn(name = "lca_id", referencedColumnName = "lcaId", nullable = true)
+  private LCA lca;
 
   @UpdateTimestamp
   private LocalDate LastUpdated;
@@ -54,6 +75,8 @@ public class Visa {
                 ", jobLocation='" + jobLocation + '\'' +
                 ", jobLocation2='" + jobLocation2 + '\'' +
                 ", lcaWage=" + lcaWage +
+                ", status='" + status + '\'' +
+                ", lca=" + (lca != null ? lca.getLcaId() : null) +
                 ", employee=" + employee +
                 ", LastUpdated=" + LastUpdated +
                 '}';

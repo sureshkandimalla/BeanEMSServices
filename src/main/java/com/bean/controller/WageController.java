@@ -2,18 +2,14 @@ package com.bean.controller;
 
 import com.bean.exception.ResourceNotFoundException;
 import com.bean.model.*;
-import com.bean.repository.BillsRepository;
 import com.bean.repository.ProjectRepository;
 import com.bean.repository.WageRepository;
-import com.bean.service.BillsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 
 @CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com","http://localhost:3000", "http://localhost:4000"})

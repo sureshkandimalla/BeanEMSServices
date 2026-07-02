@@ -1,6 +1,7 @@
 package com.bean.service;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +86,7 @@ public class InvoiceService {
 			invoice.setBilling(dbInvoice.getBillRate());
 			invoice.setInvoicePaidAmount(dbInvoice.getInvoicePaidAmount());
 			invoice.setInvoiceMonth(dbInvoice.getStartDate()); // tochange as per business
-
+			//invoice.setInvoiceMonth(dbInvoice.getInvoiceMonth());
 			try {
 				dbInvoiceObject = invoiceRepository.save(invoice);
 			} catch (Exception e) {
@@ -99,15 +100,17 @@ public class InvoiceService {
 		logger.info("invoice dbobj:: " + dbInvoiceObject);
 		if (dbInvoiceObject != null && isValid(dbInvoiceObject.getInvoiceId())) {
 			try {
-				//List<Assignment> assignmentsList = assignmentRepository.findByProjectId(dbInvoice.getProjectId());
-				//logger.info("assignmentsList size" + assignmentsList.size());
-				// Map Assignments data to Bills object and save to Bills table
-				LocalDate invoiceMonth = dbInvoiceObject.getInvoiceMonth();
+				YearMonth invoiceMonth=YearMonth.from(dbInvoiceObject.getInvoiceMonth());
+
 				List<Assignment> assignmentsList = assignmentRepository.findByProjectId(dbInvoice.getProjectId()).stream()
 						.filter(assignment -> assignment.getStartDate() != null && assignment.getEndDate() != null)
-						.filter(assignment -> !assignment.getStartDate().isAfter(invoiceMonth)
-								&& !assignment.getEndDate().isBefore(invoiceMonth))
-						.collect(Collectors.toList());
+						.filter(assignment -> {
+							YearMonth startMonth = YearMonth.from(assignment.getStartDate());
+							YearMonth endMonth = YearMonth.from(assignment.getEndDate());
+
+							return !startMonth.isAfter(invoiceMonth) && !endMonth.isBefore(invoiceMonth);
+						})
+						.toList();
 
 				for (Assignment assignment : assignmentsList) {
 					Bills bill = mapAssignmentsToBills(assignment, dbInvoiceObject); // can use invoice obj as well
@@ -133,7 +136,7 @@ public class InvoiceService {
 	        bill.setAssignmentId(assignment.getAssignmentId());
 	        bill.setEmployeeId(assignment.getEmployeeId());
 	        bill.setBillDate(invoice.getInvoiceDate());
-	        bill.setBilling((long)assignment.getWage());
+	        bill.setBilling((float) assignment.getWage());
 	        bill.setHours(invoice.getHours());
 	        bill.setBillPaidAmount(0);
 	        bill.setPaymentDate(invoice.getPaymentDate());

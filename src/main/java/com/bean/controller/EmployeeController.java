@@ -1,20 +1,15 @@
 package com.bean.controller;
 
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.bean.domain.BasicEmployee;
 import com.bean.repository.EmployeeRepository;
-import com.bean.service.CustomerService;
 import com.bean.service.EmployeeService;
 import com.bean.domain.DashboardEmployeeDetails;
 import com.bean.exception.EmployeeServiceException;
 import com.bean.exception.ResourceNotFoundException;
-import com.bean.model.Customer;
 import com.bean.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,13 +43,25 @@ public class EmployeeController {
 
 	@GetMapping("/getAllEmployees")
 	public List<Employee> getAllEmployees() {
-		return employeeRepository.findAll();
-	}
-	@GetMapping("/getEmployees")
-	public List<BasicEmployee> getEmployees() {
-		return employeeRepository.getEmployee().stream().map(emp -> new BasicEmployee((BigInteger) emp[0], (String) emp[1], (String) emp[2])).collect(Collectors.toList());
+		return employeeRepository.findAllSorted().stream()
+				.sorted(Comparator.comparingLong(Employee::getEmployeeId))
+				.collect(Collectors.toList());
 	}
 
+	@GetMapping("/getEmployees")
+	public List<BasicEmployee> getEmployees() {
+		return employeeRepository.findAllSorted().stream()
+				.sorted(Comparator.comparingLong(Employee::getEmployeeId))
+				.map(emp -> new BasicEmployee(BigInteger.valueOf(emp.getEmployeeId()), emp.getFirstName() + " " + emp.getLastName(), emp.getStatus()))
+				.collect(Collectors.toList());
+	}
+
+	@GetMapping("/employees")
+	public List<Employee> getAllEmployeesNew() {
+		return employeeRepository.findAllSorted().stream()
+				.sorted(Comparator.comparingLong(Employee::getEmployeeId))
+				.collect(Collectors.toList());
+	}
 	// create employee rest api
 	@PostMapping("/saveOnBoardDetails")
 	public ResponseEntity<Optional<Employee>> createEmployee(@RequestBody com.bean.domain.Employee employee)
@@ -66,6 +73,25 @@ public class EmployeeController {
 		logger.info("respEmployee:: " + respEmployee.toString());
 
 		return ResponseEntity.ok(respEmployee);
+
+	}
+
+
+	@PostMapping("/saveEmployees")
+	public ResponseEntity<Optional<Employee>> saveEmployees(@RequestBody com.bean.domain.Employee[] employee)
+			throws EmployeeServiceException {
+
+		System.out.println(employee);
+		Arrays.stream(employee).sequential().forEach(emp -> {
+			try {
+				employeeService.saveEmployee(emp);
+			} catch (EmployeeServiceException e) {
+				throw new RuntimeException(e);
+			}
+		});
+	//	employeeService.saveEmployeesDetails(employee);
+		ResponseEntity<Optional<Employee>> ok = ResponseEntity.ok(null);
+		return ok;
 
 	}
 
@@ -99,6 +125,14 @@ public class EmployeeController {
 		return ResponseEntity.of(empByStatusList);
 	}
 
+	// get employees by immigration/visa type
+	@GetMapping("/employeesByImmigration")
+	public ResponseEntity<List<Employee>> getEmployeesByImmigration(@RequestParam(required = true) String visaType) {
+		logger.info("visaType:: " + visaType);
+		List<Employee> employees = employeeRepository.getEmployeesByVisa(visaType);
+		return ResponseEntity.ok(employees);
+	}
+
 	// get employee by id rest api
 	@GetMapping("/employee/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
@@ -109,7 +143,7 @@ public class EmployeeController {
 
 	// update employee rest api
 
-	@PutMapping("/employees/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employeeDetails) {
 		Employee employee = employeeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
@@ -117,13 +151,40 @@ public class EmployeeController {
 		employee.setFirstName(employeeDetails.getFirstName());
 		employee.setLastName(employeeDetails.getLastName());
 		employee.setEmailId(employeeDetails.getEmailId());
+		employee.setPhone(employeeDetails.getPhone());
+		employee.setDob(employeeDetails.getDob());
+		employee.setSsn(employeeDetails.getSsn());
+		employee.setVisa(employeeDetails.getVisa());
+		employee.setTaxTerm(employeeDetails.getTaxTerm());
+		employee.setReferredBy(employeeDetails.getReferredBy());
+		employee.setGender(employeeDetails.getGender());
+		employee.setStartDate(employeeDetails.getStartDate());
+		employee.setEndDate(employeeDetails.getEndDate());
+		employee.setDesignation(employeeDetails.getDesignation());
+		employee.setEmploymentType(employeeDetails.getEmploymentType());
+		employee.setEmployeeType(employeeDetails.getEmployeeType());
+		employee.setStatus(employeeDetails.getStatus());
+		employee.setLocation(employeeDetails.getLocation());
+		employee.setPrimarySkills(employeeDetails.getPrimarySkills());
+		employee.setSecondarySkills(employeeDetails.getSecondarySkills());
+		employee.setWorkCity(employeeDetails.getWorkCity());
+		employee.setWorkCountry(employeeDetails.getWorkCountry());
+		employee.setResourceType(employeeDetails.getResourceType());
+		employee.setEmployeeDept(employeeDetails.getEmployeeDept());
+		employee.setAnnualPay(employeeDetails.getAnnualPay());
+		employee.setPayrollStart(employeeDetails.getPayrollStart());
+		employee.setEverifyStatus(employeeDetails.getEverifyStatus());
+		employee.setI9(employeeDetails.getI9());
+		employee.setPAF(employeeDetails.getPAF());
+		employee.setInsurance(employeeDetails.getInsurance());
+		employee.setCompanyName(employeeDetails.getCompanyName());
 
 		Employee updatedEmployee = employeeRepository.save(employee);
 		return ResponseEntity.ok(updatedEmployee);
 	}
 
 	// delete employee rest api
-	@DeleteMapping("/employees/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Map<String, Boolean>> deleteEmployee(@PathVariable Long id) {
 		Employee employee = employeeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));

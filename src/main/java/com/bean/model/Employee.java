@@ -9,11 +9,13 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Setter
 @Getter
 @Entity
+@DynamicUpdate
 @Table(name = "employees")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee {
@@ -37,6 +39,7 @@ public class Employee {
   private LocalDate endDate;
   private String designation;
   private String employmentType;
+  private String employeeType;
   private String status;
   private String location;
   private String primarySkills;
@@ -47,7 +50,13 @@ public class Employee {
     private String employeeDept;
   private float annualPay;
   private LocalDate payrollStart;
-
+  private String everifyStatus;
+  @Column(name = "i9")
+  private String I9;
+  @Column(name = "paf")
+  private String PAF;
+  private String insurance;
+  private String companyName;
     /*
 	 * @OneToMany(cascade = CascadeType.ALL)
 	 * 
@@ -66,6 +75,14 @@ public class Employee {
  @JsonIgnoreProperties("employee")
  @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
   private List<Visa> visas = new ArrayList<>();
+
+ @JsonIgnoreProperties("employee")
+ @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+  private List<Passport> passports = new ArrayList<>();
+
+ @JsonIgnoreProperties("employee")
+ @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+  private List<EmployeeOnboarding> onboarding = new ArrayList<>();
 
  /* @OneToMany(mappedBy = "employee" , cascade = CascadeType.ALL)
  // @JoinColumn(name = "employeeId")
@@ -94,8 +111,9 @@ public String toString() {
 	return "Employee [employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + ", emailId="
 			+ emailId + ", phone=" + phone + ", dob=" + dob + ", ssn=" + ssn + ", visa=" + visa + ", taxTerm=" + taxTerm
 			+ ", referredBy=" + referredBy + ", gender=" + gender + ", startDate=" + startDate + ", endDate=" + endDate
-			+ ", designation=" + designation + ", employmentType=" + employmentType + ", LastUpdated=" + LastUpdated + "]";
+			+ ", designation=" + designation + ", employmentType=" + employmentType + ", LastUpdated=" + LastUpdated +", everifyStatus="+everifyStatus
+            +  ", I9="+I9+", PAF="+PAF+", insurance="+insurance+"]";
 }
-  
-  
+
+
 }

@@ -9,19 +9,29 @@ import java.util.stream.Collectors;
 import com.bean.domain.BasicEmployee;
 import com.bean.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bean.exception.BillsException;
 import com.bean.model.Bills;
 import com.bean.repository.BillsRepository;
 import com.bean.service.BillsService;
 
 
-@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com","http://localhost:3000", "http://localhost:4000"})
+@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com","http://localhost:3000", "http://localhost:3001", "http://localhost:4000"},
+		methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
+		allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/v1/bills")
 public class BillsController {
@@ -36,6 +46,29 @@ public class BillsController {
     private EmployeeService employeeService;
 	
 	
+    @PostMapping
+	public ResponseEntity<Bills> createBill(@RequestBody Bills bill) throws BillsException {
+		Bills savedBill = billsService.createBill(bill);
+		return new ResponseEntity<>(savedBill, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Bills> getBillById(@PathVariable Long id) {
+		return ResponseEntity.ok(billsService.getBillById(id));
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Bills> updateBill(@PathVariable Long id, @RequestBody Bills billDetails) throws BillsException {
+		Bills updatedBill = billsService.updateBill(id, billDetails);
+		return ResponseEntity.ok(updatedBill);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteBill(@PathVariable Long id) {
+		billsService.deleteBill(id);
+		return ResponseEntity.noContent().build();
+	}
+
     @GetMapping("/getBillsForMonthAndYear")
 	public ResponseEntity<List<Bills>> getBillsForMonthAndYear(@RequestParam(required = true) String selectedDate) {
     	

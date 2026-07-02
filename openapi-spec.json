@@ -1,0 +1,3960 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "OpenAPI definition",
+        "version": "v0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/api/v1/visa/{id}": {
+            "get": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "getVisaById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Visa"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "updateVisa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Visa"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Visa"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "deleteVisa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/{id}": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "getProjectById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "updateProject",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Project"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "deleteProject",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/invoices/{id}": {
+            "get": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "getInvoiceById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Invoice"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "updateInvoice",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Invoice"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Invoice"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "deleteInvoice",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/employees/{id}": {
+            "put": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "updateEmployee",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Employee"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Employee"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "deleteEmployee",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/customers/customers/{id}": {
+            "get": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "getCustomerById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "updateCustomer",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Customer"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "deletecustomer",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/assignments/{id}": {
+            "get": {
+                "tags": [
+                    "assignment-controller"
+                ],
+                "operationId": "getAssignmentById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Assignment"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "assignment-controller"
+                ],
+                "operationId": "updateAssignment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Assignment"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Assignment"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "assignment-controller"
+                ],
+                "operationId": "deleteAssignment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wages/wage": {
+            "post": {
+                "tags": [
+                    "wage-controller"
+                ],
+                "operationId": "createAssignment",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Wage"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/visa/savePotentialEmployees": {
+            "post": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "savePotentialEmployees",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/PotentialEmployee"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PotentialEmployee"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/visa/potentialEmployees": {
+            "post": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "createPotentialEmployee",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PotentialEmployee"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PotentialEmployee"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/visa/createVisa": {
+            "post": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "createVisa",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Visa"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Visa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/saveOnBoardProject": {
+            "post": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "createProject",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Project"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payrollsummary/reprocessEmployee": {
+            "post": {
+                "tags": [
+                    "payroll-summary-controller"
+                ],
+                "operationId": "reprocessEmployee",
+                "parameters": [
+                    {
+                        "name": "employeeName",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payrollsummary/import": {
+            "post": {
+                "tags": [
+                    "payroll-summary-controller"
+                ],
+                "operationId": "importCsv",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "file"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payrollsummary/fixPayPeriodDates": {
+            "post": {
+                "tags": [
+                    "payroll-summary-controller"
+                ],
+                "operationId": "fixPayPeriodDates",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/lca/save": {
+            "post": {
+                "tags": [
+                    "lca-controller"
+                ],
+                "operationId": "saveLCA",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LCA"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LCA"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/addInvoices": {
+            "post": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "createInvoice",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Invoice"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/saveOnBoardDetails": {
+            "post": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "createEmployee",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Employee"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Employee"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/saveEmployees": {
+            "post": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "saveEmployees",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Employee"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Employee"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/customers/saveOnBoardDetails": {
+            "post": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "createCustomer",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Customer"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/assignments": {
+            "get": {
+                "tags": [
+                    "assignment-controller"
+                ],
+                "operationId": "getAllAssignments",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Assignment"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "assignment-controller"
+                ],
+                "operationId": "createAssignment_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Assignment"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Assignment"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/adjustment/addAdjustment": {
+            "post": {
+                "tags": [
+                    "adjustment-controller"
+                ],
+                "operationId": "createInvoice_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Adjustment"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Adjustment"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wages/getAllWages": {
+            "get": {
+                "tags": [
+                    "wage-controller"
+                ],
+                "operationId": "getAllEmployees",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Wage"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/visa/getAllVisas": {
+            "get": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "getAllVisas",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Visa"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/visa/getAllPotentialEmployees": {
+            "get": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "getAllPotentialEmployees",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PotentialEmployee"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/visa/employee/{employeeId}": {
+            "get": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "getVisasByEmployee",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Visa"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/visa/employee/{employeeId}/latest": {
+            "get": {
+                "tags": [
+                    "visa-controller"
+                ],
+                "operationId": "getLatestVisaByEmployee",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Visa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reconcile/getReconcileRecords": {
+            "get": {
+                "tags": [
+                    "employee-reconcile-controller"
+                ],
+                "operationId": "getReconcileRecords",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/EmployeeReconcileRecord"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reconcile/getReconcileRecords/{employeeId}": {
+            "get": {
+                "tags": [
+                    "employee-reconcile-controller"
+                ],
+                "operationId": "getReconcileRecordsForEmployee",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ReconcileRecord"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/projects": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "getProjectByEmpId",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/activeProjectsForInvoiceByEmployee": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "activeProjectsForInvoiceByEmployee",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/activeProjectsForInvoice": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "activeProjectsForInvoiceByEmployee_1",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/activeProjectsForInvoice": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "activeProjectsForInvoiceByEmployee_2",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/activeProjectsForInvoiceByEmployee": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "activeProjectsForInvoiceByEmployee_3",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/projectDashboard": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "projectDashboard",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dashboard"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payrollsummary/getPayPeriods": {
+            "get": {
+                "tags": [
+                    "payroll-summary-controller"
+                ],
+                "operationId": "getPayPeriods",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PayPeriod"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payrollsummary/getByEmployee": {
+            "get": {
+                "tags": [
+                    "payroll-summary-controller"
+                ],
+                "operationId": "getByEmployee",
+                "parameters": [
+                    {
+                        "name": "employeeName",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PayrollSummary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payrollsummary/getByDateRange": {
+            "get": {
+                "tags": [
+                    "payroll-summary-controller"
+                ],
+                "operationId": "getByDateRange",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PayrollSummary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payrollsummary/getAll": {
+            "get": {
+                "tags": [
+                    "payroll-summary-controller"
+                ],
+                "operationId": "getAll",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PayrollSummary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payroll/getPayrolls": {
+            "get": {
+                "tags": [
+                    "payroll-controller"
+                ],
+                "operationId": "getPayrolls",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Payroll"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payroll/getPayrollsForEmp": {
+            "get": {
+                "tags": [
+                    "payroll-controller"
+                ],
+                "operationId": "getPayrolls_1",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Payroll"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/lca": {
+            "get": {
+                "tags": [
+                    "lca-controller"
+                ],
+                "operationId": "getAllLCAs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/LCA"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/lca/{id}": {
+            "get": {
+                "tags": [
+                    "lca-controller"
+                ],
+                "operationId": "getLCAById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LCA"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "lca-controller"
+                ],
+                "operationId": "deleteLCA",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/lca/employee/{employeeId}": {
+            "get": {
+                "tags": [
+                    "lca-controller"
+                ],
+                "operationId": "getLCAsByEmployeeId",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/LCA"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/invoicesForMonth": {
+            "get": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "getInvoiceForMonth",
+                "parameters": [
+                    {
+                        "name": "month",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Invoice"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/invoicesForMonthAndYear": {
+            "get": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "getInvoiceForMonthAndYear",
+                "parameters": [
+                    {
+                        "name": "selectedDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Invoice"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/invoicesCountByStatus": {
+            "get": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "getInvoicesCountByStatus",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/getInvoices": {
+            "get": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "getInvoices",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Invoice"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/getInvoicesForProject": {
+            "get": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "getInvoicesForProject",
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Invoice"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/getInvoicesForEmployee": {
+            "get": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "getInvoicesForEmployee",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Invoice"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/getAllInvoices": {
+            "get": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "getAllInvoices",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Invoice"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/invoice/activeInvoices/{monthYear}": {
+            "get": {
+                "tags": [
+                    "invoice-controller"
+                ],
+                "operationId": "getActiveInvoicesForMonth",
+                "parameters": [
+                    {
+                        "name": "monthYear",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Invoice"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/immigration/getEmployeeImmigration/{id}": {
+            "get": {
+                "tags": [
+                    "immigration-controller"
+                ],
+                "operationId": "getEmployeeImmigration",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmployeeImmigrationProfile"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/immigration/getAllEmployeesImmigration": {
+            "get": {
+                "tags": [
+                    "immigration-controller"
+                ],
+                "operationId": "getAllEmployeesImmigration",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/EmployeeImmigrationProfile"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/getProjects": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "getProjects",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/getActiveAssignments": {
+            "get": {
+                "tags": [
+                    "assignment-controller"
+                ],
+                "operationId": "getAllActiveAssignments",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Assignment"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/getEmployees": {
+            "get": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "getEmployees",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BasicEmployee"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/getAllEmployees": {
+            "get": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "getAllEmployees_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Employee"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/employees": {
+            "get": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "getAllEmployeesNew",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Employee"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/employeesListByStatus": {
+            "get": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "getEmployeesListByStatus",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/employeesCountByStatus": {
+            "get": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "getEmployeesCountByStatus",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/employeesByImmigration": {
+            "get": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "getEmployeesByImmigration",
+                "parameters": [
+                    {
+                        "name": "visaType",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Employee"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employees/employee/{id}": {
+            "get": {
+                "tags": [
+                    "employee-controller"
+                ],
+                "operationId": "getEmployeeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Employee"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/customers/getAllCustomers": {
+            "get": {
+                "tags": [
+                    "customer-controller"
+                ],
+                "operationId": "getAllCustomers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Customer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bills/getBillsForProject": {
+            "get": {
+                "tags": [
+                    "bills-controller"
+                ],
+                "operationId": "getBillsForProject",
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Bills"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bills/getBillsForMonthAndYear": {
+            "get": {
+                "tags": [
+                    "bills-controller"
+                ],
+                "operationId": "getBillsForMonthAndYear",
+                "parameters": [
+                    {
+                        "name": "selectedDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Bills"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bills/getBillsForEmployee": {
+            "get": {
+                "tags": [
+                    "bills-controller"
+                ],
+                "operationId": "getBillsForEmployee",
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Bills"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/assignmentsForProject": {
+            "get": {
+                "tags": [
+                    "assignment-controller"
+                ],
+                "operationId": "getAssignmentByProjectId",
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Assignment"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/allActiveProjects": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "getAllActiveProjects",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/adjustment/getAdjustments": {
+            "get": {
+                "tags": [
+                    "adjustment-controller"
+                ],
+                "operationId": "getAdjustments",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Adjustment"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/adjustment/findAdjustmentsByEmployeeId": {
+            "get": {
+                "tags": [
+                    "adjustment-controller"
+                ],
+                "operationId": "findAdjustmentsByEmployeeId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Adjustment"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/activeProjects": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "operationId": "getAllActiveProjects_1",
+                "parameters": [
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "selectedDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payrollsummary/deleteAll": {
+            "delete": {
+                "tags": [
+                    "payroll-summary-controller"
+                ],
+                "operationId": "deleteAll",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Address": {
+                "type": "object",
+                "properties": {
+                    "addressId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "zipCode": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "employee": {
+                        "$ref": "#/components/schemas/Employee"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Assignment": {
+                "type": "object",
+                "properties": {
+                    "assignmentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "projectId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "assignmentType": {
+                        "type": "string"
+                    },
+                    "assignmentTaxType": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "assignmentNotes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Notes"
+                        }
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Customer": {
+                "type": "object",
+                "properties": {
+                    "customerId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "customerCompanyName": {
+                        "type": "string"
+                    },
+                    "customerName": {
+                        "type": "string"
+                    },
+                    "customerPhone": {
+                        "type": "string"
+                    },
+                    "customerEmail": {
+                        "type": "string"
+                    },
+                    "ein": {
+                        "type": "string"
+                    },
+                    "website": {
+                        "type": "string"
+                    },
+                    "customerStatus": {
+                        "type": "string"
+                    },
+                    "customerStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerEndDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "customerContactEmail": {
+                        "type": "string"
+                    },
+                    "customerType": {
+                        "type": "string"
+                    },
+                    "customerAddress": {
+                        "type": "string"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Employee": {
+                "type": "object",
+                "properties": {
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "emailId": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "dob": {
+                        "type": "string"
+                    },
+                    "ssn": {
+                        "type": "string"
+                    },
+                    "taxTerm": {
+                        "type": "string"
+                    },
+                    "referredBy": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "designation": {
+                        "type": "string"
+                    },
+                    "employmentType": {
+                        "type": "string"
+                    },
+                    "employeeType": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "primarySkills": {
+                        "type": "string"
+                    },
+                    "secondarySkills": {
+                        "type": "string"
+                    },
+                    "workCity": {
+                        "type": "string"
+                    },
+                    "workCountry": {
+                        "type": "string"
+                    },
+                    "resourceType": {
+                        "type": "string"
+                    },
+                    "employeeDept": {
+                        "type": "string"
+                    },
+                    "annualPay": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "payrollStart": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "everifyStatus": {
+                        "type": "string"
+                    },
+                    "insurance": {
+                        "type": "string"
+                    },
+                    "companyName": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Address"
+                        }
+                    },
+                    "project": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Project"
+                        }
+                    },
+                    "visas": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Visa"
+                        }
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "i9": {
+                        "type": "string"
+                    },
+                    "paf": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LCA": {
+                "type": "object",
+                "properties": {
+                    "lcaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "jobTitle": {
+                        "type": "string"
+                    },
+                    "lcaCaseNumber": {
+                        "type": "string"
+                    },
+                    "employmentStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "employmentEndDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "lcaPostedFromDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "lcaPostedToDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "socCode": {
+                        "type": "string"
+                    },
+                    "lcaWage": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "mangerId": {
+                        "type": "string"
+                    },
+                    "jobLocation": {
+                        "type": "string"
+                    },
+                    "jobLocation2": {
+                        "type": "string"
+                    },
+                    "noticePostedLocation": {
+                        "type": "string"
+                    },
+                    "noticePostedLocation2": {
+                        "type": "string"
+                    },
+                    "lcaNumber": {
+                        "type": "string"
+                    },
+                    "client": {
+                        "type": "string"
+                    },
+                    "vendor": {
+                        "type": "string"
+                    },
+                    "certifiedDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Notes": {
+                "type": "object",
+                "properties": {
+                    "noteId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "notesType": {
+                        "type": "string"
+                    },
+                    "details": {
+                        "type": "string"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Project": {
+                "type": "object",
+                "properties": {
+                    "projectId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "projectName": {
+                        "type": "string"
+                    },
+                    "customer": {
+                        "$ref": "#/components/schemas/Customer"
+                    },
+                    "employee": {
+                        "$ref": "#/components/schemas/Employee"
+                    },
+                    "client": {
+                        "type": "string"
+                    },
+                    "billRates": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Wage"
+                        }
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "invoiceTerm": {
+                        "type": "string"
+                    },
+                    "paymentTerm": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "assignments": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Assignment"
+                        }
+                    },
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "vendorId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Visa": {
+                "type": "object",
+                "properties": {
+                    "visaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "visaCategory": {
+                        "type": "string"
+                    },
+                    "receiptNumber": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "jobTitle": {
+                        "type": "string"
+                    },
+                    "lcaNumber": {
+                        "type": "string"
+                    },
+                    "socCode": {
+                        "type": "string"
+                    },
+                    "client": {
+                        "type": "string"
+                    },
+                    "vendor": {
+                        "type": "string"
+                    },
+                    "jobLocation": {
+                        "type": "string"
+                    },
+                    "jobLocation2": {
+                        "type": "string"
+                    },
+                    "lcaWage": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "filingType": {
+                        "type": "string",
+                        "enum": [
+                            "TRANSFER",
+                            "CONSULAR",
+                            "COS"
+                        ]
+                    },
+                    "visaSubCategory": {
+                        "type": "string",
+                        "enum": [
+                            "TRANSFER",
+                            "CAP",
+                            "TRANSFER_INDIA"
+                        ]
+                    },
+                    "filingYear": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "employee": {
+                        "$ref": "#/components/schemas/Employee"
+                    },
+                    "lca": {
+                        "$ref": "#/components/schemas/LCA"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Wage": {
+                "type": "object",
+                "properties": {
+                    "wageId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "wageType": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "wageNotes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Notes"
+                        }
+                    },
+                    "createdDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Invoice": {
+                "type": "object",
+                "properties": {
+                    "invoiceId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "projectId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "invoiceMonth": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "billing": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "hours": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "invoicePaidAmount": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "invoiceDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "paymentDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PotentialEmployee": {
+                "type": "object",
+                "properties": {
+                    "peId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "emailId": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "dob": {
+                        "type": "string"
+                    },
+                    "company": {
+                        "type": "string"
+                    },
+                    "visaType": {
+                        "type": "string"
+                    },
+                    "referredBy": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string"
+                    },
+                    "year": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "primarySkills": {
+                        "type": "string"
+                    },
+                    "secondarySkills": {
+                        "type": "string"
+                    },
+                    "currentLocation": {
+                        "type": "string"
+                    },
+                    "workCountry": {
+                        "type": "string"
+                    },
+                    "onProject": {
+                        "type": "string"
+                    },
+                    "peNotes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Notes"
+                        }
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Adjustment": {
+                "type": "object",
+                "properties": {
+                    "adjustmentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "fromId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "toId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "adjustmentType": {
+                        "type": "string"
+                    },
+                    "notes": {
+                        "type": "string"
+                    },
+                    "adjustmentDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "EmployeeReconcileRecord": {
+                "type": "object",
+                "properties": {
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "designation": {
+                        "type": "string"
+                    },
+                    "dob": {
+                        "type": "string"
+                    },
+                    "ssn": {
+                        "type": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "string"
+                    },
+                    "emailId": {
+                        "type": "string"
+                    },
+                    "employmentType": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "referredBy": {
+                        "type": "string"
+                    },
+                    "taxTerms": {
+                        "type": "string"
+                    },
+                    "workAuthorization": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "income": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "expense": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "netProfit": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ReconcileExpense": {
+                "type": "object",
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    },
+                    "hours": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "expenseType": {
+                        "type": "string"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "projectId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ReconcileRecord": {
+                "type": "object",
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    },
+                    "hours": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "projectBilling": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "income": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "expense": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "invoiceTotal": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "invoicePaidAmount": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "expenseRecords": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ReconcileExpense"
+                        }
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "projectId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "Dashboard": {
+                "type": "object",
+                "properties": {
+                    "activeProjects": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "totalRevenue": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "totalCost": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
+            "PayPeriod": {
+                "type": "object",
+                "properties": {
+                    "payPeriodId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "payDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "paymentDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PayrollSummary": {
+                "type": "object",
+                "properties": {
+                    "payrollSummaryId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "payPeriodId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "payFrequency": {
+                        "type": "string"
+                    },
+                    "department": {
+                        "type": "string"
+                    },
+                    "checkDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "employeeName": {
+                        "type": "string"
+                    },
+                    "hours": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "totalPaid": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "taxWithheld": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "deductions": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "netPay": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "paymentDetails": {
+                        "type": "string"
+                    },
+                    "employerLiability": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "totalExpenses": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "payPeriodStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "payPeriodEndDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "Payroll": {
+                "type": "object",
+                "properties": {
+                    "payrollId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "payCheckId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "checkDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "payCycleStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "payCycleEndDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "hours": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "totalPaid": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "taxWithheld": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "deductions": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "netPay": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "employerLiability": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "notes": {
+                        "type": "string"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "EmployeeImmigrationProfile": {
+                "type": "object",
+                "properties": {
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "emailId": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "dob": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string"
+                    },
+                    "designation": {
+                        "type": "string"
+                    },
+                    "employmentType": {
+                        "type": "string"
+                    },
+                    "employeeType": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "companyName": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "visaCategory": {
+                        "type": "string"
+                    },
+                    "everifyStatus": {
+                        "type": "string"
+                    },
+                    "i9": {
+                        "type": "string"
+                    },
+                    "paf": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "addressLine": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "zipCode": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "immigrationTypes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ImmigrationDetails"
+                        }
+                    },
+                    "lcaList": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LcaSummary"
+                        }
+                    },
+                    "visas": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/VisaSummary"
+                        }
+                    }
+                }
+            },
+            "ImmigrationDetails": {
+                "type": "object",
+                "properties": {
+                    "visaType": {
+                        "type": "string"
+                    },
+                    "visaStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "visaEndDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "immigrationNotes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Notes"
+                        }
+                    },
+                    "immigrationDetailsId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "LcaSummary": {
+                "type": "object",
+                "properties": {
+                    "lcaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "jobTitle": {
+                        "type": "string"
+                    },
+                    "lcaCaseNumber": {
+                        "type": "string"
+                    },
+                    "employmentStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "employmentEndDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "lcaPostedFromDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "lcaPostedToDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "socCode": {
+                        "type": "string"
+                    },
+                    "lcaWage": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "mangerId": {
+                        "type": "string"
+                    },
+                    "jobLocation": {
+                        "type": "string"
+                    },
+                    "jobLocation2": {
+                        "type": "string"
+                    },
+                    "noticePostedLocation": {
+                        "type": "string"
+                    },
+                    "noticePostedLocation2": {
+                        "type": "string"
+                    },
+                    "lcaNumber": {
+                        "type": "string"
+                    },
+                    "client": {
+                        "type": "string"
+                    },
+                    "vendor": {
+                        "type": "string"
+                    },
+                    "certifiedDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "VisaSummary": {
+                "type": "object",
+                "properties": {
+                    "visaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "visaCategory": {
+                        "type": "string"
+                    },
+                    "receiptNumber": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "jobTitle": {
+                        "type": "string"
+                    },
+                    "lcaNumber": {
+                        "type": "string"
+                    },
+                    "socCode": {
+                        "type": "string"
+                    },
+                    "client": {
+                        "type": "string"
+                    },
+                    "vendor": {
+                        "type": "string"
+                    },
+                    "jobLocation": {
+                        "type": "string"
+                    },
+                    "jobLocation2": {
+                        "type": "string"
+                    },
+                    "lcaWage": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "lca": {
+                        "$ref": "#/components/schemas/LcaSummary"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "BasicEmployee": {
+                "type": "object",
+                "properties": {
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Bills": {
+                "type": "object",
+                "properties": {
+                    "invoiceId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "assignmentId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "invoiceMonth": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "billing": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "employeeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "employeeName": {
+                        "type": "string"
+                    },
+                    "hours": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "billPaidAmount": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "billDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "paymentDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "billType": {
+                        "type": "string"
+                    },
+                    "billId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            }
+        }
+    }
+}

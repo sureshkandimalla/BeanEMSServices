@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.bean.model.Customer;
-import com.bean.domain.Status;
+import com.bean.domain.ProjectStatus;
 import com.bean.model.Invoice;
 import com.bean.model.Project;
 import com.bean.model.Wage;
@@ -94,9 +94,9 @@ public class ProjectService {
 		  //project.getAssignments().stream().forEach(assignment ->{if(WageType.EMP_PAY.equals(assignment.getAssignmentType())?assignment.getWage()});
 		  if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||
 				  (project.getEndDate() != null && project.getEndDate().isBefore(today)))
-			  projectDomain.setStatus(Status.INACTIVE.toString());
+			  projectDomain.setStatus(ProjectStatus.INACTIVE.toString());
 		    else
-		      projectDomain.setStatus(Status.ACTIVE.toString());
+		      projectDomain.setStatus(ProjectStatus.ACTIVE.toString());
 		      //projectDomain.gete
 		  projectDomain.setExpenseExternal((float) project.getAssignments().stream()
 				  .filter(assignment -> !WageType.EMP_PAY.toString().equals(assignment.getAssignmentType()))  // Exclude EMP_PAY
@@ -170,9 +170,9 @@ public class ProjectService {
 
 			if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||
 					(project.getEndDate() != null && project.getEndDate().isBefore(today)))
-				newprojectDomain.setStatus(Status.INACTIVE.toString());
+				newprojectDomain.setStatus(ProjectStatus.INACTIVE.toString());
 			else
-				newprojectDomain.setStatus(Status.ACTIVE.toString());
+				newprojectDomain.setStatus(ProjectStatus.ACTIVE.toString());
 
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
 			String selectedMonthYear = current.format(formatter);
