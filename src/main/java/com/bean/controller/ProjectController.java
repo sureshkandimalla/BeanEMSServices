@@ -152,10 +152,20 @@ public class ProjectController {
 		List<com.bean.domain.Project> flattenProjects = new ArrayList<>();
 		repoProjects.stream().forEach(project -> {
 			System.out.println(project.getAssignments());
-			project.getBillRates().forEach(billrate -> {
-
-				flattenProjects.add(projectService.createProject(project, billrate, null));
-			});
+			if (project.getBillRates() == null || project.getBillRates().isEmpty()) {
+				// Projects with no bill rate records were silently dropped from this
+				// list since there was nothing to flatten against. Fall back to the
+				// project's own dates with a $0 bill rate so it still shows up.
+				Wage fallbackWage = new Wage();
+				fallbackWage.setWage(0f);
+				fallbackWage.setStartDate(project.getStartDate());
+				fallbackWage.setEndDate(project.getEndDate());
+				flattenProjects.add(projectService.createProject(project, fallbackWage, null));
+			} else {
+				project.getBillRates().forEach(billrate -> {
+					flattenProjects.add(projectService.createProject(project, billrate, null));
+				});
+			}
 		});
 
 		/*
