@@ -1,9 +1,15 @@
 package com.bean.service;
 
+import com.bean.model.Employee;
 import com.bean.model.PayrollSummary;
 import com.bean.repository.EmployeeRepository;
 import com.bean.repository.PayPeriodRepository;
 import com.bean.repository.PayrollSummaryRepository;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +29,7 @@ public class PayrollSummaryService {
 
     private static final Logger logger = LoggerFactory.getLogger(PayrollSummaryService.class);
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("M/d/yyyy");
+    private static final DateTimeFormatter YYYYMMDD_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     @Autowired
     private PayrollSummaryRepository payrollSummaryRepository;
@@ -80,6 +88,138 @@ public class PayrollSummaryService {
             }
         });
         return records;
+    }
+
+    /**
+     * Result of {@link #importFromXlsxResource()}: the saved records plus any
+     * employee_name values from the sheet that couldn't be matched to an
+     * Employee (those rows are still imported, just with a null employeeId,
+     * matching the same "leave it for later reconciliation" approach as
+     * {@link #reprocessEmployeeMatch(String)}).
+     */
+    public static class XlsxImportResult {
+        public final List<PayrollSummary> saved;
+        public final List<String> unmatchedEmployeeNames;
+
+        public XlsxImportResult(List<PayrollSummary> saved, List<String> unmatchedEmployeeNames) {
+            this.saved = saved;
+            this.unmatchedEmployeeNames = unmatchedEmployeeNames;
+        }
+    }
+
+    /**
+     * Imports the bundled resources/data/IntellanPayroll.xlsx "Payroll
+     * Summary" sheet. Unlike {@link #importFromCsv}, which expects an
+     * uploaded file laid out for direct app use, this sheet is a raw export
+     * (payroll_summary_id, check_date, pay_frequency, Department,
+     * employee_name, hours, total_paid, tax_withheld, Deductions, net_pay,
+     * payment_details, employer_liability, total_expenses, last_updated,
+     * pay_period_id, employee_id) where the last three columns are blank in
+     * the source file — this method derives them itself:
+     *   - payPeriodId = the check date as a literal yyyyMMdd number (e.g.
+     *     2025-04-15 -> 20250415), not a PayPeriod table lookup.
+     *   - employeeId = resolved from "LastName, FirstName" in employee_name
+     *     against the Employee table.
+     * The source payroll_summary_id column is ignored — the DB assigns its
+     * own identity value for every imported row.
+     */
+    public XlsxImportResult importFromXlsxResource() throws Exception {
+        List<PayrollSummary> records = new ArrayList<>();
+        List<String> unmatchedNames = new ArrayList<>();
+
+        try (InputStream in = getClass().getResourceAsStream("/data/IntellanPayroll.xlsx");
+             XSSFWorkbook workbook = new XSSFWorkbook(in)) {
+
+            Sheet sheet = workbook.getSheet("Payroll Summary");
+            if (sheet == null) {
+                sheet = workbook.getSheetAt(workbook.getNumberOfSheets() - 1);
+            }
+
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) continue; // header
+
+                String rawCheckDate = getStringValue(row.getCell(1));
+                String rawName = getStringValue(row.getCell(4));
+                if (rawCheckDate.isEmpty() || rawName.isEmpty()) continue; // trailing blank rows
+
+                try {
+                    PayrollSummary ps = new PayrollSummary();
+
+                    LocalDate checkDate = LocalDate.parse(rawCheckDate.trim(), DATE_FORMATTER);
+                    ps.setCheckDate(checkDate);
+                    ps.setPayFrequency(getStringValue(row.getCell(2)));
+                    ps.setDepartment(getStringValue(row.getCell(3)));
+                    ps.setEmployeeName(rawName);
+                    ps.setHours((float) getNumericValue(row.getCell(5)));
+                    ps.setTotalPaid((float) getNumericValue(row.getCell(6)));
+                    ps.setTaxWithheld((float) getNumericValue(row.getCell(7)));
+                    ps.setDeductions((float) getNumericValue(row.getCell(8)));
+                    ps.setNetPay((float) getNumericValue(row.getCell(9)));
+                    ps.setPaymentDetails(getStringValue(row.getCell(10)));
+                    ps.setEmployerLiability((float) getNumericValue(row.getCell(11)));
+                    ps.setTotalExpenses((float) getNumericValue(row.getCell(12)));
+
+                    // pay_period_id = literal yyyyMMdd of the check date.
+                    ps.setPayPeriodId(Long.parseLong(checkDate.format(YYYYMMDD_FORMATTER)));
+
+                    // employee_id resolved from "LastName, FirstName".
+                    if (rawName.contains(",")) {
+                        String[] parts = rawName.split(",", 2);
+                        String lastName = parts[0].trim();
+                        String firstName = parts[1].trim();
+                        var emp = employeeRepository.findByLastNameIgnoreCaseAndFirstNameIgnoreCase(lastName, firstName);
+                        if (emp.isPresent()) {
+                            Employee employee = emp.get();
+                            ps.setEmployeeId(employee.getEmployeeId());
+                            if (employee.getCompanyName() != null && !employee.getCompanyName().isEmpty()) {
+                                ps.setDepartment(employee.getCompanyName());
+                            }
+                        } else {
+                            unmatchedNames.add(rawName);
+                            logger.warn("No employee match for payroll row (row {}): '{}'", row.getRowNum(), rawName);
+                        }
+                    } else {
+                        unmatchedNames.add(rawName);
+                        logger.warn("employee_name not in 'Last, First' format (row {}): '{}'", row.getRowNum(), rawName);
+                    }
+
+                    records.add(ps);
+                } catch (Exception e) {
+                    logger.warn("Skipping xlsx row {} due to parse error: {}", row.getRowNum(), e.getMessage());
+                }
+            }
+        }
+
+        List<PayrollSummary> saved = payrollSummaryRepository.saveAll(records);
+        return new XlsxImportResult(saved, unmatchedNames);
+    }
+
+    private String getStringValue(Cell cell) {
+        if (cell == null) return "";
+        if (cell.getCellType() == CellType.STRING) {
+            return cell.getStringCellValue().trim();
+        }
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return String.valueOf(cell.getNumericCellValue());
+        }
+        return cell.toString().trim();
+    }
+
+    private double getNumericValue(Cell cell) {
+        if (cell == null) return 0d;
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return cell.getNumericCellValue();
+        }
+        if (cell.getCellType() == CellType.STRING) {
+            String cleaned = cell.getStringCellValue().replaceAll("[\",\\$\\s]", "").trim();
+            if (cleaned.isEmpty() || cleaned.equals("-")) return 0d;
+            try {
+                return Double.parseDouble(cleaned);
+            } catch (NumberFormatException e) {
+                return 0d;
+            }
+        }
+        return 0d;
     }
 
     public List<PayrollSummary> importFromCsv(MultipartFile file) throws Exception {

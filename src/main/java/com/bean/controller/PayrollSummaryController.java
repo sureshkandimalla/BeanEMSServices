@@ -64,6 +64,21 @@ public class PayrollSummaryController {
         }
     }
 
+    @PostMapping("/importFromResource")
+    public ResponseEntity<?> importFromResource() {
+        try {
+            PayrollSummaryService.XlsxImportResult result = payrollSummaryService.importFromXlsxResource();
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("imported", result.saved.size());
+            response.put("unmatchedEmployeeCount", result.unmatchedEmployeeNames.size());
+            response.put("unmatchedEmployeeNames", result.unmatchedEmployeeNames);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("Failed to import IntellanPayroll.xlsx", e);
+            return ResponseEntity.badRequest().body("Import failed: " + e.getMessage());
+        }
+    }
+
     @DeleteMapping("/deleteAll")
     public ResponseEntity<?> deleteAll() {
         payrollSummaryRepository.deleteAll();
