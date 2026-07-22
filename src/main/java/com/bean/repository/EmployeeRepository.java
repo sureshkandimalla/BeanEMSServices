@@ -37,4 +37,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
 	@Query(value = "SELECT employee_id FROM employees WHERE employee_id BETWEEN ?1 AND ?2 ORDER BY employee_id", nativeQuery = true)
 	List<Long> findUsedIdsInRange(long start, long end);
+
+	@Query(value = "SELECT COALESCE(MAX(employee_id), 0) FROM employees", nativeQuery = true)
+	long findMaxEmployeeId();
 }

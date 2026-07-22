@@ -20,8 +20,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee {
 
+  // No @GeneratedValue: employeeId is assigned explicitly by
+  // EmployeeService#saveEmployeeDetails from a reserved per-company range
+  // (see CompanyIdRangeConfig) — IDENTITY generation would let the DB
+  // silently overwrite any ID the application sets before insert.
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "employee_id")
   private long employeeId;
   private String firstName;

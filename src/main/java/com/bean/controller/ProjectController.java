@@ -208,8 +208,21 @@ public class ProjectController {
 		Project project = projectRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Project not exist with id :" + id));
 
+		// Note: startDate/endDate shown in the /getProjects list view are derived
+		// from the project's Wage record, not simple pass-through fields on
+		// Project itself — see WageController#updateWage for those. Status is a
+		// real field here; getProjects() prefers it over its date-based
+		// auto-compute once it's been explicitly set (see ProjectService).
 		project.setProjectName(projectDetails.getProjectName());
-		// project.setVendor(projectDetails.getVendor());
+		project.setInvoiceTerm(projectDetails.getInvoiceTerm());
+		project.setPaymentTerm(projectDetails.getPaymentTerm());
+		project.setStatus(projectDetails.getStatus());
+		// weekStartDay is newer than the four fields above and not every
+		// existing caller of this endpoint knows to send it — null-checked
+		// so an old request body doesn't silently clear a configured value.
+		if (projectDetails.getWeekStartDay() != null && !projectDetails.getWeekStartDay().isBlank()) {
+			project.setWeekStartDay(projectDetails.getWeekStartDay());
+		}
 
 		Project updatedProject = projectRepository.save(project);
 		return ResponseEntity.ok(updatedProject);

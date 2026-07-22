@@ -57,6 +57,11 @@ public class CustomerController {
     return ResponseEntity.ok(customer);
   }
 
+  // Partial update: the Vendor Details grid (VendorDetails.jsx) round-trips
+  // every field it shows as editable, but not every caller of this endpoint
+  // does — each field is only applied when actually present in the request
+  // body, so an old/partial request body doesn't null out the rest (same
+  // pattern as ProjectController#updateProject / AssignmentController#updateAssignment).
   @PutMapping("/customers/{id}")
   public ResponseEntity<Customer> updateCustomer(
     @PathVariable Long id,
@@ -68,7 +73,15 @@ public class CustomerController {
         new ResourceNotFoundException("customer not exist with id :" + id)
       );
 
-    customer.setCustomerName(customerDetails.getCustomerName());
+    if (customerDetails.getCustomerName() != null) customer.setCustomerName(customerDetails.getCustomerName());
+    if (customerDetails.getCustomerCompanyName() != null) customer.setCustomerCompanyName(customerDetails.getCustomerCompanyName());
+    if (customerDetails.getCustomerEmail() != null) customer.setCustomerEmail(customerDetails.getCustomerEmail());
+    if (customerDetails.getCustomerPhone() != null) customer.setCustomerPhone(customerDetails.getCustomerPhone());
+    if (customerDetails.getCustomerStatus() != null) customer.setCustomerStatus(customerDetails.getCustomerStatus());
+    if (customerDetails.getEin() != null) customer.setEin(customerDetails.getEin());
+    if (customerDetails.getWebsite() != null) customer.setWebsite(customerDetails.getWebsite());
+    if (customerDetails.getCustomerStartDate() != null) customer.setCustomerStartDate(customerDetails.getCustomerStartDate());
+    if (customerDetails.getCustomerEndDate() != null) customer.setCustomerEndDate(customerDetails.getCustomerEndDate());
 
     Customer updatedCustomer = customerRepository.save(customer);
     return ResponseEntity.ok(updatedCustomer);

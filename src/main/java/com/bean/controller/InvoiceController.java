@@ -73,7 +73,45 @@ public class InvoiceController {
 	public boolean isValid(Long value) {
 		return value != null && value != 0L && value != Long.MIN_VALUE;
 	}
-	
+
+	// One-off/rerunnable backfill: creates bills for any existing invoice
+	// that doesn't have any yet. Safe to call repeatedly — already-billed
+	// invoices are skipped.
+	@PostMapping("/backfillBills")
+	public ResponseEntity<Map<String, Object>> backfillBills() throws BillsException {
+		int invoicesBilled = invoiceService.backfillBillsForExistingInvoices();
+		Map<String, Object> result = new HashMap<>();
+		result.put("invoicesBilled", invoicesBilled);
+		return ResponseEntity.ok(result);
+	}
+
+	// Rerunnable: walks every invoice and corrects any of its bills whose
+	// status doesn't match what the invoice's current status implies
+	// (Invoice Cleared for Paid invoices, Created otherwise). Safe to call
+	// repeatedly — already-correct bills, and any bill already at Paid,
+	// are left alone.
+	@PostMapping("/validateBillStatus")
+	public ResponseEntity<Map<String, Integer>> validateBillStatus() {
+		return ResponseEntity.ok(invoiceService.validateBillStatusForAllInvoices());
+	}
+
+	// Rerunnable: walks every invoice and corrects any of its bills whose
+	// startDate/endDate don't match the invoice's. Safe to call repeatedly.
+	@PostMapping("/validateBillDates")
+	public ResponseEntity<Map<String, Integer>> validateBillDates() {
+		return ResponseEntity.ok(invoiceService.validateBillDatesForAllInvoices());
+	}
+
+	// Rerunnable cleanup: deletes every bill whose invoiceId doesn't match a
+	// real invoice. Defaults to a dry run (dryRun=true) so a caller can see
+	// what would be deleted before actually deleting — pass dryRun=false to
+	// commit.
+	@PostMapping("/deleteOrphanedBills")
+	public ResponseEntity<Map<String, Object>> deleteOrphanedBills(
+			@RequestParam(defaultValue = "true") boolean dryRun) {
+		return ResponseEntity.ok(invoiceService.deleteOrphanedBills(dryRun));
+	}
+
 
 	@GetMapping("/invoices/{id}")
 	public ResponseEntity<Invoice> getInvoiceById(@PathVariable Long id) {
@@ -169,6 +207,16 @@ public class InvoiceController {
 				break;
 		}
 		Invoice updatedInvoice = invoiceRepository.saveAndFlush(invoiceDetails);
+
+		// Keep the bills billed against this invoice in sync with its hours
+		// (and the total that's derived from them).
+		invoiceService.syncBillsHoursForInvoice(updatedInvoice);
+
+		// Invoice marked Paid -> its bills move from Created to Invoice Cleared.
+		if ("paid".equalsIgnoreCase(updatedInvoice.getStatus())) {
+			invoiceService.markBillsInvoiceCleared(updatedInvoice);
+		}
+
 		return ResponseEntity.ok(updatedInvoice);
 	}
 

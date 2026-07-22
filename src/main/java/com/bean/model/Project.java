@@ -40,6 +40,10 @@ public class Project {
   private LocalDate endDate;
   private String invoiceTerm;
   private String paymentTerm;
+  // Anchor day for Weekly/Biweekly/Once-in-4-Weeks period generation, a
+  // java.time.DayOfWeek name (e.g. "MONDAY", "SUNDAY"). Null/blank means
+  // "not configured" — every reader of this field falls back to MONDAY.
+  private String weekStartDay;
 
   private String status;
   /*@OneToMany(cascade = CascadeType.ALL)

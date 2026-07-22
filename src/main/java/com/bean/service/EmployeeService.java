@@ -92,6 +92,15 @@ public class EmployeeService {
 				logger.info("saveEmployeeDetails: assigned employeeId={}", nextId);
 			}
 		}
+
+		// employeeId has no @GeneratedValue — it must always be explicitly set
+		// before save. Companies without a configured range (or no company
+		// selected) fall back to the next id past every existing employee.
+		if (emp.getEmployeeId() == 0) {
+			long fallbackId = employeeRepository.findMaxEmployeeId() + 1;
+			emp.setEmployeeId(fallbackId);
+			logger.info("saveEmployeeDetails: no reserved range applied, assigned fallback employeeId={}", fallbackId);
+		}
 		// TODO mapping based on UI to DB
 		emp.setFirstName(employee.firstName());
 		emp.setLastName(employee.lastName());

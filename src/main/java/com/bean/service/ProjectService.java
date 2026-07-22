@@ -1,7 +1,9 @@
 package com.bean.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -43,6 +45,7 @@ public class ProjectService {
 	  public com.bean.domain.Project  createProject(Project project, Wage wage, String selectedDate){
 		    com.bean.domain.Project projectDomain=new com.bean.domain.Project();
 		    projectDomain.setProjectId(project.getProjectId());
+		    projectDomain.setWageId(wage.getWageId());
 		    projectDomain.setProjectName(project.getProjectName());
 		    projectDomain.setClientName(project.getClient());
 		    projectDomain.setInvoiceTerm(project.getInvoiceTerm());
@@ -92,12 +95,17 @@ public class ProjectService {
 		  }
 
 		  //project.getAssignments().stream().forEach(assignment ->{if(WageType.EMP_PAY.equals(assignment.getAssignmentType())?assignment.getWage()});
-		  if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||
-				  (project.getEndDate() != null && project.getEndDate().isBefore(today)))
+		  // A manually-set status (via the Projects grid) always wins; only
+		  // fall back to auto-computing Active/Inactive from the dates when
+		  // the project has never had an explicit status set.
+		  if (project.getStatus() != null && !project.getStatus().isBlank()) {
+			  projectDomain.setStatus(project.getStatus());
+		  } else if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||
+				  (project.getEndDate() != null && project.getEndDate().isBefore(today))) {
 			  projectDomain.setStatus(ProjectStatus.INACTIVE.toString());
-		    else
-		      projectDomain.setStatus(ProjectStatus.ACTIVE.toString());
-		      //projectDomain.gete
+		  } else {
+			  projectDomain.setStatus(ProjectStatus.ACTIVE.toString());
+		  }
 		  projectDomain.setExpenseExternal((float) project.getAssignments().stream()
 				  .filter(assignment -> !WageType.EMP_PAY.toString().equals(assignment.getAssignmentType()))  // Exclude EMP_PAY
 				  .mapToDouble(Assignment::getWage)  // Sum wages
@@ -138,6 +146,7 @@ public class ProjectService {
 		projectDomain.setClientName(project.getClient());
 		projectDomain.setInvoiceTerm(project.getInvoiceTerm());
 		projectDomain.setPaymentTerm(project.getPaymentTerm());
+		projectDomain.setWeekStartDay(resolveWeekStartDay(project).name());
 		projectDomain.setStartDate(wage.getStartDate());
 		projectDomain.setEndDate(wage.getEndDate());
 		projectDomain.setBillRate(wage.getWage());
@@ -153,44 +162,128 @@ public class ProjectService {
 		//Here
 		LocalDate startDate = wage.getStartDate();
 		LocalDate endDate = wage.getEndDate();
-		if(endDate.isAfter(today)){
+		if (endDate == null || endDate.isAfter(today)) {
 			endDate = today;
 		}
 		System.out.println("startDate: "+startDate+" endDate: "+endDate);
-		LocalDate current = startDate;
 		List<com.bean.domain.Project> dominList = new ArrayList<>();
 
-		List<Invoice> monthlyInvoices = invoiceService.getInvoiceByProjectId(
+		List<Invoice> projectInvoices = invoiceService.getInvoiceByProjectId(
 				project.getProjectId());
-		while (!current.isAfter(endDate)) {
-			com.bean.domain.Project newprojectDomain= projectDomain.clone();
-			newprojectDomain.setStartDate(current.withDayOfMonth(1)); // Set to the first day of the current month
-			newprojectDomain.setEndDate(current.withDayOfMonth(current.lengthOfMonth())); // Set to the last day of the current month
 
+		String invoiceTerm = project.getInvoiceTerm();
+		DayOfWeek weekStartDay = resolveWeekStartDay(project);
 
-			if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||
-					(project.getEndDate() != null && project.getEndDate().isBefore(today)))
-				newprojectDomain.setStatus(ProjectStatus.INACTIVE.toString());
-			else
-				newprojectDomain.setStatus(ProjectStatus.ACTIVE.toString());
+		if ("1".equals(invoiceTerm)) {
+			// Weekly: one row per calendar week, anchored to the project's
+			// configured week-start day (defaults to Monday).
+			addWeekAlignedRows(dominList, projectDomain, project, wage, today, projectInvoices,
+					startDate, endDate, weekStartDay, 1, 6);
+		} else if ("2".equals(invoiceTerm)) {
+			// Biweekly: one row per two-week span, same anchor day.
+			addWeekAlignedRows(dominList, projectDomain, project, wage, today, projectInvoices,
+					startDate, endDate, weekStartDay, 2, 13);
+		} else if ("6".equals(invoiceTerm)) {
+			// Once in 4 Weeks: one row per four-week span, same anchor day.
+			addWeekAlignedRows(dominList, projectDomain, project, wage, today, projectInvoices,
+					startDate, endDate, weekStartDay, 4, 27);
+		} else if ("5".equals(invoiceTerm)) {
+			// Semi-Monthly: two rows per month — 1st-15th and 16th-end.
+			LocalDate monthCursor = startDate.withDayOfMonth(1);
+			while (!monthCursor.isAfter(endDate)) {
+				LocalDate firstHalfStart = monthCursor;
+				LocalDate firstHalfEnd = monthCursor.withDayOfMonth(15);
+				dominList.add(buildInvoiceRow(projectDomain, project, wage, today, firstHalfStart, firstHalfEnd,
+						projectInvoices.stream().filter(invoice -> firstHalfStart.equals(invoice.getStartDate())).findAny()));
 
+				LocalDate secondHalfStart = monthCursor.withDayOfMonth(16);
+				LocalDate secondHalfEnd = monthCursor.withDayOfMonth(monthCursor.lengthOfMonth());
+				dominList.add(buildInvoiceRow(projectDomain, project, wage, today, secondHalfStart, secondHalfEnd,
+						projectInvoices.stream().filter(invoice -> secondHalfStart.equals(invoice.getStartDate())).findAny()));
+
+				monthCursor = monthCursor.plusMonths(1);
+			}
+		} else {
+			// Monthly (also the fallback for "Special"/unrecognized terms).
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-			String selectedMonthYear = current.format(formatter);
-					monthlyInvoices.stream()
-					.filter(invoice -> invoice.getInvoiceMonth().format(formatter).equals(selectedMonthYear))
-					.findAny().ifPresentOrElse(invoice -> {
-						logger.info("id: "+invoice.getInvoiceId()+"hours: "+invoice.getHours());
-								newprojectDomain.setHours(invoice.getHours());
-								newprojectDomain.setInvoiceId(invoice.getInvoiceId());
-								newprojectDomain.setTotal(invoice.getTotal());
-					}, () -> {System.out.println("No matching invoice found");});
-			dominList.add(newprojectDomain);
-			// Move to the next month
-			current = current.plusMonths(1);
+			LocalDate current = startDate;
+			while (!current.isAfter(endDate)) {
+				LocalDate periodStart = current.withDayOfMonth(1); // first day of the current month
+				LocalDate periodEnd = current.withDayOfMonth(current.lengthOfMonth()); // last day of the current month
+				String selectedMonthYear = current.format(formatter);
+
+				Optional<Invoice> matched = projectInvoices.stream()
+						.filter(invoice -> invoice.getInvoiceMonth().format(formatter).equals(selectedMonthYear))
+						.findAny();
+
+				dominList.add(buildInvoiceRow(projectDomain, project, wage, today, periodStart, periodEnd, matched));
+				current = current.plusMonths(1);
+			}
 		}
 
 		return dominList;
 
+	}
+
+	// Shared by Weekly/Biweekly/Once-in-4-Weeks: all three are spans of a
+	// fixed number of weeks anchored to the project's configured
+	// week-start day, matched against any existing invoice by its exact
+	// period start date.
+	private void addWeekAlignedRows(List<com.bean.domain.Project> dominList, com.bean.domain.Project projectDomain,
+			Project project, Wage wage, LocalDate today, List<Invoice> projectInvoices,
+			LocalDate startDate, LocalDate endDate, DayOfWeek weekStartDay, int stepWeeks, int spanDays) {
+		LocalDate cursor = startDate.with(TemporalAdjusters.previousOrSame(weekStartDay));
+		while (!cursor.isAfter(endDate)) {
+			final LocalDate periodStart = cursor;
+			LocalDate periodEnd = periodStart.plusDays(spanDays);
+
+			Optional<Invoice> matched = projectInvoices.stream()
+					.filter(invoice -> periodStart.equals(invoice.getStartDate()))
+					.findAny();
+
+			dominList.add(buildInvoiceRow(projectDomain, project, wage, today, periodStart, periodEnd, matched));
+			cursor = cursor.plusWeeks(stepWeeks);
+		}
+	}
+
+	// Every week-based term (Weekly/Biweekly/Once-in-4-Weeks) anchors to
+	// this project's own configured start-of-week day; defaults to Monday
+	// when not set (covers both a genuinely unconfigured project and any
+	// unparseable/legacy value, rather than throwing).
+	private DayOfWeek resolveWeekStartDay(Project project) {
+		String configured = project.getWeekStartDay();
+		if (configured == null || configured.isBlank()) {
+			return DayOfWeek.MONDAY;
+		}
+		try {
+			return DayOfWeek.valueOf(configured.trim().toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return DayOfWeek.MONDAY;
+		}
+	}
+
+	// One row for a single invoice period (a month, or a week-based term's
+	// span) — shared by both the monthly and week-aligned branches above.
+	private com.bean.domain.Project buildInvoiceRow(com.bean.domain.Project template, Project project, Wage wage,
+			LocalDate today, LocalDate periodStart, LocalDate periodEnd, Optional<Invoice> matchedInvoice) {
+		com.bean.domain.Project row = template.clone();
+		row.setStartDate(periodStart);
+		row.setEndDate(periodEnd);
+
+		if ((wage.getEndDate() != null && wage.getEndDate().isBefore(today)) ||
+				(project.getEndDate() != null && project.getEndDate().isBefore(today)))
+			row.setStatus(ProjectStatus.INACTIVE.toString());
+		else
+			row.setStatus(ProjectStatus.ACTIVE.toString());
+
+		matchedInvoice.ifPresentOrElse(invoice -> {
+			logger.info("id: " + invoice.getInvoiceId() + "hours: " + invoice.getHours());
+			row.setHours(invoice.getHours());
+			row.setInvoiceId(invoice.getInvoiceId());
+			row.setTotal(invoice.getTotal());
+		}, () -> logger.info("No matching invoice found for period {} - {}", periodStart, periodEnd));
+
+		return row;
 	}
 
 	public ResponseEntity<String> saveProject(com.bean.domain.Project project) {
@@ -208,7 +301,8 @@ public class ProjectService {
 			dbProject.setProjectName(project.getProjectName());
 			dbProject.setInvoiceTerm(project.getInvoiceTerm());
 			dbProject.setPaymentTerm(project.getPaymentTerm());
-		
+			dbProject.setWeekStartDay(project.getWeekStartDay());
+
 		Optional<Employee> optionalEmployee = employeeRepository.findById(project.getEmployeeId());
 		Optional<Customer> optionalCustomer = customerRepository.findById(project.getVendorId());
 

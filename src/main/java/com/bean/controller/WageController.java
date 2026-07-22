@@ -46,4 +46,16 @@ public class WageController {
         return ResponseEntity.ok( projectRepository.save(project));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Wage> updateWage(@PathVariable long id, @RequestBody Wage wageDetails) {
+        Wage wage = wageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Wage not exist with id :" + id));
+
+        wage.setWage(wageDetails.getWage());
+        wage.setStartDate(wageDetails.getStartDate());
+        wage.setEndDate(wageDetails.getEndDate());
+
+        return ResponseEntity.ok(wageRepository.save(wage));
+    }
+
 }

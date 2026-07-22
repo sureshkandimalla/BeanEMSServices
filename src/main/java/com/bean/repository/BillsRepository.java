@@ -20,5 +20,10 @@ public interface BillsRepository extends JpaRepository<Bills, Long> {
     Optional<List<Bills>> findBillsForProject(long projectId);
    // Optional<List<Bills>> findBillsForProject(long projectId);
    Optional<List<Bills>>  findByEmployeeId(long employeeId);
-   
+
+   @Query(value = "SELECT DISTINCT invoice_id FROM bills", nativeQuery = true)
+   List<Long> findDistinctInvoiceIdsWithBills();
+
+   List<Bills> findByInvoiceId(Long invoiceId);
+
 }

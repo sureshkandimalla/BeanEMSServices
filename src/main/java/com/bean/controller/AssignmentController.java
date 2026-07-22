@@ -99,24 +99,33 @@ public class AssignmentController {
         return ResponseEntity.ok(x);
     }
 
-    // Update assignment rest api
+    // Update assignment rest api. Partial update: the Assignments grid on
+    // the Project page only round-trips assignmentId/wage/status/dates —
+    // it never has projectId/employeeId/assignmentTaxType/description in
+    // its row data. Blindly overwriting every field (the old behavior)
+    // would null those out on every edit, so each field is only applied
+    // when actually present in the request body.
     @PutMapping("/assignments/{id}")
     public ResponseEntity<Assignment> updateAssignment(@PathVariable Long id, @RequestBody Assignment assignmentDetails) {
         Assignment assignment = assignmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Assignment not exist with id :" + id));
 
-        assignment.setProjectId(assignmentDetails.getProjectId());
-        assignment.setAssignmentType(assignmentDetails.getAssignmentType());
-        assignment.setAssignmentTaxType(assignmentDetails.getAssignmentTaxType());
-        assignment.setStartDate(assignmentDetails.getStartDate());
-        assignment.setEndDate(assignmentDetails.getEndDate());
-        assignment.setWage(assignmentDetails.getWage());
-        assignment.setEmployeeId(assignmentDetails.getEmployeeId());
-        assignment.setDescription(assignmentDetails.getDescription());
-        if (assignmentDetails.getEndDate() != null) {
+        if (assignmentDetails.getProjectId() != null) assignment.setProjectId(assignmentDetails.getProjectId());
+        if (assignmentDetails.getAssignmentType() != null) assignment.setAssignmentType(assignmentDetails.getAssignmentType());
+        if (assignmentDetails.getAssignmentTaxType() != null) assignment.setAssignmentTaxType(assignmentDetails.getAssignmentTaxType());
+        if (assignmentDetails.getStartDate() != null) assignment.setStartDate(assignmentDetails.getStartDate());
+        if (assignmentDetails.getEndDate() != null) assignment.setEndDate(assignmentDetails.getEndDate());
+        if (assignmentDetails.getWage() != 0) assignment.setWage(assignmentDetails.getWage());
+        if (assignmentDetails.getEmployeeId() != 0) assignment.setEmployeeId(assignmentDetails.getEmployeeId());
+        if (assignmentDetails.getDescription() != null) assignment.setDescription(assignmentDetails.getDescription());
+
+        // An explicit status from the grid always wins; only fall back to
+        // computing it from endDate when the caller didn't set one.
+        if (assignmentDetails.getStatus() != null && !assignmentDetails.getStatus().isBlank()) {
+            assignment.setStatus(assignmentDetails.getStatus());
+        } else if (assignmentDetails.getEndDate() != null) {
             assignment.setStatus(assignmentDetails.getEndDate().isAfter(java.time.LocalDate.now()) ? "Active" : "Inactive");
         }
-
 
         Assignment updatedAssignment = assignmentRepository.save(assignment);
         return ResponseEntity.ok(updatedAssignment);

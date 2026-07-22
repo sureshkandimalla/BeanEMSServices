@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Getter@Setter
 public class Project implements Cloneable {
     private long projectId;
+    private long wageId;
     private String projectName;
     private long employeeId;
     private String employeeName;
@@ -27,6 +28,7 @@ public class Project implements Cloneable {
     private String status;
     private String  invoiceTerm;
     private String  paymentTerm;
+    private String  weekStartDay;
     private float hours;
     private long invoiceId;
     private float Billing;
