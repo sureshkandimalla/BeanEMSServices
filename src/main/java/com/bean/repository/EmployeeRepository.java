@@ -35,6 +35,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
 	Optional<Employee> findByLastNameIgnoreCaseAndFirstNameIgnoreCase(String lastName, String firstName);
 
+	Optional<Employee> findByFirstNameIgnoreCaseAndLastNameIgnoreCase(String firstName, String lastName);
+
+	List<Employee> findByLastNameIgnoreCase(String lastName);
+
 	@Query(value = "SELECT employee_id FROM employees WHERE employee_id BETWEEN ?1 AND ?2 ORDER BY employee_id", nativeQuery = true)
 	List<Long> findUsedIdsInRange(long start, long end);
 
