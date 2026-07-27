@@ -99,6 +99,48 @@ public class AssignmentController {
         return ResponseEntity.ok(x);
     }
 
+    // Projects (+ assignment) an employee is on, for pickers like the
+    // Timesheet page ("which project am I logging hours against?").
+    @GetMapping("/assignmentsForEmployee")
+    public ResponseEntity<List<Map<String, Object>>> getAssignmentsForEmployee(@RequestParam Long employeeId) {
+        List<Map<String, Object>> rows = assignmentRepository.findAssignmentsForEmployee(employeeId).stream()
+                .map(result -> {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("projectId", result[0]);
+                    row.put("projectName", result[1]);
+                    row.put("assignmentId", result[2]);
+                    row.put("wage", result[3]);
+                    row.put("assignmentType", result[4]);
+                    row.put("status", result[5]);
+                    row.put("startDate", result[6]);
+                    row.put("endDate", result[7]);
+                    return row;
+                }).collect(Collectors.toList());
+        return ResponseEntity.ok(rows);
+    }
+
+    // Every active assignment across all employees/projects, for the
+    // Monthly Timesheets bulk-entry page (one row per assignment).
+    @GetMapping("/activeAssignmentsWithDetails")
+    public ResponseEntity<List<Map<String, Object>>> getActiveAssignmentsWithDetails() {
+        List<Map<String, Object>> rows = assignmentRepository.findAllActiveAssignmentsWithDetails().stream()
+                .map(result -> {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("employeeName", result[0] + " " + result[1]);
+                    row.put("projectId", result[2]);
+                    row.put("projectName", result[3]);
+                    row.put("vendorName", result[4]);
+                    row.put("assignmentId", result[5]);
+                    row.put("employeeId", result[6]);
+                    row.put("wage", result[7]);
+                    row.put("status", result[8]);
+                    row.put("startDate", result[9]);
+                    row.put("endDate", result[10]);
+                    return row;
+                }).collect(Collectors.toList());
+        return ResponseEntity.ok(rows);
+    }
+
     // Update assignment rest api. Partial update: the Assignments grid on
     // the Project page only round-trips assignmentId/wage/status/dates —
     // it never has projectId/employeeId/assignmentTaxType/description in

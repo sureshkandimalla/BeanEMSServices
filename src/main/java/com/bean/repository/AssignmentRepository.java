@@ -37,5 +37,32 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
             "where a.employee_id=e.employee_id and a.project_id=?",
             nativeQuery = true)
     List<Object[]> findAssignmentsForProject(Long projectId);
-    
+
+    @Query(value = "select p.project_id as projectId, p.project_name as projectName, a.assignment_id as assignmentId, "+
+            "a.wage as wage, a.assignment_type as assignmentType, a.status as status, "+
+            "a.start_date as startDate, a.end_date as endDate from assignment a, project p "+
+            "where a.project_id = p.project_id and a.employee_id = ?",
+            nativeQuery = true)
+    List<Object[]> findAssignmentsForEmployee(Long employeeId);
+
+    // Backs the bulk Timesheet entry page: every active assignment across
+    // all employees/projects, joined with the names needed to display it
+    // (employee, project, vendor) in one row. "Active" is computed from
+    // end_date rather than trusting the stored status column, which is
+    // only recomputed when the assignment itself is next saved/edited — an
+    // assignment whose end_date has since passed would otherwise keep
+    // showing up as Active indefinitely.
+    @Query(value = "select e.first_name as firstName, e.last_name as lastName, "+
+            "p.project_id as projectId, p.project_name as projectName, "+
+            "c.customer_company_name as vendorName, "+
+            "a.assignment_id as assignmentId, a.employee_id as employeeId, a.wage as wage, "+
+            "a.status as status, a.start_date as startDate, a.end_date as endDate "+
+            "from assignment a "+
+            "join employees e on a.employee_id = e.employee_id "+
+            "join project p on a.project_id = p.project_id "+
+            "left join customer c on p.vendor_id = c.customer_id "+
+            "where (a.end_date is null or a.end_date >= CURDATE())",
+            nativeQuery = true)
+    List<Object[]> findAllActiveAssignmentsWithDetails();
+
 }
