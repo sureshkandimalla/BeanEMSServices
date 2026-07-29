@@ -52,6 +52,13 @@ public class TimeSheetService {
         return timeSheetRepository.findByWorkDateBetweenOrderByWorkDate(month.atDay(1), month.atEndOfMonth());
     }
 
+    // Every entry across all assignments for an arbitrary date range — backs
+    // the Payroll Eligibility page, where a pay period rarely lines up with
+    // calendar month boundaries (e.g. biweekly).
+    public List<TimeSheet> getByRange(LocalDate start, LocalDate end) {
+        return timeSheetRepository.findByWorkDateBetweenOrderByWorkDate(start, end);
+    }
+
     public static class SaveResult {
         public final List<TimeSheet> saved;
         public final List<LocalDate> lockedDates;

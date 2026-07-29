@@ -233,9 +233,17 @@ public class ProjectService {
 			Project project, Wage wage, LocalDate today, List<Invoice> projectInvoices,
 			LocalDate startDate, LocalDate endDate, DayOfWeek weekStartDay, int stepWeeks, int spanDays) {
 		LocalDate cursor = startDate.with(TemporalAdjusters.previousOrSame(weekStartDay));
+		boolean isFirstRow = true;
 		while (!cursor.isAfter(endDate)) {
-			final LocalDate periodStart = cursor;
-			LocalDate periodEnd = periodStart.plusDays(spanDays);
+			// The grid-aligned cursor can fall before the project's actual
+			// start date (e.g. project starts on a Sunday, grid anchors to
+			// Monday) — only the very first period clips forward to the
+			// real start date, so the first invoice doesn't bill days
+			// before the engagement began. The period's end date, and every
+			// later period, stays on the regular weekStartDay grid.
+			final LocalDate periodStart = (isFirstRow && cursor.isBefore(startDate)) ? startDate : cursor;
+			LocalDate periodEnd = cursor.plusDays(spanDays);
+			isFirstRow = false;
 
 			Optional<Invoice> matched = projectInvoices.stream()
 					.filter(invoice -> periodStart.equals(invoice.getStartDate()))

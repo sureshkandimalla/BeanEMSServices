@@ -13,4 +13,5 @@ public interface PayrollSummaryRepository extends JpaRepository<PayrollSummary, 
     List<PayrollSummary> findByCheckDateBetween(LocalDate startDate, LocalDate endDate);
     List<PayrollSummary> findByDepartment(String department);
     List<PayrollSummary> findByEmployeeId(Long employeeId);
+    List<PayrollSummary> findByPayPeriodId(Long payPeriodId);
 }

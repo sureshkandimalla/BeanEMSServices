@@ -46,6 +46,11 @@ public class PayrollSummaryController {
         return payrollSummaryService.getByEmployeeId(employeeId);
     }
 
+    @GetMapping("/getByPayPeriod")
+    public List<PayrollSummary> getByPayPeriod(@RequestParam Long payPeriodId) {
+        return payrollSummaryRepository.findByPayPeriodId(payPeriodId);
+    }
+
     @GetMapping("/getByDateRange")
     public List<PayrollSummary> getByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,

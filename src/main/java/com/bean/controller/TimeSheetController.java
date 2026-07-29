@@ -46,6 +46,11 @@ public class TimeSheetController {
         return timeSheetService.getByEmployeeAndRange(employeeId, LocalDate.parse(startDate), LocalDate.parse(endDate));
     }
 
+    @GetMapping("/getByRange")
+    public List<TimeSheet> getByRange(@RequestParam String startDate, @RequestParam String endDate) {
+        return timeSheetService.getByRange(LocalDate.parse(startDate), LocalDate.parse(endDate));
+    }
+
     @PostMapping("/saveBulk")
     public ResponseEntity<?> saveBulk(@RequestBody List<TimeSheet> entries) {
         try {

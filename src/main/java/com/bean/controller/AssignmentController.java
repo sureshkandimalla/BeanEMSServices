@@ -141,6 +141,33 @@ public class AssignmentController {
         return ResponseEntity.ok(rows);
     }
 
+    // Every assignment whose active window overlaps a given pay period, for
+    // the Payroll Eligibility page — unlike activeAssignmentsWithDetails,
+    // this isn't limited to "currently active"; a pay period can be past.
+    @GetMapping("/assignmentsEligibleForPeriod")
+    public ResponseEntity<List<Map<String, Object>>> getAssignmentsEligibleForPeriod(
+            @RequestParam String startDate, @RequestParam String endDate) {
+        List<Map<String, Object>> rows = assignmentRepository
+                .findAssignmentsEligibleForPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate)).stream()
+                .map(result -> {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("employeeName", result[0] + " " + result[1]);
+                    row.put("projectId", result[2]);
+                    row.put("projectName", result[3]);
+                    row.put("vendorName", result[4]);
+                    row.put("assignmentId", result[5]);
+                    row.put("employeeId", result[6]);
+                    row.put("wage", result[7]);
+                    row.put("status", result[8]);
+                    row.put("startDate", result[9]);
+                    row.put("endDate", result[10]);
+                    row.put("employeeType", result[11]);
+                    row.put("taxTerm", result[12]);
+                    return row;
+                }).collect(Collectors.toList());
+        return ResponseEntity.ok(rows);
+    }
+
     // Update assignment rest api. Partial update: the Assignments grid on
     // the Project page only round-trips assignmentId/wage/status/dates —
     // it never has projectId/employeeId/assignmentTaxType/description in

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bean.model.Assignment;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,8 +62,29 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
             "join employees e on a.employee_id = e.employee_id "+
             "join project p on a.project_id = p.project_id "+
             "left join customer c on p.vendor_id = c.customer_id "+
-            "where (a.end_date is null or a.end_date >= CURDATE())",
+            "where (a.end_date is null or a.end_date >= CURDATE()) "+
+            "and (e.company_name is null or e.company_name <> 'Referral')",
             nativeQuery = true)
     List<Object[]> findAllActiveAssignmentsWithDetails();
+
+    // Backs the Payroll Eligibility page: every assignment whose active
+    // window overlaps a given pay period at all (not just "currently
+    // active" — a pay period can be in the past), joined with the same
+    // employee/project/vendor names as findAllActiveAssignmentsWithDetails.
+    @Query(value = "select e.first_name as firstName, e.last_name as lastName, "+
+            "p.project_id as projectId, p.project_name as projectName, "+
+            "c.customer_company_name as vendorName, "+
+            "a.assignment_id as assignmentId, a.employee_id as employeeId, a.wage as wage, "+
+            "a.status as status, a.start_date as startDate, a.end_date as endDate, "+
+            "COALESCE(NULLIF(e.employee_type, ''), NULLIF(e.tax_term, '')) as employeeType, "+
+            "e.tax_term as taxTerm "+
+            "from assignment a "+
+            "join employees e on a.employee_id = e.employee_id "+
+            "join project p on a.project_id = p.project_id "+
+            "left join customer c on p.vendor_id = c.customer_id "+
+            "where a.start_date <= ?2 and (a.end_date is null or a.end_date >= ?1) "+
+            "and (e.company_name is null or e.company_name <> 'Referral')",
+            nativeQuery = true)
+    List<Object[]> findAssignmentsEligibleForPeriod(LocalDate periodStart, LocalDate periodEnd);
 
 }
