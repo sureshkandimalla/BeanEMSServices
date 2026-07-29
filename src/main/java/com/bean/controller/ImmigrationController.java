@@ -11,12 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = {
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:4200",
-        "https://beanems.netlify.app"
-})
 @RestController
 @RequestMapping("/api/v1/immigration")
 public class ImmigrationController {

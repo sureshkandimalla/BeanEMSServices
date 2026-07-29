@@ -9,7 +9,6 @@ import com.bean.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,9 +33,6 @@ import java.util.stream.Collectors;
 
 //import static org.graalvm.compiler.nodes.calc.BinaryArithmeticNode.ReassociateMatch.x;
 
-@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com","http://localhost:3000", "http://localhost:3001","http://localhost:4000"},
-		methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
-		allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/v1/invoice")
 public class InvoiceController {

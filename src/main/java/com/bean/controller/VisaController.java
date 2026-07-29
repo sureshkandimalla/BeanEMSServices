@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com", "http://localhost:3000", "http://localhost:4000", "http://localhost:3001"})
 @RestController
 @RequestMapping("/api/v1/visa")
 public class VisaController {

@@ -16,7 +16,6 @@ import java.util.Map;
  * their company's reserved range (see CompanyIdRangeConfig) before that was
  * fixed. Not a permanent feature — remove after use.
  */
-@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com", "http://localhost:3000", "http://localhost:4000", "http://localhost:3001"})
 @RestController
 @RequestMapping("/api/v1/migration")
 public class MigrationController {

@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com", "http://localhost:3000", "http://localhost:4000"})
 @RestController
 @RequestMapping("/api/v1/payrollsummary")
 public class PayrollSummaryController {

@@ -11,7 +11,6 @@ import com.bean.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +28,6 @@ import com.bean.repository.BillsRepository;
 import com.bean.service.BillsService;
 
 
-@CrossOrigin(origins = {"http://beanems.s3-website-us-east-1.amazonaws.com","http://localhost:3000", "http://localhost:3001", "http://localhost:4000"},
-		methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
-		allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/v1/bills")
 public class BillsController {

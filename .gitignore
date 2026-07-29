@@ -1,6 +1,9 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
+
+# Rebuilt fresh for each `eb deploy --staged` (see Procfile) — not committed.
+/application.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -31,3 +34,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
