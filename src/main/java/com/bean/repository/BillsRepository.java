@@ -26,4 +26,6 @@ public interface BillsRepository extends JpaRepository<Bills, Long> {
 
    List<Bills> findByInvoiceId(Long invoiceId);
 
+   List<Bills> findByProjectId(Long projectId);
+
 }

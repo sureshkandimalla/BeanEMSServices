@@ -19,6 +19,7 @@ public class Bills {
   private Long BillId;
 
   private Long invoiceId;
+  private Long projectId;
   private Long assignmentId;
   private LocalDate invoiceMonth;
   private float billing; //assignment wage
@@ -36,7 +37,7 @@ public class Bills {
   
 @Override
 public String toString() {
-	return "Bills [BillId=" + BillId + ", invoiceId=" + invoiceId + ", assignmentId=" + assignmentId + ", invoiceMonth="
+	return "Bills [BillId=" + BillId + ", invoiceId=" + invoiceId + ", projectId=" + projectId + ", assignmentId=" + assignmentId + ", invoiceMonth="
 			+ invoiceMonth + ", billing=" + billing + ", employeeId=" + employeeId + ", hours=" + hours + ", total="
 			+ total + ", billPaidAmount=" + billPaidAmount + ", billDate=" + billDate + ", startDate=" + startDate
 			+ ", endDate=" + endDate + ", paymentDate=" + paymentDate + ", status=" + status + "]";

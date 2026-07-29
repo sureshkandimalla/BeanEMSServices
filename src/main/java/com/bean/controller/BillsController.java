@@ -69,6 +69,15 @@ public class BillsController {
 		return ResponseEntity.noContent().build();
 	}
 
+    // Every bill across all projects — used by the Projects Overview's
+    // Invoices vs Bills chart, joined client-side to a project via each
+    // bill's invoiceId -> Invoice.projectId (Bills itself has no projectId
+    // column).
+    @GetMapping("/getAllBills")
+    public ResponseEntity<List<Bills>> getAllBills() {
+        return ResponseEntity.ok(billsRepository.findAll());
+    }
+
     @GetMapping("/getBillsForMonthAndYear")
 	public ResponseEntity<List<Bills>> getBillsForMonthAndYear(@RequestParam(required = true) String selectedDate) {
     	

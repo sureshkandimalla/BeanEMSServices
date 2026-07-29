@@ -301,6 +301,7 @@ public class InvoiceService {
 	        // Create a Bills object and map data from Assignments
 	        Bills bill = new Bills();
 	        bill.setInvoiceId(invoice.getInvoiceId());
+	        bill.setProjectId(invoice.getProjectId());
 	        bill.setAssignmentId(assignment.getAssignmentId());
 	        bill.setEmployeeId(assignment.getEmployeeId());
 	        bill.setBillDate(invoice.getInvoiceDate());
