@@ -61,7 +61,7 @@ public class VisaService {
         visa.setLcaNumber(visaDetails.getLcaNumber());
         visa.setSocCode(visaDetails.getSocCode());
         visa.setClient(visaDetails.getClient());
-        visa.setVendor(visaDetails.getVendor());
+        visa.setCustomer(visaDetails.getCustomer());
         visa.setJobLocation(visaDetails.getJobLocation());
         visa.setJobLocation2(visaDetails.getJobLocation2());
         visa.setLcaWage(visaDetails.getLcaWage());

@@ -1,6 +1,7 @@
 package com.bean.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +11,9 @@ import com.bean.model.Project;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-	
+
+	List<Project> findByProjectNameIgnoreCase(String projectName);
+
 	@Query(
             value = "SELECT * FROM project a WHERE DATE_FORMAT(a.start_date, '%Y-%m') <= :endDate AND DATE_FORMAT(a.end_date, '%Y-%m') >= :endDate",
             nativeQuery = true)

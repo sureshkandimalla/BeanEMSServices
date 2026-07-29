@@ -26,7 +26,7 @@ public record LcaSummary(
         String noticePostedLocation2,
         String lcaNumber,
         String client,
-        String vendor,
+        String customer,
         LocalDate certifiedDate,
         String status,
         LocalDate lastUpdated
@@ -49,7 +49,7 @@ public record LcaSummary(
                 lca.getNoticePostedLocation2(),
                 lca.getLcaNumber(),
                 lca.getClient(),
-                lca.getVendor(),
+                lca.getCustomer(),
                 lca.getCertifiedDate(),
                 lca.getStatus(),
                 lca.getLastUpdated()

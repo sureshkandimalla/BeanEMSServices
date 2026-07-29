@@ -127,7 +127,7 @@ public class AssignmentController {
                     row.put("employeeName", result[0] + " " + result[1]);
                     row.put("projectId", result[2]);
                     row.put("projectName", result[3]);
-                    row.put("vendorName", result[4]);
+                    row.put("customerName", result[4]);
                     row.put("assignmentId", result[5]);
                     row.put("employeeId", result[6]);
                     row.put("wage", result[7]);
@@ -152,7 +152,7 @@ public class AssignmentController {
                     row.put("employeeName", result[0] + " " + result[1]);
                     row.put("projectId", result[2]);
                     row.put("projectName", result[3]);
-                    row.put("vendorName", result[4]);
+                    row.put("customerName", result[4]);
                     row.put("assignmentId", result[5]);
                     row.put("employeeId", result[6]);
                     row.put("wage", result[7]);

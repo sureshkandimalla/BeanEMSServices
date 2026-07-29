@@ -26,9 +26,9 @@ public class CustomerService {
 		Customer cust = new Customer();
 		// TODO mapping based on UI to DB
 		
-		cust.setCustomerCompanyName(customer.vendorCompanyName());
+		cust.setCustomerCompanyName(customer.customerCompanyName());
 		cust.setCustomerEmail(customer.emailId());
-		cust.setCustomerName(customer.vendorName());
+		cust.setCustomerName(customer.customerName());
 		cust.setCustomerPhone(customer.phone());
 		cust.setCustomerStartDate(customer.startDate());
 		cust.setCustomerEndDate(customer.endDate());

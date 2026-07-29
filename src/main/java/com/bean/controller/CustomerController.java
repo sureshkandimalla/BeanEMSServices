@@ -55,7 +55,7 @@ public class CustomerController {
     return ResponseEntity.ok(customer);
   }
 
-  // Partial update: the Vendor Details grid (VendorDetails.jsx) round-trips
+  // Partial update: the Customer Details grid (CustomerDetails.jsx) round-trips
   // every field it shows as editable, but not every caller of this endpoint
   // does — each field is only applied when actually present in the request
   // body, so an old/partial request body doesn't null out the rest (same

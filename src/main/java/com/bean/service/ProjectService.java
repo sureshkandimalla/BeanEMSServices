@@ -55,8 +55,8 @@ public class ProjectService {
 		    projectDomain.setBillRate(wage.getWage());
 		    projectDomain.setEmployeeId(project.getEmployee().getEmployeeId());
 		    projectDomain.setEmployeeName(project.getEmployee().getFirstName()+" "+project.getEmployee().getLastName());
-		    projectDomain.setVendorId(project.getCustomer().getCustomerId());
-		    projectDomain.setVendorName(project.getCustomer().getCustomerCompanyName());
+		    projectDomain.setCustomerId(project.getCustomer().getCustomerId());
+		    projectDomain.setCustomerName(project.getCustomer().getCustomerCompanyName());
 		    projectDomain.setStartDate(wage.getStartDate());
 		    projectDomain.setEndDate(wage.getEndDate());
 		  LocalDate today = LocalDate.now();
@@ -152,8 +152,8 @@ public class ProjectService {
 		projectDomain.setBillRate(wage.getWage());
 		projectDomain.setEmployeeId(project.getEmployee().getEmployeeId());
 		projectDomain.setEmployeeName(project.getEmployee().getFirstName()+" "+project.getEmployee().getLastName());
-		projectDomain.setVendorId(project.getCustomer().getCustomerId());
-		projectDomain.setVendorName(project.getCustomer().getCustomerCompanyName());
+		projectDomain.setCustomerId(project.getCustomer().getCustomerId());
+		projectDomain.setCustomerName(project.getCustomer().getCustomerCompanyName());
 		projectDomain.setStartDate(wage.getStartDate());
 		projectDomain.setEndDate(wage.getEndDate());
 		LocalDate today = LocalDate.now();
@@ -301,7 +301,7 @@ public class ProjectService {
 			Project dbProject = new Project();
 			dbProject.setClient(project.getClient());
 			dbProject.setEmployeeId(project.getEmployeeId());
-			dbProject.setVendorId(project.getVendorId());
+			dbProject.setCustomerId(project.getCustomerId());
 			dbProject.setEndDate(project.getEndDate());
 			dbProject.setStartDate(project.getStartDate());
 			dbProject.setStatus(project.getStatus());
@@ -312,7 +312,7 @@ public class ProjectService {
 			dbProject.setWeekStartDay(project.getWeekStartDay());
 
 		Optional<Employee> optionalEmployee = employeeRepository.findById(project.getEmployeeId());
-		Optional<Customer> optionalCustomer = customerRepository.findById(project.getVendorId());
+		Optional<Customer> optionalCustomer = customerRepository.findById(project.getCustomerId());
 
 		Wage wage =new Wage();
 		wage.setEndDate(project.getEndDate());
@@ -336,7 +336,7 @@ public class ProjectService {
 		    dbProject.setEmployee(employee);
 		    dbProject.setCustomer(customer);
 
-		    logger.info("employeeid & vendorid in project table: " + project.getEmployeeId() + " " + project.getVendorId());
+		    logger.info("employeeid & customerid in project table: " + project.getEmployeeId() + " " + project.getCustomerId());
 		    projectRepository.save(dbProject);
 		} else {
 		    // Handle the case where either the employee or the customer is not found

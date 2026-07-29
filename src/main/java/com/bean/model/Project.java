@@ -61,7 +61,7 @@ public class Project {
   @Transient
   private Long employeeId;
   @Transient
-  private Long vendorId;
+  private Long customerId;
   
   @Override
 public String toString() {

@@ -33,7 +33,8 @@ public class LCA {
   private String noticePostedLocation2;
   private String lcaNumber;
   private String client;
-  private String vendor;
+  @Column(name = "vendor")
+  private String customer;
   private LocalDate certifiedDate;
   private String status;
   private String shortName;

@@ -48,14 +48,14 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
 
     // Backs the bulk Timesheet entry page: every active assignment across
     // all employees/projects, joined with the names needed to display it
-    // (employee, project, vendor) in one row. "Active" is computed from
+    // (employee, project, customer) in one row. "Active" is computed from
     // end_date rather than trusting the stored status column, which is
     // only recomputed when the assignment itself is next saved/edited — an
     // assignment whose end_date has since passed would otherwise keep
     // showing up as Active indefinitely.
     @Query(value = "select e.first_name as firstName, e.last_name as lastName, "+
             "p.project_id as projectId, p.project_name as projectName, "+
-            "c.customer_company_name as vendorName, "+
+            "c.customer_company_name as customerName, "+
             "a.assignment_id as assignmentId, a.employee_id as employeeId, a.wage as wage, "+
             "a.status as status, a.start_date as startDate, a.end_date as endDate "+
             "from assignment a "+
@@ -70,10 +70,10 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     // Backs the Payroll Eligibility page: every assignment whose active
     // window overlaps a given pay period at all (not just "currently
     // active" — a pay period can be in the past), joined with the same
-    // employee/project/vendor names as findAllActiveAssignmentsWithDetails.
+    // employee/project/customer names as findAllActiveAssignmentsWithDetails.
     @Query(value = "select e.first_name as firstName, e.last_name as lastName, "+
             "p.project_id as projectId, p.project_name as projectName, "+
-            "c.customer_company_name as vendorName, "+
+            "c.customer_company_name as customerName, "+
             "a.assignment_id as assignmentId, a.employee_id as employeeId, a.wage as wage, "+
             "a.status as status, a.start_date as startDate, a.end_date as endDate, "+
             "COALESCE(NULLIF(e.employee_type, ''), NULLIF(e.tax_term, '')) as employeeType, "+

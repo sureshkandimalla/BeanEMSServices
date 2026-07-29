@@ -32,7 +32,8 @@ public class Visa {
   private String lcaNumber;
   private String socCode;
   private String client;
-  private String vendor;
+  @Column(name = "vendor")
+  private String customer;
   private String jobLocation;
   private String jobLocation2;
   private Double lcaWage;
@@ -71,7 +72,7 @@ public class Visa {
                 ", lcaNumber='" + lcaNumber + '\'' +
                 ", socCode='" + socCode + '\'' +
                 ", client='" + client + '\'' +
-                ", vendor='" + vendor + '\'' +
+                ", customer='" + customer + '\'' +
                 ", jobLocation='" + jobLocation + '\'' +
                 ", jobLocation2='" + jobLocation2 + '\'' +
                 ", lcaWage=" + lcaWage +

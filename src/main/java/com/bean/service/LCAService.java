@@ -44,7 +44,7 @@ public class LCAService {
             existing.setNoticePostedLocation2(lca.getNoticePostedLocation2());
             existing.setLcaNumber(lca.getLcaNumber());
             existing.setClient(lca.getClient());
-            existing.setVendor(lca.getVendor());
+            existing.setCustomer(lca.getCustomer());
             existing.setCertifiedDate(lca.getCertifiedDate());
             existing.setStatus(lca.getStatus());
             existing.setShortName(lca.getShortName());

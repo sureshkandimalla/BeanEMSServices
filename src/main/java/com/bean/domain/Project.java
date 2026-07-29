@@ -11,8 +11,8 @@ public class Project implements Cloneable {
     private String projectName;
     private long employeeId;
     private String employeeName;
-    private String vendorName;
-    private long vendorId;
+    private String customerName;
+    private long customerId;
     private String clientName;
     private String client; //for project table
     private long clientId;
@@ -47,7 +47,7 @@ public class Project implements Cloneable {
 	@Override
 	public String toString() {
 		return "Project [projectId=" + projectId + ", projectName=" + projectName + ", employeeId=" + employeeId
-				+ ", employeeName=" + employeeName + ", vendorName=" + vendorName + ", vendorId=" + vendorId
+				+ ", employeeName=" + employeeName + ", customerName=" + customerName + ", customerId=" + customerId
 				+ ", clientName=" + clientName + ", clientId=" + clientId + ", startDate=" + startDate + ", endDate="
 				+ endDate + ", billRate=" + billRate + ", employeePay=" + employeePay + ", expenseInternal="
 				+ expenseInternal + ", expenseExternal=" + expenseExternal + ", net=" + net + ", status=" + status
