@@ -1,0 +1,66 @@
+package com.employeehub.domain;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+@Getter@Setter
+public class Project implements Cloneable {
+    private long projectId;
+    private long wageId;
+    private String projectName;
+    private long employeeId;
+    private String employeeName;
+    // The employee's own company (e.g. "Intellan Technologies LLC", "Code9
+    // LLC") — not to be confused with customerName/client, which are the
+    // outside companies this project is delivered for.
+    private String companyName;
+    private String customerName;
+    private long customerId;
+    private String clientName;
+    private String client; //for project table
+    private long clientId;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private float billRate;
+    private float employeePay;
+    private float expenseInternal;
+    private float expenseExternal;
+
+    private float employerTax;
+    private float net;
+    private String status;
+    private String  invoiceTerm;
+    private String  paymentTerm;
+    private String  weekStartDay;
+    private float hours;
+    private long invoiceId;
+    private float Billing;
+    private float total;
+
+    @Override
+    public Project clone() {
+        try {
+            return (Project) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+	@Override
+	public String toString() {
+		return "Project [projectId=" + projectId + ", projectName=" + projectName + ", employeeId=" + employeeId
+				+ ", employeeName=" + employeeName + ", customerName=" + customerName + ", customerId=" + customerId
+				+ ", clientName=" + clientName + ", clientId=" + clientId + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", billRate=" + billRate + ", employeePay=" + employeePay + ", expenseInternal="
+				+ expenseInternal + ", expenseExternal=" + expenseExternal + ", net=" + net + ", status=" + status
+				+ ", invoiceTerm=" + invoiceTerm + ", paymentTerm=" + paymentTerm + ", hours=" + hours + ", invoiceID="
+				+ invoiceId + ", Billing=" + Billing + ", total=" + total + "]";
+	}
+    
+    
+  
+
+    
+}

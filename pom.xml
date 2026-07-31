@@ -8,11 +8,11 @@
 		<version>2.7.0</version>
 		<relativePath />
 	</parent>
-	<groupId>com.gfg</groupId>
-	<artifactId>springboot_mysql_project</artifactId>
+	<groupId>com.employeehub</groupId>
+	<artifactId>employeehub-services</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>springboot_mysql_project</name>
-	<description>Demo project for Spring Boot with MySQL</description>
+	<name>employeehub-services</name>
+	<description>EmployeeHub backend — employee, project, and payroll management</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -73,6 +73,25 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<!-- Signs/verifies the app's own session token issued after a Google ID
+		     token is verified server-side at login (see AuthController). -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 	<build>

@@ -1,7 +1,7 @@
 # Bills & Invoices — Requirements
 
-Primary class: `com.bean.service.InvoiceService`
-Controllers: `com.bean.controller.InvoiceController` (`/api/v1/invoice/**`), `com.bean.controller.BillsController` (`/api/v1/bills/**`)
+Primary class: `com.employeehub.service.InvoiceService`
+Controllers: `com.employeehub.controller.InvoiceController` (`/api/v1/invoice/**`), `com.employeehub.controller.BillsController` (`/api/v1/bills/**`)
 Purpose: how Invoice and Bill records relate, how a Bill's lifecycle status is derived from its Invoice, and how invoice **periods** (one row per week/month/etc. in the Generate Invoice UI) are generated per project.
 
 Frontend counterparts: `src/Invoice/GenerateInvoiceDetails.requirements.md`, `src/Utils/invoiceTerm.requirements.md` (BeanEMS repo).

@@ -1,0 +1,130 @@
+package com.employeehub.controller;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.employeehub.domain.BasicEmployee;
+import com.employeehub.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.employeehub.exception.BillsException;
+import com.employeehub.model.Bills;
+import com.employeehub.repository.BillsRepository;
+import com.employeehub.service.BillsService;
+
+
+@RestController
+@RequestMapping("/api/v1/bills")
+public class BillsController {
+	
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(BillsController.class);
+	
+	@Autowired
+    private BillsRepository billsRepository;
+	@Autowired
+    private BillsService billsService;
+    @Autowired
+    private EmployeeService employeeService;
+	
+	
+    @PostMapping
+	public ResponseEntity<Bills> createBill(@RequestBody Bills bill) throws BillsException {
+		Bills savedBill = billsService.createBill(bill);
+		return new ResponseEntity<>(savedBill, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Bills> getBillById(@PathVariable Long id) {
+		return ResponseEntity.ok(billsService.getBillById(id));
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Bills> updateBill(@PathVariable Long id, @RequestBody Bills billDetails) throws BillsException {
+		Bills updatedBill = billsService.updateBill(id, billDetails);
+		return ResponseEntity.ok(updatedBill);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteBill(@PathVariable Long id) {
+		billsService.deleteBill(id);
+		return ResponseEntity.noContent().build();
+	}
+
+    // Every bill across all projects — used by the Projects Overview's
+    // Invoices vs Bills chart, joined client-side to a project via each
+    // bill's invoiceId -> Invoice.projectId (Bills itself has no projectId
+    // column).
+    @GetMapping("/getAllBills")
+    public ResponseEntity<List<Bills>> getAllBills() {
+        return ResponseEntity.ok(billsRepository.findAll());
+    }
+
+    @GetMapping("/getBillsForMonthAndYear")
+	public ResponseEntity<List<Bills>> getBillsForMonthAndYear(@RequestParam(required = true) String selectedDate) {
+    	
+    	LocalDate localDate = LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    	logger.info("selectedDate:::::"+selectedDate);
+        // Format the LocalDate to a string in "yyyymm" format
+        String formattedDate = localDate.format(DateTimeFormatter.ofPattern("yyyyMM"));
+        Optional<List<Bills>> billsList= billsService.findBillsByInvoiceMonth(formattedDate);
+        logger.info("billsList:: "+billsList.toString());
+    	return billsList.map(bills -> ResponseEntity.ok(bills))
+                .orElse(null);
+    }
+    @GetMapping("/getBillsForProject")
+    public ResponseEntity<List<com.employeehub.domain.Bills>> getBillsForProject(@RequestParam(required = true) long projectId) {
+
+        Optional<List<Bills>> billsList= billsService.findBillsForProject(projectId);
+        List<com.employeehub.domain.Bills> domainBillsList = billsList.orElseThrow().stream()
+                .map(bills -> new com.employeehub.domain.Bills(bills))
+                .collect(Collectors.toList());
+        List<BasicEmployee> employees=employeeService.getEmployees();
+        domainBillsList.stream().forEach(bills -> {
+                    bills.setEmployeeName(employees.stream()
+                            .filter(emp -> emp.getEmployeeId()==bills.getEmployeeId())
+                            .findFirst()
+                            .map(BasicEmployee::getName)
+                            .orElse("Unknown"));
+                    logger.info("bills:: "+ bills);
+        }   );
+        logger.info("billsList:: "+ domainBillsList);
+        return billsList.map(bills -> ResponseEntity.ok(domainBillsList))
+                .orElse(null);
+    }
+    @GetMapping("/getBillsForEmployee")
+    public ResponseEntity<List<com.employeehub.domain.Bills>> getBillsForEmployee(@RequestParam(required = true) long employeeId) {
+
+        Optional<List<Bills>> billsList= billsService.findBillsForEmployee(employeeId);
+        List<com.employeehub.domain.Bills> domainBillsList = billsList.orElseThrow().stream()
+                .map(bills -> new com.employeehub.domain.Bills(bills))
+                .collect(Collectors.toList());
+        List<BasicEmployee> employees=employeeService.getEmployees();
+        domainBillsList.stream().forEach(bills -> {
+            bills.setEmployeeName(employees.stream()
+                    .filter(emp -> emp.getEmployeeId()==bills.getEmployeeId())
+                    .findFirst()
+                    .map(BasicEmployee::getName)
+                    .orElse("Unknown"));
+            logger.info("bills:: "+ bills);
+        }   );
+        logger.info("billsList:: "+ domainBillsList);
+        return billsList.map(bills -> ResponseEntity.ok(domainBillsList))
+                .orElse(null);
+    }
+
+}
