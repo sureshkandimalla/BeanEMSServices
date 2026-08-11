@@ -2,6 +2,8 @@ package com.employeehub.controller;
 
 import com.employeehub.config.JwtService;
 import com.employeehub.config.TenantContext;
+import com.employeehub.model.UserRole;
+import com.employeehub.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +40,9 @@ public class AuthController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -78,12 +83,27 @@ public class AuthController {
 
         String appToken = jwtService.issueToken(email, tenant);
 
+        // /api/v1/auth/login is excluded from AuthFilter (see its
+        // shouldNotFilter), so TenantContext is never set for this request —
+        // set it here ourselves, same as AuthFilter does for every other
+        // request, so the routing datasource picks the right tenant's schema
+        // for this lookup. A user with no row here simply gets role=null,
+        // meaning "no access assigned yet" on the frontend.
+        String role = null;
+        TenantContext.set(tenant);
+        try {
+            role = userRoleRepository.findByEmailIgnoreCase(email).map(UserRole::getRole).orElse(null);
+        } finally {
+            TenantContext.clear();
+        }
+
         Map<String, Object> response = new HashMap<>();
         response.put("token", appToken);
         response.put("tenant", tenant);
         response.put("email", email);
         response.put("name", tokenInfo.get("name"));
         response.put("picture", tokenInfo.get("picture"));
+        response.put("role", role);
         return ResponseEntity.ok(response);
     }
 }

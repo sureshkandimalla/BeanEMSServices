@@ -1,10 +1,12 @@
 package com.employeehub.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.employeehub.model.Bills;
 
@@ -27,5 +29,15 @@ public interface BillsRepository extends JpaRepository<Bills, Long> {
    List<Bills> findByInvoiceId(Long invoiceId);
 
    List<Bills> findByProjectId(Long projectId);
+
+   // Any bill whose own [startDate, endDate] billing window overlaps the
+   // given range at all — standard interval-overlap condition
+   // (start <= rangeEnd AND end >= rangeStart). Bills with a null start/end
+   // (never should happen post-invoice-creation, but defensively excluded
+   // by the NOT NULL checks) are left out since there's no window to
+   // compare against.
+   @Query("SELECT b FROM Bills b WHERE b.startDate IS NOT NULL AND b.endDate IS NOT NULL " +
+          "AND b.startDate <= :rangeEnd AND b.endDate >= :rangeStart")
+   List<Bills> findOverlappingRange(@Param("rangeStart") LocalDate rangeStart, @Param("rangeEnd") LocalDate rangeEnd);
 
 }
