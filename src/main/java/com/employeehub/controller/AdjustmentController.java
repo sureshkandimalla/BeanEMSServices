@@ -21,9 +21,11 @@ public class AdjustmentController {
 
 	
     @GetMapping("/getAdjustments")
-	public List<Adjustment> getAdjustments() {
+	public List<com.employeehub.domain.Adjustment> getAdjustments() {
 
-    	return adjustmentRepository.findAll();
+    	return adjustmentRepository.findAllAdjustmentsWithNames().stream()
+				.map(com.employeehub.domain.Adjustment::new)
+				.collect(Collectors.toList());
 
     }
 	@GetMapping("/findAdjustmentsByEmployeeId")

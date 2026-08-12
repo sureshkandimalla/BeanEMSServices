@@ -27,4 +27,16 @@ public interface AdjustmentRepository extends JpaRepository<Adjustment, Long> {
             "LEFT JOIN employees e_to ON a.to_id = e_to.employee_id " +
             "WHERE (a.from_id = :id OR a.to_id = :id)", nativeQuery = true)
     List<Object[]> findAdjustmentsByEmployeeId(@Param("id") Long id);
+
+    // Same shape as findAdjustmentsByEmployeeId (with from/to names resolved),
+    // just without the per-employee filter — backs the standalone Adjustments
+    // nav page, which shows every adjustment instead of one employee's.
+    @Query(value="SELECT a.adjustment_id as adjustment_id,a.last_updated as last_updated, a.adjustment_date as adjustment_date, " +
+            "a.adjustment_type as adjustment_type,a.amount as amount,a.notes as notes,a.from_id as from_id,a.to_id as to_id," +
+            "CONCAT(e_from.first_name, e_from.last_name) AS from_name, " +
+            "CONCAT(e_to.first_name, e_to.last_name) AS to_name " +
+            "FROM adjustments a " +
+            "LEFT JOIN employees e_from ON a.from_id = e_from.employee_id " +
+            "LEFT JOIN employees e_to ON a.to_id = e_to.employee_id", nativeQuery = true)
+    List<Object[]> findAllAdjustmentsWithNames();
 }
