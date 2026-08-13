@@ -28,6 +28,7 @@ public class Visa {
   private String receiptNumber ;
   private LocalDate startDate;
   private LocalDate endDate;
+  private LocalDate approvedDate;
   private String jobTitle;
   private String lcaNumber;
   private String socCode;
@@ -68,6 +69,7 @@ public class Visa {
                 ", receiptNumber='" + receiptNumber + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", approvedDate=" + approvedDate +
                 ", jobTitle='" + jobTitle + '\'' +
                 ", lcaNumber='" + lcaNumber + '\'' +
                 ", socCode='" + socCode + '\'' +

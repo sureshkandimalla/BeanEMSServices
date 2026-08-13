@@ -57,6 +57,7 @@ public class VisaService {
         visa.setReceiptNumber(visaDetails.getReceiptNumber());
         visa.setStartDate(visaDetails.getStartDate());
         visa.setEndDate(visaDetails.getEndDate());
+        visa.setApprovedDate(visaDetails.getApprovedDate());
         visa.setJobTitle(visaDetails.getJobTitle());
         visa.setLcaNumber(visaDetails.getLcaNumber());
         visa.setSocCode(visaDetails.getSocCode());
