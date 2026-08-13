@@ -31,7 +31,7 @@ public class AuthController {
 
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AuthController.class);
 
-    private static final String GOOGLE_CLIENT_ID = "206630439236-q0q2np2g72vf5rgodjk4hhv814i3q7ai.apps.googleusercontent.com";
+    private static final String GOOGLE_CLIENT_ID = "34277343649-4552ljfqc3ccsipco8jbf7jr3mu279j0.apps.googleusercontent.com";
 
     private static final Map<String, String> DOMAIN_TO_TENANT = Map.of(
             "beaninfosys.com", TenantContext.BEAN,
