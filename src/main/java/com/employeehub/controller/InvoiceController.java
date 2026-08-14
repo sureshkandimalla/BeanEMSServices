@@ -190,7 +190,10 @@ public class InvoiceController {
 		switch (invoiceDetails.getStatus().toLowerCase()) {
 			case "paid":
 				if (invoiceDetails.getInvoicePaidAmount() == 0) {
-					invoiceDetails.setInvoicePaidAmount(invoiceDetails.getTotal());
+					// Invoice PaidAmount is Invoice Amount minus Discounts —
+					// same rule the frontend applies live as Discounts is edited.
+					invoiceDetails.setInvoicePaidAmount(
+							Math.max(invoiceDetails.getTotal() - invoiceDetails.getDiscounts(), 0));
 				}
 				// Backstop behind the frontend's paid-date prompt — an invoice
 				// saved as Paid should never end up with no paid date.
