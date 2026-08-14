@@ -26,6 +26,8 @@ public class Invoice {
   private LocalDate startDate;
   private LocalDate endDate;
   private LocalDate paymentDate;
+  private LocalDate invoicePaidDate;
+  private float discounts;
   private String status;
   
   /*@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, optional = false)
@@ -56,6 +58,8 @@ public class Invoice {
               ", startDate=" + startDate +
               ", endDate=" + endDate +
               ", paymentDate=" + paymentDate +
+              ", invoicePaidDate=" + invoicePaidDate +
+              ", discounts=" + discounts +
               ", status='" + status + '\'' +
               '}';
   }

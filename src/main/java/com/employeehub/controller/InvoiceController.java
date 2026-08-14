@@ -192,6 +192,11 @@ public class InvoiceController {
 				if (invoiceDetails.getInvoicePaidAmount() == 0) {
 					invoiceDetails.setInvoicePaidAmount(invoiceDetails.getTotal());
 				}
+				// Backstop behind the frontend's paid-date prompt — an invoice
+				// saved as Paid should never end up with no paid date.
+				if (invoiceDetails.getInvoicePaidDate() == null) {
+					invoiceDetails.setInvoicePaidDate(java.time.LocalDate.now());
+				}
 				break;
 			case "unpaid":
 				if (invoiceDetails.getInvoicePaidAmount() != 0) {
