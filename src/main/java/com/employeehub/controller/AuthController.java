@@ -41,6 +41,14 @@ public class AuthController {
             "kksoftwareassociates.com", TenantContext.KKASSOCIATES
     );
 
+    // Individual-email overrides for accounts that can't use a company-domain
+    // allowlist entry (e.g. a personal Gmail address standing in for
+    // KKAssociates) — checked before DOMAIN_TO_TENANT, keyed by full lowercased
+    // email rather than domain since gmail.com itself must stay unauthorized.
+    private static final Map<String, String> EMAIL_TO_TENANT = Map.of(
+            "mkasa123@gmail.com", TenantContext.KKASSOCIATES
+    );
+
     @Autowired
     private JwtService jwtService;
 
@@ -76,8 +84,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid Google token"));
         }
 
-        String domain = email.substring(email.indexOf('@') + 1).toLowerCase();
-        String tenant = DOMAIN_TO_TENANT.get(domain);
+        String lowerEmail = email.toLowerCase();
+        String domain = lowerEmail.substring(lowerEmail.indexOf('@') + 1);
+        String tenant = EMAIL_TO_TENANT.getOrDefault(lowerEmail, DOMAIN_TO_TENANT.get(domain));
         if (tenant == null) {
             logger.warn("Login rejected for unauthorized domain: {}", domain);
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
