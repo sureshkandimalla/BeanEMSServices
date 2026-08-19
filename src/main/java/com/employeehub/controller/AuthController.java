@@ -20,11 +20,12 @@ import java.util.Map;
 // Login is the one place a Google ID token is verified server-side — once,
 // here, via Google's own tokeninfo endpoint (no extra crypto dependency
 // needed; a plain REST call is enough at login volume). Only
-// @beaninfosys.com / @intellanit.com / @intellan.com emails get an app
-// token back; every other domain is rejected outright, so a forged/edited
-// localStorage entry on the frontend can't grant access the way the old
-// client-only auth could — AuthFilter re-verifies THIS token's signature on
-// every later request instead of trusting anything the client merely claims.
+// @beaninfosys.com / @intellanit.com / @intellan.com / @kksoftwareassociates.com
+// emails get an app token back; every other domain is rejected outright, so a
+// forged/edited localStorage entry on the frontend can't grant access the way
+// the old client-only auth could — AuthFilter re-verifies THIS token's
+// signature on every later request instead of trusting anything the client
+// merely claims.
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -36,7 +37,8 @@ public class AuthController {
     private static final Map<String, String> DOMAIN_TO_TENANT = Map.of(
             "beaninfosys.com", TenantContext.BEAN,
             "intellanit.com", TenantContext.INTELLAN,
-            "intellan.com", TenantContext.INTELLAN
+            "intellan.com", TenantContext.INTELLAN,
+            "kksoftwareassociates.com", TenantContext.KKASSOCIATES
     );
 
     @Autowired

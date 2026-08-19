@@ -24,6 +24,9 @@ public class DataSourceConfig {
     @Value("${db.url.intellan}")
     private String intellanUrl;
 
+    @Value("${db.url.kkassociates}")
+    private String kkassociatesUrl;
+
     @Value("${spring.datasource.username}")
     private String username;
 
@@ -35,10 +38,12 @@ public class DataSourceConfig {
     public DataSource dataSource() {
         DataSource beanDataSource = buildDataSource(beanUrl);
         DataSource intellanDataSource = buildDataSource(intellanUrl);
+        DataSource kkassociatesDataSource = buildDataSource(kkassociatesUrl);
 
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(TenantContext.BEAN, beanDataSource);
         targetDataSources.put(TenantContext.INTELLAN, intellanDataSource);
+        targetDataSources.put(TenantContext.KKASSOCIATES, kkassociatesDataSource);
 
         TenantRoutingDataSource routingDataSource = new TenantRoutingDataSource();
         routingDataSource.setTargetDataSources(targetDataSources);

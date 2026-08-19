@@ -18,6 +18,7 @@ public class EmployeeMapper {
         modelEmployee.setDesignation(domainEmployee.designation());
         modelEmployee.setEmploymentType(domainEmployee.employmentType());
         modelEmployee.setEmployeeType(domainEmployee.employeeType());
+        modelEmployee.setVendorId(domainEmployee.vendorId());
         modelEmployee.setStatus(domainEmployee.status());
         modelEmployee.setLocation(domainEmployee.location());
         modelEmployee.setCompanyName(domainEmployee.companyName());
@@ -41,6 +42,7 @@ public class EmployeeMapper {
                 modelEmployee.getEmailId(),
                 modelEmployee.getEmploymentType(),
                 modelEmployee.getEmployeeType(),
+                modelEmployee.getVendorId(),
                 modelEmployee.getFirstName(),
                 modelEmployee.getLastName(),
                 modelEmployee.getGender(),

@@ -261,6 +261,7 @@ public class MasterDataLoadService {
                             getStringValue(row.getCell(2)),   // emailId
                             getStringValue(row.getCell(8)),   // employmentType
                             null,                              // employeeType (not persisted by saveEmployeeDetails)
+                            null,                              // vendorId (no column in the import sheet)
                             firstName,
                             lastName,
                             requireNonBlank(getStringValue(row.getCell(6)), "Gender"),

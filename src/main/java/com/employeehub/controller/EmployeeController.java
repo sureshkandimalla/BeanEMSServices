@@ -161,6 +161,7 @@ public class EmployeeController {
 		employee.setDesignation(employeeDetails.getDesignation());
 		employee.setEmploymentType(employeeDetails.getEmploymentType());
 		employee.setEmployeeType(employeeDetails.getEmployeeType());
+		employee.setVendorId(employeeDetails.getVendorId());
 		employee.setStatus(employeeDetails.getStatus());
 		employee.setLocation(employeeDetails.getLocation());
 		employee.setPrimarySkills(employeeDetails.getPrimarySkills());

@@ -99,6 +99,7 @@ class EmployeeControllerSaveTest {
                 "john.doe@example.com", // emailId
                 "Full-time",            // employmentType
                 null,                   // employeeType
+                null,                   // vendorId
                 "John",                 // firstName
                 "Doe",                  // lastName
                 "male",                 // gender

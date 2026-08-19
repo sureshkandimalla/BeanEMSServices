@@ -114,6 +114,11 @@ public class EmployeeService {
 		emp.setWorkCity(emp.getWorkCity());
 
 		emp.setEmploymentType(employee.employmentType());
+		// Was never mapped here (only on the later PUT /employees/{id} update
+		// path) — new C2C hires need this set at creation time so it's
+		// available immediately (e.g. for the C2C employer-tax exemption).
+		emp.setEmployeeType(employee.employeeType());
+		emp.setVendorId(employee.vendorId());
 
 		emp.setTaxTerm(employee.taxTerms());
 		emp.setVisa(employee.visa());

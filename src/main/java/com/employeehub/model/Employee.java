@@ -43,6 +43,10 @@ public class Employee {
   private String designation;
   private String employmentType;
   private String employeeType;
+  // Which staffing vendor this employee is C2C'd through — only meaningful
+  // when employeeType is C2C, but left unconstrained (nullable, no FK
+  // enforcement) since not every employee has one.
+  private Long vendorId;
   private String status;
   private String location;
   private String primarySkills;
