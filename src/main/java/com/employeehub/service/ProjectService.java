@@ -85,8 +85,13 @@ public class ProjectService {
 				  .findFirst();*/
 		  if(empAssignment.isPresent()) {
 			  projectDomain.setEmployeePay(((float) empAssignment.get().getWage()));
-			 if( empAssignment.get().getAssignmentTaxType().equals("W2")) {
-				 Optional<Employee> employee = employeeRepository.findById(empAssignment.get().getEmployeeId());
+			  Optional<Employee> employee = employeeRepository.findById(empAssignment.get().getEmployeeId());
+			  // Employer tax only applies to W2 employees — the assignment's own
+			  // tax-type flag isn't always kept in sync with the employee's real
+			  // type, so also check the employee record directly and zero out
+			  // taxes for C2C regardless of what the assignment says.
+			  boolean isC2CEmployee = employee.isPresent() && "C2C".equalsIgnoreCase(employee.get().getEmployeeType());
+			 if( empAssignment.get().getAssignmentTaxType().equals("W2") && !isC2CEmployee) {
 				 if(employee.isPresent() && employee.get().getVisa().contains("OPT"))
 					 projectDomain.setEmployerTax(0);
 				 else
