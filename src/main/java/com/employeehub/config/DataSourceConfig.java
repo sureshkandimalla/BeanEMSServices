@@ -1,5 +1,6 @@
 package com.employeehub.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -11,21 +12,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Replaces Spring Boot's single auto-configured DataSource with one that
-// routes each request to the Bean or Intellan schema based on
-// TenantContext. Defining this @Bean makes Spring Boot's own
-// DataSourceAutoConfiguration back off (it's @ConditionalOnMissingBean),
-// so no exclusion/property juggling is needed beyond this class.
+// routes each request to the right tenant's schema based on TenantContext.
+// The tenant list itself is externalized (see TenantRegistryProperties) —
+// adding a company here is just one more app.tenants[N] entry, no code
+// change. Defining this @Bean makes Spring Boot's own
+// DataSourceAutoConfiguration back off (it's @ConditionalOnMissingBean), so
+// no exclusion/property juggling is needed beyond this class.
 @Configuration
 public class DataSourceConfig {
 
-    @Value("${db.url.bean}")
-    private String beanUrl;
-
-    @Value("${db.url.intellan}")
-    private String intellanUrl;
-
-    @Value("${db.url.kkassociates}")
-    private String kkassociatesUrl;
+    @Autowired
+    private TenantRegistryProperties tenantRegistry;
 
     @Value("${spring.datasource.username}")
     private String username;
@@ -36,18 +33,27 @@ public class DataSourceConfig {
     @Bean
     @Primary
     public DataSource dataSource() {
-        DataSource beanDataSource = buildDataSource(beanUrl);
-        DataSource intellanDataSource = buildDataSource(intellanUrl);
-        DataSource kkassociatesDataSource = buildDataSource(kkassociatesUrl);
-
         Map<Object, Object> targetDataSources = new HashMap<>();
-        targetDataSources.put(TenantContext.BEAN, beanDataSource);
-        targetDataSources.put(TenantContext.INTELLAN, intellanDataSource);
-        targetDataSources.put(TenantContext.KKASSOCIATES, kkassociatesDataSource);
+        DataSource defaultDataSource = null;
 
-        TenantRoutingDataSource routingDataSource = new TenantRoutingDataSource();
+        for (TenantDefinition tenant : tenantRegistry.getTenants()) {
+            DataSource ds = buildDataSource(tenant.getJdbcUrl());
+            targetDataSources.put(tenant.getKey(), ds);
+            if (tenant.getKey().equals(tenantRegistry.getDefaultTenant())) {
+                defaultDataSource = ds;
+            }
+        }
+
+        if (defaultDataSource == null && !targetDataSources.isEmpty()) {
+            // Configured default-tenant key didn't match any registry entry —
+            // fall back to whichever tenant loaded first rather than leaving
+            // the routing DataSource with no default at all.
+            defaultDataSource = (DataSource) targetDataSources.values().iterator().next();
+        }
+
+        TenantRoutingDataSource routingDataSource = new TenantRoutingDataSource(tenantRegistry.getDefaultTenant());
         routingDataSource.setTargetDataSources(targetDataSources);
-        routingDataSource.setDefaultTargetDataSource(intellanDataSource);
+        routingDataSource.setDefaultTargetDataSource(defaultDataSource);
         routingDataSource.afterPropertiesSet();
         return routingDataSource;
     }

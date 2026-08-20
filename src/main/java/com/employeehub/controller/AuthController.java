@@ -1,7 +1,9 @@
 package com.employeehub.controller;
 
-import com.employeehub.config.JwtService;
 import com.employeehub.config.TenantContext;
+import com.employeehub.config.TenantDefinition;
+import com.employeehub.config.TenantRegistryProperties;
+import com.employeehub.config.JwtService;
 import com.employeehub.model.UserRole;
 import com.employeehub.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
 // Login is the one place a Google ID token is verified server-side — once,
 // here, via Google's own tokeninfo endpoint (no extra crypto dependency
-// needed; a plain REST call is enough at login volume). Only
-// @beaninfosys.com / @intellanit.com / @intellan.com / @kksoftwareassociates.com
-// emails get an app token back; every other domain is rejected outright, so a
+// needed; a plain REST call is enough at login volume). Only an email whose
+// domain or exact address appears in the externalized tenant registry (see
+// TenantRegistryProperties / application.properties' app.tenants[N] entries)
+// gets an app token back; every other domain is rejected outright, so a
 // forged/edited localStorage entry on the frontend can't grant access the way
 // the old client-only auth could — AuthFilter re-verifies THIS token's
 // signature on every later request instead of trusting anything the client
@@ -34,20 +38,27 @@ public class AuthController {
 
     private static final String GOOGLE_CLIENT_ID = "34277343649-4552ljfqc3ccsipco8jbf7jr3mu279j0.apps.googleusercontent.com";
 
-    private static final Map<String, String> DOMAIN_TO_TENANT = Map.of(
-            "beaninfosys.com", TenantContext.BEAN,
-            "intellanit.com", TenantContext.INTELLAN,
-            "intellan.com", TenantContext.INTELLAN,
-            "kksoftwareassociates.com", TenantContext.KKASSOCIATES
-    );
+    @Autowired
+    private TenantRegistryProperties tenantRegistry;
 
-    // Individual-email overrides for accounts that can't use a company-domain
-    // allowlist entry (e.g. a personal Gmail address standing in for
-    // KKAssociates) — checked before DOMAIN_TO_TENANT, keyed by full lowercased
-    // email rather than domain since gmail.com itself must stay unauthorized.
-    private static final Map<String, String> EMAIL_TO_TENANT = Map.of(
-            "mkasa123@gmail.com", TenantContext.KKASSOCIATES
-    );
+    // Built once at startup from the registry rather than per-request —
+    // domain/email -> tenant key, both keyed lowercase.
+    private Map<String, String> domainToTenant;
+    private Map<String, String> emailToTenant;
+
+    @PostConstruct
+    void buildLookupMaps() {
+        domainToTenant = new HashMap<>();
+        emailToTenant = new HashMap<>();
+        for (TenantDefinition tenant : tenantRegistry.getTenants()) {
+            for (String domain : tenant.getDomains()) {
+                domainToTenant.put(domain.toLowerCase(), tenant.getKey());
+            }
+            for (String email : tenant.getEmails()) {
+                emailToTenant.put(email.toLowerCase(), tenant.getKey());
+            }
+        }
+    }
 
     @Autowired
     private JwtService jwtService;
@@ -86,7 +97,7 @@ public class AuthController {
 
         String lowerEmail = email.toLowerCase();
         String domain = lowerEmail.substring(lowerEmail.indexOf('@') + 1);
-        String tenant = EMAIL_TO_TENANT.getOrDefault(lowerEmail, DOMAIN_TO_TENANT.get(domain));
+        String tenant = emailToTenant.getOrDefault(lowerEmail, domainToTenant.get(domain));
         if (tenant == null) {
             logger.warn("Login rejected for unauthorized domain: {}", domain);
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
