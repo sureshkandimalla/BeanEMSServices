@@ -92,7 +92,7 @@ public class ProjectService {
 			  // taxes for C2C regardless of what the assignment says.
 			  boolean isC2CEmployee = employee.isPresent() && "C2C".equalsIgnoreCase(employee.get().getEmployeeType());
 			 if( empAssignment.get().getAssignmentTaxType().equals("W2") && !isC2CEmployee) {
-				 if(employee.isPresent() && employee.get().getVisa().contains("OPT"))
+				 if(employee.isPresent() && employee.get().getVisa() != null && employee.get().getVisa().contains("OPT"))
 					 projectDomain.setEmployerTax(0);
 				 else
 					 projectDomain.setEmployerTax((float) ((projectDomain.getEmployeePay() == 0) ? 0L : projectDomain.getEmployeePay() * .08));

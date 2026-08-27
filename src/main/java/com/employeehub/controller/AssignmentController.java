@@ -64,7 +64,14 @@ public class AssignmentController {
 
     // Create assignment rest api
     @PostMapping("/assignments")
-    public Assignment createAssignment(@RequestBody Assignment assignment) {
+    public ResponseEntity<?> createAssignment(@RequestBody Assignment assignment) {
+        // employeeId is a primitive long, so a request that omits it
+        // deserializes to 0 instead of failing loudly — that's an invalid
+        // employee id, not a real one, so reject it here rather than save
+        // an assignment with no actual employee.
+        if (assignment.getEmployeeId() == 0) {
+            return ResponseEntity.badRequest().body("employeeId is required");
+        }
         if (assignment.getEndDate() == null) {
             assignment.setEndDate(LocalDate.of(9999, 12, 31));
         }
@@ -72,7 +79,7 @@ public class AssignmentController {
             assignment.setStatus("Active");
         else
             assignment.setStatus("Inactive");
-        return assignmentRepository.save(assignment);
+        return ResponseEntity.ok(assignmentRepository.save(assignment));
     }
 
     // Get assignment by id rest api
