@@ -197,9 +197,9 @@ public class ProjectController {
 
 	@PostMapping("" +
 			"/saveOnBoardProject")
-	public ResponseEntity<String> createProject(@RequestBody com.employeehub.domain.Project project) {
-		
-		ResponseEntity<String> savedProject = projectService.saveProject(project);
+	public ResponseEntity<Map<String, Object>> createProject(@RequestBody com.employeehub.domain.Project project) {
+
+		ResponseEntity<Map<String, Object>> savedProject = projectService.saveProject(project);
 		return savedProject;
 	}
 

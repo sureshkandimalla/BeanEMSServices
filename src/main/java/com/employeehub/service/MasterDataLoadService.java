@@ -391,7 +391,8 @@ public class MasterDataLoadService {
 
                     var response = projectService.saveProject(dto);
                     if (!response.getStatusCode().is2xxSuccessful()) {
-                        throw new IllegalArgumentException(response.getBody());
+                        throw new IllegalArgumentException(String.valueOf(
+                                response.getBody() != null ? response.getBody().get("message") : null));
                     }
                     imported++;
                 } catch (Exception e) {

@@ -6,7 +6,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -302,7 +304,7 @@ public class ProjectService {
 		return row;
 	}
 
-	public ResponseEntity<String> saveProject(com.employeehub.domain.Project project) {
+	public ResponseEntity<Map<String, Object>> saveProject(com.employeehub.domain.Project project) {
 
 			logger.info("employeeid : "+project.getEmployeeId());
 		
@@ -321,6 +323,7 @@ public class ProjectService {
 
 		Optional<Employee> optionalEmployee = employeeRepository.findById(project.getEmployeeId());
 		Optional<Customer> optionalCustomer = customerRepository.findById(project.getCustomerId());
+		Project savedProject;
 
 		Wage wage =new Wage();
 		wage.setEndDate(project.getEndDate());
@@ -345,12 +348,20 @@ public class ProjectService {
 		    dbProject.setCustomer(customer);
 
 		    logger.info("employeeid & customerid in project table: " + project.getEmployeeId() + " " + project.getCustomerId());
-		    projectRepository.save(dbProject);
+		    savedProject = projectRepository.save(dbProject);
 		} else {
 		    // Handle the case where either the employee or the customer is not found
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee or Customer not found");
+			Map<String, Object> notFound = new HashMap<>();
+			notFound.put("message", "Employee or Customer not found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFound);
 		}
-		return ResponseEntity.status(HttpStatus.OK).body("Project data saved Succesfully");
-		
+		// projectId is returned so the frontend can immediately attach
+		// documents (e.g. a Purchase Order) to the just-created project —
+		// see DocumentController, entityType "ProjectPO".
+		Map<String, Object> response = new HashMap<>();
+		response.put("message", "Project data saved Succesfully");
+		response.put("projectId", savedProject.getProjectId());
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+
 	}
 }
