@@ -6,6 +6,8 @@ import com.employeehub.model.Assignment;
 import com.employeehub.model.Project;
 import com.employeehub.model.Wage;
 import com.employeehub.repository.AssignmentRepository;
+import com.employeehub.repository.BillsRepository;
+import com.employeehub.repository.InvoiceRepository;
 import com.employeehub.repository.ProjectRepository;
 import com.employeehub.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,10 @@ public class ProjectController {
 	private ProjectService projectService;
 	@Autowired
 	private AssignmentRepository assignmentRepository;
+	@Autowired
+	private InvoiceRepository invoiceRepository;
+	@Autowired
+	private BillsRepository billsRepository;
 
 
 	@GetMapping("/activeProjects")
@@ -241,14 +247,39 @@ public class ProjectController {
 		return ResponseEntity.ok(updatedProject);
 	}
 
+	// Lets the frontend show a "this will also delete N invoices/bills/
+	// assignments" warning before the user commits to deleteProject below.
+	@GetMapping("/projects/{id}/deletionImpact")
+	public ResponseEntity<Map<String, Integer>> getProjectDeletionImpact(@PathVariable Long id) {
+		Map<String, Integer> impact = new HashMap<>();
+		impact.put("invoices", invoiceRepository.findByProjectId(id).size());
+		impact.put("bills", billsRepository.findByProjectId(id).size());
+		impact.put("assignments", assignmentRepository.findByProjectId(id).size());
+		return ResponseEntity.ok(impact);
+	}
+
+	// Invoices and bills aren't JPA relations on Project (unlike
+	// assignments/billRates, which cascade via CascadeType.ALL below), so
+	// they're deleted explicitly here — otherwise they'd be left behind
+	// still pointing at the now-deleted project_id.
 	@DeleteMapping("/projects/{id}")
-	public ResponseEntity<Map<String, Boolean>> deleteProject(@PathVariable Long id) {
+	public ResponseEntity<Map<String, Integer>> deleteProject(@PathVariable Long id) {
 		Project project = projectRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Project not exist with id :" + id));
 
+		var bills = billsRepository.findByProjectId(id);
+		billsRepository.deleteAll(bills);
+
+		var invoices = invoiceRepository.findByProjectId(id);
+		invoiceRepository.deleteAll(invoices);
+
+		int assignmentsDeleted = project.getAssignments() != null ? project.getAssignments().size() : 0;
 		projectRepository.delete(project);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
+
+		Map<String, Integer> response = new HashMap<>();
+		response.put("invoicesDeleted", invoices.size());
+		response.put("billsDeleted", bills.size());
+		response.put("assignmentsDeleted", assignmentsDeleted);
 		return ResponseEntity.ok(response);
 	}
 
