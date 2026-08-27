@@ -22,6 +22,14 @@ public class Project implements Cloneable {
     private long clientId;
     private LocalDate startDate;
     private LocalDate endDate;
+    // A project's own [startDate, endDate] and its (first) work order's
+    // dates are independently editable in Add New Project — a project can
+    // run longer than any one work order, and later work orders (added via
+    // WorkOrderForm) each carry their own dates too. Falls back to the
+    // project's own dates in ProjectService#saveProject when omitted, so
+    // older callers (e.g. the Excel import) keep working unchanged.
+    private LocalDate workOrderStartDate;
+    private LocalDate workOrderEndDate;
     private float billRate;
     private float employeePay;
     private float expenseInternal;

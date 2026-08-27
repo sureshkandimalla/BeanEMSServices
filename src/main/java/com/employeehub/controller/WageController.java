@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -28,7 +30,7 @@ public class WageController {
         return wageRepository.findAll();
     }
     @PostMapping("/wage")
-    public ResponseEntity<Project>  createAssignment(@RequestBody com.employeehub.domain.Wage domainWage) {
+    public ResponseEntity<Map<String, Object>> createAssignment(@RequestBody com.employeehub.domain.Wage domainWage) {
 
         System.out.println(domainWage);
         Project project = projectRepository.findById(domainWage.getProjectId())
@@ -41,8 +43,14 @@ public class WageController {
         project.getBillRates().add(modelWage);
         modelWage.setCreatedDate(LocalDate.now());
 
-        //return wageRepository.save(Wage);
-        return ResponseEntity.ok( projectRepository.save(project));
+        Project savedProject = projectRepository.save(project);
+        // wageId is returned so the frontend can immediately attach a
+        // document (Purchase Order) to this specific work order —
+        // DocumentsPanel's presign/confirm flow needs a real entityId.
+        Map<String, Object> response = new HashMap<>();
+        response.put("project", savedProject);
+        response.put("wageId", modelWage.getWageId());
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")

@@ -326,9 +326,12 @@ public class ProjectService {
 		Project savedProject;
 
 		Wage wage =new Wage();
-		wage.setEndDate(project.getEndDate());
+		// The work order's own dates, not necessarily the project's —
+		// falls back to the project's dates when omitted (older callers,
+		// e.g. the Excel import in MasterDataLoadService).
+		wage.setEndDate(project.getWorkOrderEndDate() != null ? project.getWorkOrderEndDate() : project.getEndDate());
 		wage.setLastUpdated(LocalDate.now());
-		wage.setStartDate(project.getStartDate());
+		wage.setStartDate(project.getWorkOrderStartDate() != null ? project.getWorkOrderStartDate() : project.getStartDate());
 		wage.setWageType("Billing");
 		wage.setWage(project.getBillRate());
 		wage.setCreatedDate(LocalDate.now());
@@ -355,12 +358,15 @@ public class ProjectService {
 			notFound.put("message", "Employee or Customer not found");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFound);
 		}
-		// projectId is returned so the frontend can immediately attach
-		// documents (e.g. a Purchase Order) to the just-created project —
-		// see DocumentController, entityType "ProjectPO".
+		// projectId/wageId are returned so the frontend can immediately
+		// attach a document (Purchase Order) to the project's just-created
+		// initial work order — see DocumentController, entityType
+		// "WorkOrderPO", entityId = wageId (not projectId — a project can
+		// have several work orders, each with its own PO).
 		Map<String, Object> response = new HashMap<>();
 		response.put("message", "Project data saved Succesfully");
 		response.put("projectId", savedProject.getProjectId());
+		response.put("wageId", wage.getWageId());
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 
 	}
