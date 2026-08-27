@@ -66,12 +66,17 @@ public class BillsController {
 	}
 
     // Every bill across all projects — used by the Projects Overview's
-    // Invoices vs Bills chart, joined client-side to a project via each
-    // bill's invoiceId -> Invoice.projectId (Bills itself has no projectId
-    // column).
+    // Invoices vs Bills chart. Bills has its own project_id column
+    // (populated from the invoice's project at bill-creation time); no
+    // join through Invoice is needed to attribute a bill to its project.
     @GetMapping("/getAllBills")
     public ResponseEntity<List<Bills>> getAllBills() {
         return ResponseEntity.ok(billsRepository.findAll());
+    }
+
+    @GetMapping("/getBillsForCustomer")
+    public ResponseEntity<List<Bills>> getBillsForCustomer(@RequestParam(required = true) Long customerId) {
+        return ResponseEntity.ok(billsRepository.findByCustomer(customerId));
     }
 
     @GetMapping("/getBillsForMonthAndYear")

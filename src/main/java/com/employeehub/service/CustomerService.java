@@ -39,6 +39,15 @@ public class CustomerService {
 		cust.setCustomerContactEmail(customer.emailId());
 		cust.setCustomerType("Vendor");
 		cust.setCustomerAddress(formatAddress(customer));
+		cust.setCreditLimit(customer.creditLimit());
+		cust.setParentCompany(customer.parentCompany());
+		cust.setBillingContact(customer.billingContact());
+		cust.setApContact(customer.apContact());
+		cust.setStandardCurrency(customer.standardCurrency());
+		cust.setMsaStatus(customer.msaStatus());
+		cust.setDefaultBillingMethod(customer.defaultBillingMethod());
+		cust.setPaymentTerms(customer.paymentTerms());
+		cust.setNotes(customer.notes());
 		return Optional.of(customerRepository.save(cust));
 
 		//return cust;
@@ -56,6 +65,7 @@ public class CustomerService {
 		appendPart(sb, customer.city());
 		String stateZip = joinWithSpace(customer.state(), customer.zipCode());
 		appendPart(sb, stateZip);
+		appendPart(sb, customer.country());
 		return sb.length() > 0 ? sb.toString() : "";
 	}
 

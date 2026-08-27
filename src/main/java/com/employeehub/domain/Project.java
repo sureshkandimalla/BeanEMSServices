@@ -34,7 +34,13 @@ public class Project implements Cloneable {
     private String  paymentTerm;
     private String  weekStartDay;
     private float hours;
+    // Identity/"already invoiced" signal — the invoice's surrogate id, not
+    // the user-typed invoiceNumber. Truthy/non-zero means this period has
+    // an invoice already.
     private long invoiceId;
+    // Cosmetic/business label shown and edited in the Generate Invoice
+    // grid — never used to detect whether a period is already invoiced.
+    private Long invoiceNumber;
     private float Billing;
     private float total;
 

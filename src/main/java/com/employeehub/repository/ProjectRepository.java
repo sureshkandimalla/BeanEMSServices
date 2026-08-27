@@ -26,5 +26,13 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             value = "SELECT * FROM project a where a.employee_id=?",
             nativeQuery = true)
     List<Project> findAllProjectsByEmployee(long employeeId);
-   
+
+    // Project's own customerId (see model.Project's @JoinColumn) is physically
+    // stored in the vendor_id column — a legacy naming leftover, not a real
+    // vendor reference.
+    @Query(
+            value = "SELECT * FROM project a where a.vendor_id=?",
+            nativeQuery = true)
+    List<Project> findAllProjectsByCustomer(long customerId);
+
 }

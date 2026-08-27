@@ -51,7 +51,7 @@ public class InvoiceController {
 			throws InvoiceException, BillsException {
 
 		List<com.employeehub.domain.Invoice> filteredInvoices = invoices.stream()
-				.filter(invoice -> isValid(invoice.getInvoiceId())) // only invoiceid as hours and total can be 0/null
+				.filter(invoice -> isValid(invoice.getInvoiceNumber())) // only invoiceNumber as hours and total can be 0/null
 				.collect(Collectors.toList());
 
 		// filteredInvoices.forEach(System.out::println);
@@ -186,7 +186,11 @@ public class InvoiceController {
 
 	@PutMapping("/invoices/{id}")
 	public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody Invoice invoiceDetails) {
-		Invoice invoice = invoiceRepository.findByInvoiceId(id).orElseThrow(() -> new ResourceNotFoundException("Invoice not exist with id: " + id));
+		invoiceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invoice not exist with id: " + id));
+		// The path id is the only authoritative identity — never trust the
+		// request body's id (a client could send a different one, which
+		// would silently retarget/overwrite an unrelated invoice row).
+		invoiceDetails.setId(id);
 		switch (invoiceDetails.getStatus().toLowerCase()) {
 			case "paid":
 				if (invoiceDetails.getInvoicePaidAmount() == 0) {
@@ -259,6 +263,12 @@ public class InvoiceController {
 		logger.info("employeeId:: "+projectId);
 
 		List<Invoice> invoiceList = invoiceRepository.findByProjectId(projectId).stream().toList();
+		return ResponseEntity.ok(invoiceList);
+	}
+
+	@GetMapping("/getInvoicesForCustomer")
+	public ResponseEntity<List<Invoice>> getInvoicesForCustomer(@RequestParam(required = true) Long customerId) {
+		List<Invoice> invoiceList = invoiceRepository.findByCustomer(customerId);
 		return ResponseEntity.ok(invoiceList);
 	}
 

@@ -128,9 +128,10 @@ public class ProjectService {
 				
 				monthlyInvoices.stream().filter(invoice -> invoice.getProjectId().equals(project.getProjectId()))
 						.findAny().ifPresentOrElse(invoice -> {
-							logger.info("id: "+invoice.getInvoiceId()+"hours: "+invoice.getHours());
+							logger.info("id: "+invoice.getId()+"hours: "+invoice.getHours());
 							projectDomain.setHours(invoice.getHours());
-							projectDomain.setInvoiceId(invoice.getInvoiceId());
+							projectDomain.setInvoiceId(invoice.getId());
+							projectDomain.setInvoiceNumber(invoice.getInvoiceNumber());
 							projectDomain.setTotal(invoice.getTotal());
 
 						}, () -> {System.out.println("No matching invoice found");});
@@ -291,9 +292,10 @@ public class ProjectService {
 			row.setStatus(ProjectStatus.ACTIVE.toString());
 
 		matchedInvoice.ifPresentOrElse(invoice -> {
-			logger.info("id: " + invoice.getInvoiceId() + "hours: " + invoice.getHours());
+			logger.info("id: " + invoice.getId() + "hours: " + invoice.getHours());
 			row.setHours(invoice.getHours());
-			row.setInvoiceId(invoice.getInvoiceId());
+			row.setInvoiceId(invoice.getId());
+			row.setInvoiceNumber(invoice.getInvoiceNumber());
 			row.setTotal(invoice.getTotal());
 		}, () -> logger.info("No matching invoice found for period {} - {}", periodStart, periodEnd));
 

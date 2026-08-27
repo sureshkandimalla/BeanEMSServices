@@ -329,7 +329,16 @@ public class MasterDataLoadService {
                             getStringValue(row.getCell(10)), // city
                             getStringValue(row.getCell(11)), // state
                             getStringValue(row.getCell(12)), // zipCode
-                            getStringValue(row.getCell(13))  // country
+                            getStringValue(row.getCell(13)), // country
+                            null,  // creditLimit (not in import sheet)
+                            null,  // parentCompany (not in import sheet)
+                            null,  // billingContact (not in import sheet)
+                            null,  // apContact (not in import sheet)
+                            null,  // standardCurrency (not in import sheet)
+                            null,  // msaStatus (not in import sheet)
+                            null,  // defaultBillingMethod (not in import sheet)
+                            null,  // paymentTerms (not in import sheet)
+                            null   // notes (not in import sheet)
                     );
 
                     customerService.saveCustomer(dto);

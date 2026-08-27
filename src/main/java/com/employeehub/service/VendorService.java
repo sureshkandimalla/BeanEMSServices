@@ -27,12 +27,19 @@ public class VendorService {
 		v.setVendorPhone(vendor.phone());
 		v.setVendorStartDate(vendor.startDate());
 		v.setVendorEndDate(vendor.endDate());
-		v.setVendorStatus("Active");
+		// Used to be hardcoded "Active" — the onboarding form now lets the
+		// user pick a real status (Pending/Active/On Hold/Inactive); a brand
+		// new vendor with no status supplied defaults to "Pending" rather
+		// than silently starting "Active".
+		v.setVendorStatus(vendor.status() != null ? vendor.status() : "Pending");
 		v.setEin(vendor.ein());
 		v.setWebsite(vendor.webSite());
 		v.setLastUpdated(LocalDate.now());
 		v.setVendorContactEmail(vendor.emailId());
 		v.setVendorAddress(formatAddress(vendor));
+		v.setVendorType(vendor.vendorType());
+		v.setPaymentTerms(vendor.paymentTerms());
+		v.setPaymentPolicy(vendor.paymentPolicy());
 		return Optional.of(vendorRepository.save(v));
 	}
 
@@ -48,6 +55,7 @@ public class VendorService {
 		appendPart(sb, vendor.city());
 		String stateZip = joinWithSpace(vendor.state(), vendor.zipCode());
 		appendPart(sb, stateZip);
+		appendPart(sb, vendor.country());
 		return sb.length() > 0 ? sb.toString() : "";
 	}
 

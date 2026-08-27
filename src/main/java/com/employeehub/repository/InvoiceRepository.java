@@ -38,15 +38,25 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query(value = "SELECT * FROM invoice  where project_id in( SELECT project_id FROM project where employee_id =?)",
             nativeQuery = true)
     List<Invoice> findByEmployee(long employeeId);
-    @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? and a.invoice_Id =?", nativeQuery = true)
-	Optional<Invoice> findByInvoiceByMonthAndInvoiceId(String invoiceMonth, Long invoiceId);
+
+    // Project's customerId is physically stored in its vendor_id column —
+    // see ProjectRepository#findAllProjectsByCustomer.
+    @Query(value = "SELECT * FROM invoice where project_id in (SELECT project_id FROM project where vendor_id =?)",
+            nativeQuery = true)
+    List<Invoice> findByCustomer(long customerId);
+    // Replaces the old findByInvoiceByMonthAndInvoiceId: "does an invoice
+    // already exist for this project/month" must be keyed off the actual
+    // business identity (one invoice per project per month), never off a
+    // user-typed number — that's what let two unrelated invoices collide
+    // and overwrite each other. See InvoiceService#createInvoiceObject.
+    @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? and a.project_id =?", nativeQuery = true)
+	Optional<Invoice> findByProjectIdAndInvoiceMonth(String invoiceMonth, Long projectId);
 
     @Query(value = "SELECT * FROM invoice a where DATE_FORMAT(a.invoice_month,'%Y%m') =? and a.status =?", nativeQuery = true)
     List<Invoice> findAllInvoicesForTheMonthAndStatus(String formattedDate, String status);
     
     @Query(value = "SELECT status, COUNT(*) as count FROM invoice WHERE status IN ('paid', 'pending', 'upcoming', 'overdew') GROUP BY status", nativeQuery = true)
 	List<Map<String, String>> getInvoiceCountByStatus();
-   Optional<Invoice> findByInvoiceId(Long employeeId);
     List<Invoice> findByProjectId(Long projectId);
 
 

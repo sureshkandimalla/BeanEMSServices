@@ -78,8 +78,18 @@ public class CustomerController {
     if (customerDetails.getCustomerStatus() != null) customer.setCustomerStatus(customerDetails.getCustomerStatus());
     if (customerDetails.getEin() != null) customer.setEin(customerDetails.getEin());
     if (customerDetails.getWebsite() != null) customer.setWebsite(customerDetails.getWebsite());
+    if (customerDetails.getCustomerAddress() != null) customer.setCustomerAddress(customerDetails.getCustomerAddress());
     if (customerDetails.getCustomerStartDate() != null) customer.setCustomerStartDate(customerDetails.getCustomerStartDate());
     if (customerDetails.getCustomerEndDate() != null) customer.setCustomerEndDate(customerDetails.getCustomerEndDate());
+    if (customerDetails.getCreditLimit() != null) customer.setCreditLimit(customerDetails.getCreditLimit());
+    if (customerDetails.getParentCompany() != null) customer.setParentCompany(customerDetails.getParentCompany());
+    if (customerDetails.getBillingContact() != null) customer.setBillingContact(customerDetails.getBillingContact());
+    if (customerDetails.getApContact() != null) customer.setApContact(customerDetails.getApContact());
+    if (customerDetails.getStandardCurrency() != null) customer.setStandardCurrency(customerDetails.getStandardCurrency());
+    if (customerDetails.getMsaStatus() != null) customer.setMsaStatus(customerDetails.getMsaStatus());
+    if (customerDetails.getDefaultBillingMethod() != null) customer.setDefaultBillingMethod(customerDetails.getDefaultBillingMethod());
+    if (customerDetails.getPaymentTerms() != null) customer.setPaymentTerms(customerDetails.getPaymentTerms());
+    if (customerDetails.getNotes() != null) customer.setNotes(customerDetails.getNotes());
 
     Customer updatedCustomer = customerRepository.save(customer);
     return ResponseEntity.ok(updatedCustomer);

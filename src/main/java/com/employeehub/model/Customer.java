@@ -37,6 +37,18 @@ public class Customer {
   private String customerType;
   private String customerAddress;
 
+  private Double creditLimit;
+  private String parentCompany;
+  private String billingContact;
+  private String apContact;
+  private String standardCurrency;
+  private String msaStatus;
+  private String defaultBillingMethod;
+  private String paymentTerms;
+
+  @Column(columnDefinition = "TEXT")
+  private String notes;
+
 
  /* @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "customerId")

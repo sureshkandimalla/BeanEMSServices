@@ -147,14 +147,29 @@ public class ProjectController {
 }
 	@GetMapping("/getProjects")
 	public List<com.employeehub.domain.Project> getProjects() {
-		var repoProjects = projectRepository.findAll();
+		List<com.employeehub.domain.Project> flattenProjects = flattenProjects(projectRepository.findAll());
+		if(!flattenProjects.isEmpty()) {
+			logger.info("flattenProjects.size():: "+flattenProjects.size());
+		}
+		return flattenProjects;
+	}
+
+	// Scoped version of getProjects() for a single customer — used by
+	// CustomerFullDetailsComponent.jsx so it doesn't have to fetch every
+	// project in the tenant just to filter down to one customer's own.
+	@GetMapping("/getProjectsByCustomer/{customerId}")
+	public List<com.employeehub.domain.Project> getProjectsByCustomer(@PathVariable Long customerId) {
+		return flattenProjects(projectRepository.findAllProjectsByCustomer(customerId));
+	}
+
+	// Same per-bill-rate flattening getProjects()/getProjectsByCustomer() both
+	// need — a project with no bill rate records falls back to its own
+	// dates with a $0 bill rate so it still shows up, rather than being
+	// silently dropped.
+	private List<com.employeehub.domain.Project> flattenProjects(List<Project> repoProjects) {
 		List<com.employeehub.domain.Project> flattenProjects = new ArrayList<>();
-		repoProjects.stream().forEach(project -> {
-			System.out.println(project.getAssignments());
+		repoProjects.forEach(project -> {
 			if (project.getBillRates() == null || project.getBillRates().isEmpty()) {
-				// Projects with no bill rate records were silently dropped from this
-				// list since there was nothing to flatten against. Fall back to the
-				// project's own dates with a $0 bill rate so it still shows up.
 				Wage fallbackWage = new Wage();
 				fallbackWage.setWage(0f);
 				fallbackWage.setStartDate(project.getStartDate());
@@ -166,13 +181,6 @@ public class ProjectController {
 				});
 			}
 		});
-
-		/*
-		 * flattenProjects.forEach(project -> { System.out.println(project); });
-		 */
-		if(!flattenProjects.isEmpty()) {
-			logger.info("flattenProjects.size():: "+flattenProjects.size());
-		}
 		return flattenProjects;
 	}
 
@@ -195,10 +203,15 @@ public class ProjectController {
 				.orElseThrow(() -> new ResourceNotFoundException("Project not exist with id :" + id));
 		return ResponseEntity.ok(project);
 	}
+	// Same raw-entity (nested employee/customer/billRates) shape either way —
+	// ProjectGrid.jsx reads whichever of the two params it was given.
 	@GetMapping("/projects")
-	public ResponseEntity<List<Project>> getProjectByEmpId(@RequestParam Long employeeId) {
-		List<Project> project = projectRepository.findAllProjectsByEmployee(employeeId);
-				//.orElseThrow(() -> new ResourceNotFoundException("Project not exist with id :" + employeeId));
+	public ResponseEntity<List<Project>> getProjectByEmpId(
+			@RequestParam(required = false) Long employeeId,
+			@RequestParam(required = false) Long customerId) {
+		List<Project> project = customerId != null
+				? projectRepository.findAllProjectsByCustomer(customerId)
+				: projectRepository.findAllProjectsByEmployee(employeeId);
 		return ResponseEntity.ok(project);
 	}
 
@@ -216,6 +229,7 @@ public class ProjectController {
 		project.setInvoiceTerm(projectDetails.getInvoiceTerm());
 		project.setPaymentTerm(projectDetails.getPaymentTerm());
 		project.setStatus(projectDetails.getStatus());
+		project.setClient(projectDetails.getClient());
 		// weekStartDay is newer than the four fields above and not every
 		// existing caller of this endpoint knows to send it — null-checked
 		// so an old request body doesn't silently clear a configured value.

@@ -76,8 +76,12 @@ public class VendorController {
     if (vendorDetails.getVendorStatus() != null) vendor.setVendorStatus(vendorDetails.getVendorStatus());
     if (vendorDetails.getEin() != null) vendor.setEin(vendorDetails.getEin());
     if (vendorDetails.getWebsite() != null) vendor.setWebsite(vendorDetails.getWebsite());
+    if (vendorDetails.getVendorAddress() != null) vendor.setVendorAddress(vendorDetails.getVendorAddress());
     if (vendorDetails.getVendorStartDate() != null) vendor.setVendorStartDate(vendorDetails.getVendorStartDate());
     if (vendorDetails.getVendorEndDate() != null) vendor.setVendorEndDate(vendorDetails.getVendorEndDate());
+    if (vendorDetails.getVendorType() != null) vendor.setVendorType(vendorDetails.getVendorType());
+    if (vendorDetails.getPaymentTerms() != null) vendor.setPaymentTerms(vendorDetails.getPaymentTerms());
+    if (vendorDetails.getPaymentPolicy() != null) vendor.setPaymentPolicy(vendorDetails.getPaymentPolicy());
 
     Vendor updatedVendor = vendorRepository.save(vendor);
     return ResponseEntity.ok(updatedVendor);

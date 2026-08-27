@@ -14,7 +14,14 @@ import lombok.Setter;
 public class Invoice {
 
   @Id
-  private Long invoiceId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  // Cosmetic/business label only — NOT unique, NOT used for identity or
+  // lookups. Historically this was the @Id itself (named invoiceId), which
+  // let two different user-typed numbers collide and silently overwrite
+  // each other's invoice row; `id` above is the real identity now.
+  private Long invoiceNumber;
 
   private Long projectId;
   private LocalDate invoiceMonth;
@@ -47,7 +54,8 @@ public class Invoice {
   @Override
   public String toString() {
       return "Invoice{" +
-              "invoiceId=" + invoiceId +
+              "id=" + id +
+              ", invoiceNumber=" + invoiceNumber +
               ", projectId=" + projectId +
               ", invoiceMonth=" + invoiceMonth +
               ", billing=" + billing +

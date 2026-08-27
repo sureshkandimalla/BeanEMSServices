@@ -11,7 +11,11 @@ import lombok.Setter;
 public class Invoice {
 	
 	
-	 	private long invoiceId;
+	 	// Server-assigned surrogate identity — null/absent on create, present
+	 	// on rows read back from the DB. Never required from the client.
+	 	private Long id;
+	    // Cosmetic/business label the user types — not unique, not identity.
+	    private Long invoiceNumber;
 	    private Long projectId;
 	    private LocalDate  invoiceMonth;
 	    private float billRate;
@@ -28,7 +32,7 @@ public class Invoice {
 	    
 		@Override
 		public String toString() {
-			return "Invoice [invoiceId=" + invoiceId + ", projectId=" + projectId + ", invoiceMonth=" + invoiceMonth
+			return "Invoice [id=" + id + ", invoiceNumber=" + invoiceNumber + ", projectId=" + projectId + ", invoiceMonth=" + invoiceMonth
 					+ ", billing=" + billRate + ", hours=" + hours + ", total=" + total + ", invoicePaidAmount="
 					+ invoicePaidAmount + ", invoiceDate=" + invoiceDate + ", startDate=" + startDate + ", endDate="
 					+ endDate + ", paymentDate=" + paymentDate + ", status=" + status + ", assignmentId=" + assignmentId

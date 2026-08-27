@@ -54,22 +54,28 @@ public class InvoiceService {
 		Invoice dbInvoiceObject =null;
 		Invoice invoice = new Invoice();
 
-		logger.info("dbInvoice.getInvoiceId(): " + dbInvoice.getInvoiceId() + " " + invoiceMonthForDB);
-		Optional<Invoice> existingInvoice = invoiceRepository.findByInvoiceByMonthAndInvoiceId(invoiceMonthForDB,
-				dbInvoice.getInvoiceId());
+		logger.info("dbInvoice.getInvoiceNumber(): " + dbInvoice.getInvoiceNumber() + " " + invoiceMonthForDB);
+		// "Does an invoice already exist" is keyed off the actual business
+		// identity — one invoice per project per month — never off the
+		// user-typed invoiceNumber. Keying off a typed value is what let
+		// two unrelated invoices collide and silently overwrite each other.
+		Optional<Invoice> existingInvoice = invoiceRepository.findByProjectIdAndInvoiceMonth(invoiceMonthForDB,
+				dbInvoice.getProjectId());
 
 		logger.info("existingInvoice.isPresent():: " + existingInvoice.isPresent());
 		if (existingInvoice.isPresent()) {
 
 			Invoice existing = existingInvoice.get();
-			if (!(existing.getHours()==dbInvoice.getHours()) || !(existing.getTotal()==dbInvoice.getTotal())) {
+			boolean numberChanged = !java.util.Objects.equals(existing.getInvoiceNumber(), dbInvoice.getInvoiceNumber());
+			if (!(existing.getHours()==dbInvoice.getHours()) || !(existing.getTotal()==dbInvoice.getTotal()) || numberChanged) {
 				existing.setHours(dbInvoice.getHours());
 				existing.setTotal(dbInvoice.getTotal());
+				existing.setInvoiceNumber(dbInvoice.getInvoiceNumber());
 				// toadd params if required invoice_date,invoice paid amount, need to be
 				// updated?
 
 				try {
-					dbInvoiceObject = invoiceRepository.save(existing); // update if existing invoiceid and month
+					dbInvoiceObject = invoiceRepository.save(existing); // update if existing project+month
 				} catch (Exception e) {
 					throw new InvoiceException("Failed to save invoice", e);
 				}
@@ -79,7 +85,7 @@ public class InvoiceService {
 		} else {
 
 			invoice.setHours(dbInvoice.getHours());
-			invoice.setInvoiceId(dbInvoice.getInvoiceId());
+			invoice.setInvoiceNumber(dbInvoice.getInvoiceNumber());
 			invoice.setTotal(dbInvoice.getTotal());
 			invoice.setInvoiceDate(parsedDate);
 			invoice.setStartDate(dbInvoice.getStartDate());
@@ -102,7 +108,7 @@ public class InvoiceService {
 		}
 
 		logger.info("invoice dbobj:: " + dbInvoiceObject);
-		if (dbInvoiceObject != null && isValid(dbInvoiceObject.getInvoiceId())) {
+		if (dbInvoiceObject != null && dbInvoiceObject.getId() != null) {
 			syncBillsForInvoice(dbInvoiceObject, dbInvoice.getProjectId());
 		} else {
 
@@ -119,7 +125,7 @@ public class InvoiceService {
 	// this is what makes editing an invoice's hours (e.g. from the
 	// Generate Invoice grid) propagate to the bills billed against it.
 	private void syncBillsForInvoice(Invoice invoice, Long projectId) throws BillsException {
-		List<Bills> existingBills = billsRepository.findByInvoiceId(invoice.getInvoiceId());
+		List<Bills> existingBills = billsRepository.findByInvoiceId(invoice.getId());
 		if (existingBills.isEmpty()) {
 			createBillsForInvoice(invoice, projectId);
 		} else {
@@ -138,7 +144,7 @@ public class InvoiceService {
 	}
 
 	public void syncBillsHoursForInvoice(Invoice invoice) {
-		List<Bills> bills = billsRepository.findByInvoiceId(invoice.getInvoiceId());
+		List<Bills> bills = billsRepository.findByInvoiceId(invoice.getId());
 		applyInvoiceHoursToBills(invoice, bills);
 	}
 
@@ -146,7 +152,7 @@ public class InvoiceService {
 	// billed against it moves from Created to Invoice Cleared. A bill only
 	// reaches Paid separately, when the bill itself is paid out.
 	public void markBillsInvoiceCleared(Invoice invoice) {
-		List<Bills> bills = billsRepository.findByInvoiceId(invoice.getInvoiceId());
+		List<Bills> bills = billsRepository.findByInvoiceId(invoice.getId());
 		for (Bills bill : bills) {
 			bill.setStatus("Invoice Cleared");
 			billsRepository.save(bill);
@@ -173,7 +179,7 @@ public class InvoiceService {
 			invoicesChecked++;
 			String targetStatus = "paid".equalsIgnoreCase(invoice.getStatus()) ? "Invoice Cleared" : "Created";
 
-			List<Bills> bills = billsRepository.findByInvoiceId(invoice.getInvoiceId());
+			List<Bills> bills = billsRepository.findByInvoiceId(invoice.getId());
 			for (Bills bill : bills) {
 				if ("paid".equalsIgnoreCase(bill.getStatus())) continue;
 				if (targetStatus.equalsIgnoreCase(bill.getStatus())) continue;
@@ -204,7 +210,7 @@ public class InvoiceService {
 		for (Invoice invoice : allInvoices) {
 			invoicesChecked++;
 
-			List<Bills> bills = billsRepository.findByInvoiceId(invoice.getInvoiceId());
+			List<Bills> bills = billsRepository.findByInvoiceId(invoice.getId());
 			for (Bills bill : bills) {
 				boolean startMismatch = !java.util.Objects.equals(bill.getStartDate(), invoice.getStartDate());
 				boolean endMismatch = !java.util.Objects.equals(bill.getEndDate(), invoice.getEndDate());
@@ -230,7 +236,7 @@ public class InvoiceService {
 	@Transactional
 	public Map<String, Object> deleteOrphanedBills(boolean dryRun) {
 		Set<Long> validInvoiceIds = invoiceRepository.getAllInvoices().stream()
-				.map(Invoice::getInvoiceId)
+				.map(Invoice::getId)
 				.collect(Collectors.toSet());
 
 		List<Bills> allBills = billsRepository.findAll();
@@ -287,7 +293,7 @@ public class InvoiceService {
 
 		int invoicesBilled = 0;
 		for (Invoice invoice : allInvoices) {
-			if (invoiceIdsWithBills.contains(invoice.getInvoiceId())) continue;
+			if (invoiceIdsWithBills.contains(invoice.getId())) continue;
 			if (invoice.getProjectId() == null || invoice.getInvoiceMonth() == null) continue;
 
 			createBillsForInvoice(invoice, invoice.getProjectId());
@@ -300,7 +306,7 @@ public class InvoiceService {
 
 	        // Create a Bills object and map data from Assignments
 	        Bills bill = new Bills();
-	        bill.setInvoiceId(invoice.getInvoiceId());
+	        bill.setInvoiceId(invoice.getId());
 	        bill.setProjectId(invoice.getProjectId());
 	        bill.setAssignmentId(assignment.getAssignmentId());
 	        bill.setEmployeeId(assignment.getEmployeeId());

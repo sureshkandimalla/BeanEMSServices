@@ -16,11 +16,14 @@ public interface BillsRepository extends JpaRepository<Bills, Long> {
             value = "SELECT * FROM bills a where DATE_FORMAT(a.invoice_Month,'%Y%m')=?",
             nativeQuery = true)
     Optional<List<Bills>> findBillsByInvoiceMonth(String invoiceMonth);
+    // Filters bills.project_id directly — previously joined through
+    // invoice.project_id, which leaked another project's bills into the
+    // result whenever an invoice's project_id was wrong (see the
+    // invoice-surrogate-key migration this bug motivated).
     @Query(
-            value = "SELECT * FROM bills where invoice_id in (select invoice_id FROM invoice  where project_id=:projectId)",
+            value = "SELECT * FROM bills where project_id=:projectId",
             nativeQuery = true)
     Optional<List<Bills>> findBillsForProject(long projectId);
-   // Optional<List<Bills>> findBillsForProject(long projectId);
    Optional<List<Bills>>  findByEmployeeId(long employeeId);
 
    @Query(value = "SELECT DISTINCT invoice_id FROM bills", nativeQuery = true)
@@ -29,6 +32,12 @@ public interface BillsRepository extends JpaRepository<Bills, Long> {
    List<Bills> findByInvoiceId(Long invoiceId);
 
    List<Bills> findByProjectId(Long projectId);
+
+   // Project's own customerId is physically stored in its vendor_id column
+   // — see ProjectRepository#findAllProjectsByCustomer.
+   @Query(value = "SELECT * FROM bills where project_id in (SELECT project_id FROM project where vendor_id=?)",
+           nativeQuery = true)
+   List<Bills> findByCustomer(long customerId);
 
    // Any bill whose own [startDate, endDate] billing window overlaps the
    // given range at all — standard interval-overlap condition

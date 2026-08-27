@@ -34,6 +34,11 @@ public class Vendor {
   private LocalDate vendorEndDate;
   private String vendorContactEmail;
   private String vendorAddress;
+  private String vendorType;
+  private String paymentTerms;
+
+  @Column(columnDefinition = "TEXT")
+  private String paymentPolicy;
 
   @UpdateTimestamp
   private LocalDate LastUpdated;
