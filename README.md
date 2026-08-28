@@ -7,10 +7,10 @@ Spring Boot 2.7.0 / Java 17 / Maven backend for BeanEMS, backed by MySQL via Spr
 This backend runs in production on a single-instance AWS Elastic Beanstalk environment
 (`beanems-env`, Corretto 17 on Amazon Linux 2023), fronted by CloudFront for HTTPS, with a
 private RDS MySQL instance (`beanems-prod`) reachable only from the EB environment's security
-group. The frontend (Vercel, `BeanEMS` repo) calls this backend through CloudFront.
+group. The frontend (Vercel, `EmployeeHub` repo) calls this backend through CloudFront.
 
 For the full architecture diagram, environment variable reference, redeploy commands, and
-security notes, see [DEPLOYMENT.md in the BeanEMS (frontend) repo](https://github.com/sureshkandimalla/BeanEMS/blob/master/DEPLOYMENT.md).
+security notes, see [DEPLOYMENT.md in the EmployeeHub (frontend) repo](https://github.com/sureshkandimalla/EmployeeHub/blob/master/DEPLOYMENT.md).
 
 ### Quick facts
 
