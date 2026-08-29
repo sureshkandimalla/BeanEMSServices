@@ -32,6 +32,12 @@ public class Note {
   @Column(columnDefinition = "TEXT")
   private String description;
 
+  // The logged-in user who wrote this note (Header.jsx's user.name, sent
+  // straight from the frontend since the backend doesn't decode the JWT
+  // for display info elsewhere either — same trust level as the rest of
+  // this API).
+  private String addedBy;
+
   @CreationTimestamp
   private LocalDateTime date;
 
