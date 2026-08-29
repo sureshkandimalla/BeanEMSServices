@@ -6,6 +6,7 @@ import com.employeehub.repository.PemployeeRepository;
 import com.employeehub.service.VisaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -86,5 +87,14 @@ public class VisaController {
     @PostMapping("/savePotentialEmployees")
     public ResponseEntity<List<PotentialEmployee>> savePotentialEmployees(@RequestBody List<PotentialEmployee> potentialEmployees) {
         return ResponseEntity.ok(pemployeeRepository.saveAll(potentialEmployees));
+    }
+
+    @Transactional
+    @DeleteMapping("/potentialEmployees/{id}")
+    public ResponseEntity<Map<String, Boolean>> deletePotentialEmployee(@PathVariable Long id) {
+        pemployeeRepository.deleteByPeId(id);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 }
