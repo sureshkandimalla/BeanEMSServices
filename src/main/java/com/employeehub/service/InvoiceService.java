@@ -48,21 +48,29 @@ public class InvoiceService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String formattedDate = today.format(formatter);
 		LocalDate parsedDate = LocalDate.parse(formattedDate, formatter);
-		//LocalDate invoiceMonth = LocalDate.parse(, formatter);
-		String invoiceMonthForDB = dbInvoice.getStartDate().format(DateTimeFormatter.ofPattern("yyyyMM"));
 
 		Invoice dbInvoiceObject =null;
 		Invoice invoice = new Invoice();
 
-		logger.info("dbInvoice.getInvoiceNumber(): " + dbInvoice.getInvoiceNumber() + " " + invoiceMonthForDB);
+		logger.info("dbInvoice.getInvoiceNumber(): " + dbInvoice.getInvoiceNumber() + " startDate=" + dbInvoice.getStartDate());
 		// "Does an invoice already exist" is keyed off the actual business
-		// identity — one invoice per project per month — never off the
-		// user-typed invoiceNumber. Keying off a typed value is what let
-		// two unrelated invoices collide and silently overwrite each other.
-		Optional<Invoice> existingInvoice = invoiceRepository.findByProjectIdAndInvoiceMonth(invoiceMonthForDB,
-				dbInvoice.getProjectId());
+		// identity — one invoice per project per *exact period* (its start
+		// date), never off the user-typed invoiceNumber (that's what let two
+		// unrelated invoices collide and silently overwrite each other) and
+		// never off calendar month alone (Weekly/Biweekly/Once-in-4-Weeks/
+		// Semi-Monthly all put more than one legitimate invoice in the same
+		// month — matching on month collided those with each other instead:
+		// confirmed live for Chandra-Aquinas, a Weekly project, where a
+		// second week's save either 500'd or silently overwrote the first
+		// week's row). Pick the oldest row if duplicates already exist from
+		// that bug rather than crash — same defensive intent, corrected key.
+		List<Invoice> existingInvoices = invoiceRepository.findByProjectIdAndStartDate(
+				dbInvoice.getProjectId(), dbInvoice.getStartDate());
+		Optional<Invoice> existingInvoice = existingInvoices.stream()
+				.min(java.util.Comparator.comparing(Invoice::getId));
 
-		logger.info("existingInvoice.isPresent():: " + existingInvoice.isPresent());
+		logger.info("existingInvoice.isPresent():: " + existingInvoice.isPresent()
+				+ (existingInvoices.size() > 1 ? " (WARNING: " + existingInvoices.size() + " duplicate rows for this project+period)" : ""));
 		if (existingInvoice.isPresent()) {
 
 			Invoice existing = existingInvoice.get();
@@ -71,11 +79,13 @@ public class InvoiceService {
 				existing.setHours(dbInvoice.getHours());
 				existing.setTotal(dbInvoice.getTotal());
 				existing.setInvoiceNumber(dbInvoice.getInvoiceNumber());
+				existing.setEndDate(dbInvoice.getEndDate());
+				existing.setInvoiceMonth(dbInvoice.getStartDate());
 				// toadd params if required invoice_date,invoice paid amount, need to be
 				// updated?
 
 				try {
-					dbInvoiceObject = invoiceRepository.save(existing); // update if existing project+month
+					dbInvoiceObject = invoiceRepository.save(existing); // update if existing project+period
 				} catch (Exception e) {
 					throw new InvoiceException("Failed to save invoice", e);
 				}
